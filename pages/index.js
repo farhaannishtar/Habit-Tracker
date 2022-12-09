@@ -1,3 +1,4 @@
+// This file used the new habit card component
 import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
 import { useState } from 'react'

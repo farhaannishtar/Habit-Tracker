@@ -1,3 +1,4 @@
+// This file was used to make new habit card
 import styles from '../styles/Habit.module.css';
 import { useState } from 'react'
 
@@ -95,8 +96,7 @@ export default function Habit(props) {
 }
 
 
-
-
+// Old code below
 
 {/* {
         editFormShowing ?
