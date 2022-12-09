@@ -1,0 +1,35 @@
+.headerContainer {
+  /* border: 3px solid red; */
+  padding: 0 13rem;
+  margin: 0;
+}
+
+.input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+.form {
+  display: flex;
+  align-items: flex-end;
+
+}
+
+.submitButton {
+  background-color: rgb(174, 13, 171);
+  color: white;
+  height: 30px;
+  font-size: 16px;
+  margin: 8px 0;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.input::placeholder {
+  font-weight: bold;
+  opacity: .6;
+  font-size: 1.9em;
+  font-style: italic;
+}

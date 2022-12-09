@@ -1,0 +1,23 @@
+.p {
+  font-size: 16px;
+  text-align: center;
+}
+
+.p:hover {
+  color: rgb(174, 13, 171);
+}
+
+.container {
+  /* border: 1px solid red; */
+  /* height: 100px;
+  width: 200px; */
+}
+
+.editForm {
+  margin: 25px 50px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row-reverse;
+}
