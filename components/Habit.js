@@ -39,7 +39,20 @@ export default function Habit(props) {
     <>
       { props.cardType === "dashboard" ?
         <a onClick={() => styleCard()} className={cardStyle}>
-          <h1>{props.habit.text}</h1>
+          { editFormShowing  ? (
+            <h1>
+              <form onSubmit={editHandler} className={styles.editForm}>
+                <input type="text" id="habit" name="habit" required placeholder="Edit Habit"/>
+                <button type="submit">Submit</button>
+              </form>
+            </h1>
+          )
+          : <h1>{props.habit.text}</h1> 
+          } 
+          <div className='buttons'>
+            <button onClick={toggleEditForm}>Edit</button>
+            <button onClick={deleteHandler}>Delete</button>
+          </div>
         </a> :
         <a onClick={() => props.styleCard(props.habit.id)} className={props.habit.habit_card_style}>
           <h1>{props.habit.habit_emoji}</h1>
@@ -47,53 +60,59 @@ export default function Habit(props) {
         </a>
       }
       <style jsx>{`
-          .card {
-            margin: 1rem;
-            flex-basis: 40%;
-            padding: 1.5rem;
-            text-align: left;
-            text-decoration: none;
-            border: 1px solid #eaeaea;
-            border-radius: 10px;
-            transition: color 0.3s ease, border-color 0.3s ease;
-            border: 2px solid green;
-            height: 150px;
-            width: 980px;
-          }
+        .buttons {
+          display: flex;
+          justify-content: flex-end;
+        }
+        .card {
+          margin: 1rem;
+          flex-basis: 40%;
+          padding: 1.5rem;
+          text-align: left;
+          text-decoration: none;
+          border: 1px solid #eaeaea;
+          border-radius: 10px;
+          transition: color 0.3s ease, border-color 0.3s ease;
+          border: 2px solid green;
+          height: 150px;
+          width: 980px;
+        }
 
-          .cardClicked {
-            margin: 1rem;
-            flex-basis: 40%;
-            padding: 1.5rem;
-            text-align: left;
-            text-decoration: none;
-            border: 1px solid #eaeaea;
-            border-radius: 10px;
-            transition: color 0.3s ease, border-color 0.3s ease;
-            background-color: #CBC3E3;
-          }
+        .cardClicked {
+          margin: 1rem;
+          flex-basis: 40%;
+          padding: 1.5rem;
+          text-align: left;
+          text-decoration: none;
+          border: 1px solid #eaeaea;
+          border-radius: 10px;
+          transition: color 0.3s ease, border-color 0.3s ease;
+          background-color: #CBC3E3;
+          height: 150px;
+          width: 980px;
+        }
 
-          .card:hover,
-          .card:focus,
-          .card:active {
-            color: #0070f3;
-            border-color: #0070f3;
-          }
-        `}</style>
-        <style jsx global>{`
-          html,
-          body {
-            padding: 0;
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-              Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-              sans-serif;
-          }
+        .card:hover,
+        .card:focus,
+        .card:active {
+          color: #0070f3;
+          border-color: #0070f3;
+        }
+      `}</style>
+      <style jsx global>{`
+        html,
+        body {
+          padding: 0;
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+            sans-serif;
+        }
 
-          * {
-            box-sizing: border-box;
-          }
-        `}</style>
+        * {
+          box-sizing: border-box;
+        }
+      `}</style>
     </>
   )
 }
@@ -101,32 +120,31 @@ export default function Habit(props) {
 
 // Old code below
 
-{/* {
-        editFormShowing ?
-        (
-          <>
-            <div className={styles.container}>
-              <form onSubmit={editHandler} className={styles.editForm}>
-                <label htmlFor="habit">Edit Habit: </label>
-                <input type="text" id="habit" name="habit" required placeholder={props.habit.text}/>
-                <button type="submit">Submit</button>
-              </form>
-              <div className={styles.buttonContainer}>
-                <button onClick={deleteHandler}>Delete</button>
-                <button onClick={toggleEditForm}>{editButtonText}</button>
-              </div>
-            </div>
-          </>
-        )
-        : (
-          <>
-            <div className={styles.container}>
-              <p className={styles.p}>{props.habit.text}</p>   
-              <div className={styles.buttonContainer}>
-                <button onClick={deleteHandler}>Delete</button>
-                <button onClick={toggleEditForm}>Edit</button>
-              </div>
-            </div>
-          </>
-        )
-      } */}
+
+        // editFormShowing ?
+        // (
+        //   <>
+        //     <div className={styles.container}>
+        //       <form onSubmit={editHandler} className={styles.editForm}>
+        //         <label htmlFor="habit">Edit Habit: </label>
+        //         <input type="text" id="habit" name="habit" required placeholder={props.habit.text}/>
+        //         <button type="submit">Submit</button>
+        //       </form>
+        //       <div className={styles.buttonContainer}>
+        //         <button onClick={deleteHandler}>Delete</button>
+        //         <button onClick={toggleEditForm}>{editButtonText}</button>
+        //       </div>
+        //     </div>
+        //   </>
+        // )
+        // : (
+        //   <>
+        //     <div className={styles.container}>
+        //       <p className={styles.p}>{props.habit.text}</p>   
+        //       <div className={styles.buttonContainer}>
+        //         <button onClick={deleteHandler}>Delete</button>
+        //         <button onClick={toggleEditForm}>Edit</button>
+        //       </div>
+        //     </div>
+        //   </>
+        // )

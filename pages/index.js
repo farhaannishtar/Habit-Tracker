@@ -117,7 +117,7 @@ export default function Home({ isConnected }) {
             flex-wrap: wrap;
             max-width: 1000px;
             margin-top: 3rem;
-            border: 2px solid blue;
+            border: 2px solid orange;
           }
 
           .container {
