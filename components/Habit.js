@@ -56,9 +56,9 @@ export default function Habit(props) {
             border: 1px solid #eaeaea;
             border-radius: 10px;
             transition: color 0.3s ease, border-color 0.3s ease;
-            /* border: 2px solid red; */
-            height: 9rem;
-            width: 30rem;
+            border: 2px solid green;
+            height: 150px;
+            width: 980px;
           }
 
           .cardClicked {

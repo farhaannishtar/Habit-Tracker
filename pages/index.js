@@ -113,11 +113,11 @@ export default function Home({ isConnected }) {
           .grid {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             flex-wrap: wrap;
             max-width: 1000px;
             margin-top: 3rem;
-            /* border: 2px solid red; */
+            border: 2px solid red;
           }
 
           .container {
@@ -126,6 +126,7 @@ export default function Home({ isConnected }) {
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            border: 2px solid pink;
           }
           `}</style>
       </div>
