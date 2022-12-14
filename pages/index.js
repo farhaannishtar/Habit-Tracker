@@ -1,4 +1,3 @@
-// This file used the new habit card component
 import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
 import { useState } from 'react'
@@ -105,7 +104,7 @@ export default function Home({ isConnected }) {
       <div className="grid">
       {
         habits.map((habit) => {
-          return <Habit key={habit.key} cardType={"dashboard"} habit={habit} identifier={habit.key} deleteHandler={deleteHandler} editHandler={editHandler}/>
+          return <Habit key={habit.key} isEditable={true} habit={habit} identifier={habit.key} deleteHandler={deleteHandler} editHandler={editHandler}/>
         })
       }
       </div>
@@ -113,11 +112,11 @@ export default function Home({ isConnected }) {
           .grid {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: left;
             flex-wrap: wrap;
             max-width: 1000px;
             margin-top: 3rem;
-            border: 2px solid orange;
+            /* border: 2px solid orange; */
           }
 
           .container {
@@ -126,7 +125,7 @@ export default function Home({ isConnected }) {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 2px solid pink;
+            /* border: 2px solid purple; */
           }
           `}</style>
       </div>

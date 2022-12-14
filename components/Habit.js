@@ -1,4 +1,3 @@
-// This file was used to make new habit card
 import styles from '../styles/Habit.module.css';
 import { useState } from 'react'
 
@@ -11,8 +10,10 @@ export default function Habit(props) {
     props.deleteHandler(props.identifier);
   }
   
-  const toggleEditForm = () => {
-    console.log('User is toggling the edit form');
+  const toggleEditForm = (event) => {
+    // Stops the onClick function from being executed by the parent component 
+    event.stopPropagation();
+    
     setEditFormShowing(!editFormShowing);
     setEditButtonText(editButtonText === 'Edit' ? 'Close' : 'Edit');
   }
@@ -26,7 +27,6 @@ export default function Habit(props) {
     props.editHandler(props.identifier, editedHabit);
   }  
 
-
   const styleCard = () => {
     if (cardStyle === "cardClicked") {
       setCardStyle("card");
@@ -37,7 +37,7 @@ export default function Habit(props) {
 
   return (
     <>
-      { props.cardType === "dashboard" ?
+      { props.isEditable ?
         <a onClick={() => styleCard()} className={cardStyle}>
           { editFormShowing  ? (
             <h1>
@@ -53,7 +53,8 @@ export default function Habit(props) {
             <button onClick={toggleEditForm}>Edit</button>
             <button onClick={deleteHandler}>Delete</button>
           </div>
-        </a> :
+        </a> 
+        :
         <a onClick={() => props.styleCard(props.habit.id)} className={props.habit.habit_card_style}>
           <h1>{props.habit.habit_emoji}</h1>
           <h2>{props.habit.habit_name}</h2>
@@ -73,9 +74,9 @@ export default function Habit(props) {
           border: 1px solid #eaeaea;
           border-radius: 10px;
           transition: color 0.3s ease, border-color 0.3s ease;
-          border: 2px solid green;
           height: 150px;
           width: 980px;
+          /* border: 2px solid green; */
         }
 
         .cardClicked {
@@ -87,64 +88,30 @@ export default function Habit(props) {
           border: 1px solid #eaeaea;
           border-radius: 10px;
           transition: color 0.3s ease, border-color 0.3s ease;
-          background-color: #CBC3E3;
           height: 150px;
           width: 980px;
+          border: 3px solid black;
         }
-
         .card:hover,
         .card:focus,
         .card:active {
           color: #0070f3;
           border-color: #0070f3;
         }
-      `}</style>
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
+
+        .cardClicked:hover,
+        .cardClicked:focus,
+        .cardClicked:active {
+          border-color: #808080
         }
 
-        * {
-          box-sizing: border-box;
+        button {
+          background-color: black;
+          color: white;
+          font-size: 16px;
+          border-radius: 4px;
         }
       `}</style>
     </>
   )
 }
-
-
-// Old code below
-
-
-        // editFormShowing ?
-        // (
-        //   <>
-        //     <div className={styles.container}>
-        //       <form onSubmit={editHandler} className={styles.editForm}>
-        //         <label htmlFor="habit">Edit Habit: </label>
-        //         <input type="text" id="habit" name="habit" required placeholder={props.habit.text}/>
-        //         <button type="submit">Submit</button>
-        //       </form>
-        //       <div className={styles.buttonContainer}>
-        //         <button onClick={deleteHandler}>Delete</button>
-        //         <button onClick={toggleEditForm}>{editButtonText}</button>
-        //       </div>
-        //     </div>
-        //   </>
-        // )
-        // : (
-        //   <>
-        //     <div className={styles.container}>
-        //       <p className={styles.p}>{props.habit.text}</p>   
-        //       <div className={styles.buttonContainer}>
-        //         <button onClick={deleteHandler}>Delete</button>
-        //         <button onClick={toggleEditForm}>Edit</button>
-        //       </div>
-        //     </div>
-        //   </>
-        // )
