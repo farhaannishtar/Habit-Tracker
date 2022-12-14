@@ -116,7 +116,7 @@ export default function Home({ isConnected }) {
             flex-wrap: wrap;
             max-width: 1000px;
             margin-top: 3rem;
-            /* border: 2px solid orange; */
+            border: 2px solid orange;
           }
 
           .container {
@@ -125,7 +125,7 @@ export default function Home({ isConnected }) {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            /* border: 2px solid purple; */
+            border: 2px solid purple;
           }
           `}</style>
       </div>
