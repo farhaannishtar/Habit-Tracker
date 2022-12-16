@@ -46,12 +46,12 @@ export default function Habit(props) {
             </form>
           )
           : 
-            <div>
+            <>
               <div className="checkboxDiv">
                 <input className="checkbox" type="checkbox" id="checkbox" onClick={() => styleCard()}/>
               </div>
               <h1>{props.habit.text}</h1> 
-            </div>
+            </>
           } 
           <div className='buttons'>
             <button onClick={toggleEditForm}>Edit</button>
@@ -67,15 +67,29 @@ export default function Habit(props) {
       <style jsx>{`
 
         .checkbox {
-          border-radius: 100px;
-          border: 2px solid black;
-          background-color: black;
+          width: 25px;
+          height: 25px;
+          background-color: white;
+          border-radius: 50%;
+          border: 1px solid #ddd;
+          -webkit-appearance: none;
+          cursor: pointer;
+          box-shadow: inset 0 2px 5px rgba(0,0,0,0.25);
+        }
+
+        .checkbox:checked {
+          appearance: auto;
+          clip-path: circle(50% at 50% 50%);
+          background-color: red;
         }
 
         .checkboxDiv {
           display: flex;
           justify-content: flex-end;
-          margin-bottom: 0px;
+          position: relative;
+          bottom: 15px;
+          left: 15px;
+          /* border: 2px solid black; */
         }
 
         h1 {
@@ -93,27 +107,26 @@ export default function Habit(props) {
           margin: 1rem;
           flex-basis: 40%;
           padding: 1.5rem;
-          text-align: left;
-          text-decoration: none;
           border: 1px solid #eaeaea;
           border-radius: 10px;
           transition: color 0.3s ease, border-color 0.3s ease;
           height: 150px;
           width: 980px;
-          border: 2px solid green;
+          // 
+          box-shadow: inset 0 2px 5px rgba(0,0,0,0.45);
+          /* border: 2px solid green; */
         }
 
         .cardClicked {
           margin: 1rem;
           flex-basis: 40%;
           padding: 1.5rem;
-          text-align: left;
-          text-decoration: none;
           border: 1px solid #eaeaea;
           border-radius: 10px;
           transition: color 0.3s ease, border-color 0.3s ease;
           height: 150px;
           width: 980px;
+          box-shadow: inset 0 2px 5px rgba(0,0,0,0.45);
           border: 3px solid black;
         }
 
