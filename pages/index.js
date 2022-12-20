@@ -28,6 +28,13 @@ export async function getServerSideProps(context) {
   }
 }
 
+const cardColors = [];
+cardColors[0] = '#ebf5ed';
+cardColors[1] = '#f9ede6';
+cardColors[2] = '#faf9e5';
+cardColors[3] = '#f7edf5';
+
+
 export default function Home({ isConnected }) {
   
   const [habits, setHabits] = useState([]);
@@ -103,8 +110,8 @@ export default function Home({ isConnected }) {
       </form>
       <div className="grid">
       {
-        habits.map((habit) => {
-          return <Habit key={habit.key} isEditable={true} habit={habit} identifier={habit.key} deleteHandler={deleteHandler} editHandler={editHandler}/>
+        habits.map((habit, index) => {
+          return <Habit key={habit.key} isEditable={true} color={cardColors[index]} habit={habit} identifier={habit.key} deleteHandler={deleteHandler} editHandler={editHandler}/>
         })
       }
       </div>

@@ -9,6 +9,8 @@ export default function Habit(props) {
   const deleteHandler = () => {
     props.deleteHandler(props.identifier);
   }
+
+  console.log('I will be happy with Natalia and we are going to be a cute couple: ', props.color);
   
   const toggleEditForm = (event) => {
     // Stops the onClick function from being executed by the parent component 
@@ -38,7 +40,7 @@ export default function Habit(props) {
   return (
     <>
       { props.isEditable ?
-        <div className='card'>
+        <div className='card' style={{ backgroundColor: props.color}}>
           { editFormShowing  ? (
             <form onSubmit={editHandler} className={styles.editForm}>
               <input type="text" id="habit" name="habit" required placeholder="Edit Habit"/>
@@ -86,6 +88,10 @@ export default function Habit(props) {
           user-select: none;
         }
 
+        .circle:hover {
+          cursor: pointer;
+        }
+
         .checkbox {
           width: 25px;
           height: 25px;
@@ -99,7 +105,6 @@ export default function Habit(props) {
         .checkbox:checked {
           appearance: auto;
           clip-path: circle(50% at 50% 50%);
-          background-color: red;
         }
 
         .checkboxDiv {
@@ -131,7 +136,7 @@ export default function Habit(props) {
           transition: color 0.3s ease, border-color 0.3s ease;
           height: 400px;
           width: 940px;
-          background-color: #FFD580;
+          /* background-color: #ebf5ed; */
           /* border: 2px solid green; */
         }
 
