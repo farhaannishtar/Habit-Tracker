@@ -114,9 +114,10 @@ export default function Home({ isConnected }) {
             align-items: center;
             justify-content: left;
             flex-wrap: wrap;
-            max-width: 1000px;
+            max-width: 1200px;
             margin-top: 3rem;
-            border: 2px solid orange;
+            /* gap: 20px 80px; */
+            /* border: 2px solid orange; */
           }
 
           .container {

@@ -5,7 +5,7 @@ export default function Habit(props) {
 
   const [editFormShowing, setEditFormShowing] = useState(false);
   const [editButtonText, setEditButtonText] = useState('Edit')
-  const [cardStyle, setCardStyle] = useState('card');
+  const [cardStyle, setCardStyle] = useState('/redCheckMark.svg');
   const deleteHandler = () => {
     props.deleteHandler(props.identifier);
   }
@@ -28,17 +28,17 @@ export default function Habit(props) {
   }  
 
   const styleCard = () => {
-    if (cardStyle === "cardClicked") {
-      setCardStyle("card");
+    if (cardStyle === "/redCheckMark.svg") {
+      setCardStyle("/grayCheckMark.svg");
     } else {
-      setCardStyle("cardClicked");
+      setCardStyle("/redCheckMark.svg");
     }
   }
 
   return (
     <>
       { props.isEditable ?
-        <div className={cardStyle}>
+        <div className='card'>
           { editFormShowing  ? (
             <form onSubmit={editHandler} className={styles.editForm}>
               <input type="text" id="habit" name="habit" required placeholder="Edit Habit"/>
@@ -48,7 +48,12 @@ export default function Habit(props) {
           : 
             <>
               <div className="checkboxDiv">
-                <input className="checkbox" type="checkbox" id="checkbox" onClick={() => styleCard()}/>
+                <label className='container'>
+                  <div className="circle" onClick={styleCard}>
+                    <img src={cardStyle} alt="SVG as an image"/>
+                  </div>
+                  
+                </label>
               </div>
               <h1>{props.habit.text}</h1> 
             </>
@@ -66,6 +71,21 @@ export default function Habit(props) {
       }
       <style jsx>{`
 
+        .circle {
+          padding: 20px;
+          margin: 20px;
+          border-radius: 1500px;
+          background-color: white;
+          display: flex;
+          justify-content: center;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+
         .checkbox {
           width: 25px;
           height: 25px;
@@ -74,7 +94,6 @@ export default function Habit(props) {
           border: 1px solid #ddd;
           -webkit-appearance: none;
           cursor: pointer;
-          box-shadow: inset 0 2px 5px rgba(0,0,0,0.25);
         }
 
         .checkbox:checked {
@@ -108,12 +127,11 @@ export default function Habit(props) {
           flex-basis: 40%;
           padding: 1.5rem;
           border: 1px solid #eaeaea;
-          border-radius: 10px;
+          border-radius: 15px;
           transition: color 0.3s ease, border-color 0.3s ease;
-          height: 150px;
-          width: 980px;
-          // 
-          box-shadow: inset 0 2px 5px rgba(0,0,0,0.45);
+          height: 400px;
+          width: 940px;
+          background-color: #FFD580;
           /* border: 2px solid green; */
         }
 
@@ -124,9 +142,8 @@ export default function Habit(props) {
           border: 1px solid #eaeaea;
           border-radius: 10px;
           transition: color 0.3s ease, border-color 0.3s ease;
-          height: 150px;
-          width: 980px;
-          box-shadow: inset 0 2px 5px rgba(0,0,0,0.45);
+          height: 400px;
+          width: 780px;
           border: 3px solid black;
         }
 
