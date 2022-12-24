@@ -50,6 +50,10 @@ export default function Habit(props) {
           : 
             <>
               <div className="checkboxDiv">
+               <div className='icon'>
+                  <h1 className='emoji'> 🚴</h1>
+                  <div className='shadow'></div>
+                </div>
                 <label className='container'>
                   <div className="circle" onClick={styleCard}>
                     <img src={cardStyle} alt="SVG as an image"/>
@@ -72,6 +76,26 @@ export default function Habit(props) {
         </div>
       }
       <style jsx>{`
+        .emoji {
+          font-size: 100px;
+        }
+
+        .icon {
+          /* border: 2px solid pink; */
+        }
+
+        .shadow {
+          border-radius: 90%;
+          width: 100px;
+          height: 100px;
+          background: gray;
+          opacity: 0.2;
+          -webkit-filter: blur(10px);
+          -webkit-transform: scale(1, 0.2);
+          margin: 0px;
+          position: absolute;
+          bottom: 10px;
+        }
 
         .circle {
           padding: 20px;
@@ -109,7 +133,7 @@ export default function Habit(props) {
 
         .checkboxDiv {
           display: flex;
-          justify-content: flex-end;
+          justify-content: space-between;
           position: relative;
           bottom: 15px;
           left: 15px;
@@ -135,7 +159,7 @@ export default function Habit(props) {
           border-radius: 15px;
           transition: color 0.3s ease, border-color 0.3s ease;
           height: 400px;
-          width: 618px;;
+          width: 550px;;
           /* border: 2px solid green; */
         }
 

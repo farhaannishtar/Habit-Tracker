@@ -122,10 +122,9 @@ export default function Home({ isConnected }) {
             align-items: center;
             justify-content: left;
             flex-wrap: wrap;
-            max-width: 1300px;
+            max-width: 1250px;
             margin-top: 3rem;
-            /* gap: 20px 80px; */
-            /* border: 2px solid orange; */
+            border: 2px solid orange;
           }
 
           .container {
@@ -134,7 +133,7 @@ export default function Home({ isConnected }) {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            /* border: 2px solid purple; */
+            border: 2px solid purple;
           }
           `}</style>
       </div>
