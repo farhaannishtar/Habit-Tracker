@@ -80,10 +80,6 @@ export default function Habit(props) {
           font-size: 100px;
         }
 
-        .icon {
-          /* border: 2px solid pink; */
-        }
-
         .shadow {
           border-radius: 90%;
           width: 100px;
@@ -153,13 +149,12 @@ export default function Habit(props) {
 
         .card {
           margin: 1rem;
-          /* flex-basis: 50%; */
           padding: 1.5rem;
           border: 1px solid #eaeaea;
           border-radius: 15px;
           transition: color 0.3s ease, border-color 0.3s ease;
           height: 400px;
-          width: 550px;;
+          width: 555px;
           /* border: 2px solid green; */
         }
 

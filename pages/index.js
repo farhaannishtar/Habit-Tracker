@@ -124,7 +124,8 @@ export default function Home({ isConnected }) {
             flex-wrap: wrap;
             max-width: 1250px;
             margin-top: 3rem;
-            border: 2px solid orange;
+            gap: 30px 50px;
+            /* border: 2px solid orange;  */
           }
 
           .container {
