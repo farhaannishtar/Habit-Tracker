@@ -5,7 +5,7 @@ export default function Habit(props) {
 
   const [editFormShowing, setEditFormShowing] = useState(false);
   const [editButtonText, setEditButtonText] = useState('Edit')
-  const [cardStyle, setCardStyle] = useState('/redCheckMark.svg');
+  const [cardStyle, setCardStyle] = useState('/grayCheckMark.svg');
   const deleteHandler = () => {
     props.deleteHandler(props.identifier);
   }
@@ -129,14 +129,13 @@ export default function Habit(props) {
 
         .card {
           margin: 1rem;
-          flex-basis: 40%;
+          /* flex-basis: 50%; */
           padding: 1.5rem;
           border: 1px solid #eaeaea;
           border-radius: 15px;
           transition: color 0.3s ease, border-color 0.3s ease;
           height: 400px;
-          width: 940px;
-          /* background-color: #ebf5ed; */
+          width: 618px;;
           /* border: 2px solid green; */
         }
 

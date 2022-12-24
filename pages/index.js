@@ -111,9 +111,10 @@ export default function Home({ isConnected }) {
       <div className="grid">
       {
         habits.map((habit, index) => {
-          return <Habit key={habit.key} isEditable={true} color={cardColors[index]} habit={habit} identifier={habit.key} deleteHandler={deleteHandler} editHandler={editHandler}/>
+          return <Habit key={habit.key} isEditable={true} color={cardColors[index % cardColors.length]} habit={habit} identifier={habit.key} deleteHandler={deleteHandler} editHandler={editHandler}/>
         })
       }
+
       </div>
         <style jsx>{`
           .grid {
@@ -121,7 +122,7 @@ export default function Home({ isConnected }) {
             align-items: center;
             justify-content: left;
             flex-wrap: wrap;
-            max-width: 1200px;
+            max-width: 1300px;
             margin-top: 3rem;
             /* gap: 20px 80px; */
             /* border: 2px solid orange; */
@@ -133,7 +134,7 @@ export default function Home({ isConnected }) {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 2px solid purple;
+            /* border: 2px solid purple; */
           }
           `}</style>
       </div>
