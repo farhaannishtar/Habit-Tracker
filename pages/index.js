@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Habit from '../components/Habit'
 import uuid from 'react-uuid';
 import styles from '../styles/index.module.css'
+import AddHabit from '../components/AddHabit';
 
 export async function getServerSideProps(context) {
   try {
@@ -109,12 +110,12 @@ export default function Home({ isConnected }) {
         <button className={styles.submitButton} type="submit">Submit</button>
       </form>
       <div className="grid">
+      <AddHabit />
       {
         habits.map((habit, index) => {
           return <Habit key={habit.key} isEditable={true} color={cardColors[index % cardColors.length]} habit={habit} identifier={habit.key} deleteHandler={deleteHandler} editHandler={editHandler}/>
         })
       }
-
       </div>
         <style jsx>{`
           .grid {
@@ -122,9 +123,9 @@ export default function Home({ isConnected }) {
             align-items: center;
             justify-content: left;
             flex-wrap: wrap;
-            max-width: 1250px;
+            max-width: 1350px;
             margin-top: 3rem;
-            gap: 30px 50px;
+            gap: 5px 5px;
             /* border: 2px solid orange;  */
           }
 

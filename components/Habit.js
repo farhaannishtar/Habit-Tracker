@@ -58,7 +58,6 @@ export default function Habit(props) {
                   <div className="circle" onClick={styleCard}>
                     <img src={cardStyle} alt="SVG as an image"/>
                   </div>
-                  
                 </label>
               </div>
               <h1>{props.habit.text}</h1> 
@@ -76,6 +75,40 @@ export default function Habit(props) {
         </div>
       }
       <style jsx>{`
+        .circle {
+          padding: 15px;
+          margin: 15px;
+          border-radius: 1500px;
+          background-color: white;
+          display: flex;
+          justify-content: center;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+           /* border: 2px solid black; */
+        }
+
+        .circle:hover {
+          cursor: pointer;
+        }
+
+        .checkboxDiv {
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+          bottom: 15px;
+          left: 15px;
+          /* border: 2px solid black; */
+        }
+
+        h1 {
+          margin-top: 0px;
+          /* border: 2px solid black; */
+        }
+
         .emoji {
           font-size: 100px;
         }
@@ -93,54 +126,6 @@ export default function Habit(props) {
           bottom: 10px;
         }
 
-        .circle {
-          padding: 20px;
-          margin: 20px;
-          border-radius: 1500px;
-          background-color: white;
-          display: flex;
-          justify-content: center;
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          -khtml-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
-
-        .circle:hover {
-          cursor: pointer;
-        }
-
-        .checkbox {
-          width: 25px;
-          height: 25px;
-          background-color: white;
-          border-radius: 50%;
-          border: 1px solid #ddd;
-          -webkit-appearance: none;
-          cursor: pointer;
-        }
-
-        .checkbox:checked {
-          appearance: auto;
-          clip-path: circle(50% at 50% 50%);
-        }
-
-        .checkboxDiv {
-          display: flex;
-          justify-content: space-between;
-          position: relative;
-          bottom: 15px;
-          left: 15px;
-          /* border: 2px solid black; */
-        }
-
-        h1 {
-          margin-top: 0px;
-          /* border: 2px solid black; */
-        }
-
         .buttons {
           display: flex;
           justify-content: flex-end;
@@ -153,21 +138,9 @@ export default function Habit(props) {
           border: 1px solid #eaeaea;
           border-radius: 15px;
           transition: color 0.3s ease, border-color 0.3s ease;
-          height: 400px;
-          width: 555px;
+          height: 370px;
+          width: 383px;
           /* border: 2px solid green; */
-        }
-
-        .cardClicked {
-          margin: 1rem;
-          flex-basis: 40%;
-          padding: 1.5rem;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.3s ease, border-color 0.3s ease;
-          height: 400px;
-          width: 780px;
-          border: 3px solid black;
         }
 
         .card:hover,
@@ -175,12 +148,6 @@ export default function Habit(props) {
         .card:active {
           color: #0070f3;
           border-color: #0070f3;
-        }
-
-        .cardClicked:hover,
-        .cardClicked:focus,
-        .cardClicked:active {
-          border-color: #808080
         }
 
         button {
