@@ -1,10 +1,13 @@
 import { useState } from "react";
 import uuid from 'react-uuid';
+import EmojiModal from "./EmojiModal";
 
 export default function AddHabit(props) {
 
-  const { habits, setHabits }  = props;
+  const { setHabits }  = props;
   const [isFormShowing, setIsFormShowing] = useState(false);
+  const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
+  const [emoji, setEmoji] = useState("");
 
   const handleSubmit = async (event) => {
     // Stop the form from submitting and refreshing the page.
@@ -13,6 +16,7 @@ export default function AddHabit(props) {
     // Get data from the form.
     const data = {
       habit: event.target.habit.value,
+      emoji: emoji,
     }
   
     // Send the data to the server in JSON format.
@@ -40,13 +44,18 @@ export default function AddHabit(props) {
     // If server returns the name submitted, that means the form works.
     const result = await response.json()
   
+    console.log("result: ", result)
+
     const newHabit = {
       key: uuid(),
-      text: result.data,
+      text: result.text,
+      emoji: result.emoji
     }
+    console.log("newHabit: ", newHabit)
     setHabits(current => [...current, newHabit]);
     event.target.habit.value = "";
     setIsFormShowing(false);
+    setEmoji("")
   }
 
   const cardClickHandler = (e) => {
@@ -58,20 +67,69 @@ export default function AddHabit(props) {
       <div className='card' style={{ backgroundColor: props.color}} onClick={cardClickHandler}>
         { !isFormShowing ? 
           (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
           ) 
           :
           (
-            <form onSubmit={handleSubmit}>
-              <input type="text" id="habit" name="habit" required placeholder="Enter Habit"/>
-              <button type="submit">Submit</button>
-            </form>
+            <div className="habitInput">
+              <div className="form">
+                <form onSubmit={handleSubmit}>
+                  <input type="text" id="habit" name="habit" required placeholder="Enter Habit"/>
+                  <button type="submit">Submit</button>
+                  { emoji === "" ?
+                    <button type="button" onClick={() => setIsEmojiModalShowing(true)}>Add icon</button>
+                    :
+                    ""
+                  }
+                </form>
+                <div className="emojiDiv" onClick={() => setIsEmojiModalShowing(true)}>
+                  {
+                    emoji !== "" ? 
+                    (
+                      <div className="emoji">
+                        { emoji }
+                      </div> 
+                    )
+                    :
+                    (
+                      ""
+                    )
+                  }
+                </div>
+              </div>
+              <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
+            </div>
           )
         }
       </div>
       <style jsx>{`
+
+        .emoji {
+          /* border: 2px solid red; */
+          margin-top: 0;
+          padding: 0;
+          font-size: 100px;
+        }
+
+        .emoji:hover {
+          background-color: rgba(239,239,239,255);
+        }
+
+        .emojiDiv {
+          /* border: 2px solid red; */
+          display: flex;
+          justify-content: center;
+        }        
+
+        .habitInput {
+          height: 200px;
+          display: flex;
+          flex-direction: column;
+          /* border: 2px solid magenta; */
+        }
+
         svg {
           width: 100px;
           height: 100px;

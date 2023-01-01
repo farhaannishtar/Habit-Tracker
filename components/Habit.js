@@ -1,32 +1,31 @@
 import styles from '../styles/Habit.module.css';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import EmojiModal from "./EmojiModal";
+import uuid from 'react-uuid';
 
 export default function Habit(props) {
 
   const [editFormShowing, setEditFormShowing] = useState(false);
   const [editButtonText, setEditButtonText] = useState('Edit')
   const [cardStyle, setCardStyle] = useState('/grayCheckMark.svg');
-  const deleteHandler = () => {
-    props.deleteHandler(props.identifier);
-  }
+  const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
+  const [emoji, setEmoji] = useState(props.habit.emoji);
 
-  console.log('I will be happy with Natalia and we are going to be a cute couple: ', props.color);
-  
+  const { setHabits } = props;
+
+  const deleteHandler = () => props.deleteHandler(props.identifier);
+
   const toggleEditForm = (event) => {
-    // Stops the onClick function from being executed by the parent component 
     event.stopPropagation();
-    
     setEditFormShowing(!editFormShowing);
     setEditButtonText(editButtonText === 'Edit' ? 'Close' : 'Edit');
   }
 
   const editHandler = (event) => {
-    // Stop the form from submitting and refreshing the page.
     event.preventDefault()
-    
     const editedHabit = event.target.habit.value;
-    console.log("editedHabit: ", editedHabit);
     props.editHandler(props.identifier, editedHabit);
+    setEditFormShowing(false);
   }  
 
   const styleCard = () => {
@@ -36,6 +35,49 @@ export default function Habit(props) {
       setCardStyle("/redCheckMark.svg");
     }
   }
+
+  useEffect(() => async (event) => {
+    // Get data from the form.
+    const data = {
+      habit: props.habit.text,
+      emoji: emoji,
+    }
+  
+    // Send the data to the server in JSON format.
+    const JSONdata = JSON.stringify(data)
+  
+    // API endpoint where we send form data.
+    const endpoint = '/api/form'
+  
+    // Form the request for sending data to the server.
+    const options = {
+      // The method is POST because we are sending data.
+      method: 'POST',
+      // Tell the server we're sending JSON.
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // Body of the request is the JSON data we created above.
+      body: JSONdata,
+    }
+  
+    // Send the form data to our forms API on Vercel and get a response.
+    const response = await fetch(endpoint, options)
+  
+    // Get the response data from server as JSON.
+    // If server returns the name submitted, that means the form works.
+    const result = await response.json()
+  
+    console.log("result: ", result)
+
+    const newHabit = {
+      key: uuid(),
+      text: result.text,
+      emoji: result.emoji
+    }
+    console.log("newHabit: ", newHabit)
+    setHabits(current => [...current, newHabit]);
+  }, [emoji]);
 
   return (
     <>
@@ -50,9 +92,19 @@ export default function Habit(props) {
           : 
             <>
               <div className="checkboxDiv">
-               <div className='icon'>
-                  <h1 className='emoji'> 🚴</h1>
-                  <div className='shadow'></div>
+               <div className='icon' onClick={() => setIsEmojiModalShowing(true)}>
+                  { props.habit.emoji ? 
+                    (
+                      <>
+                        <h1 className='emoji'>{emoji}</h1>
+                        <div className='shadow'></div>
+                      </>
+                    )
+                    :
+                    (
+                      <div className='emptyIcon'></div>
+                    )
+                  }
                 </div>
                 <label className='container'>
                   <div className="circle" onClick={styleCard}>
@@ -74,12 +126,33 @@ export default function Habit(props) {
           <h2>{props.habit.habit_name}</h2>
         </div>
       }
+      <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
       <style jsx>{`
+        .emptyIcon {
+          height: 202.5px;
+          width: 104px;
+        }
+
+        .emptyIcon:hover {
+          background-color: rgba(239,239,239,255);
+          cursor: pointer;
+        }
+
+        .icon {
+          /* border: 2px solid black; */
+        }
+
+        .icon:hover {
+          background-color: rgba(239,239,239,255);
+          cursor: pointer;
+        }
+
         .circle {
           padding: 15px;
           margin: 15px;
           border-radius: 1500px;
           background-color: white;
+          /* background-color: #999999; */
           display: flex;
           justify-content: center;
           -webkit-touch-callout: none;

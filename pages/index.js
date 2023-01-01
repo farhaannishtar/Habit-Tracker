@@ -45,12 +45,7 @@ export default function Home({ isConnected }) {
   }
 
   const editHandler = (identifier, editedHabit) => {
-    const habitToEdit = habits.filter(habit => habit.key === identifier);
-    habitToEdit.text = editedHabit;
-    habitToEdit.key = uuid();
-
-    deleteHandler(identifier);
-    setHabits(current => [...current, habitToEdit]);
+    setHabits(habits => habits.filter(habit => habit.key === identifier ? habit.text = editedHabit : habit))
   }
 
   return (
@@ -63,15 +58,11 @@ export default function Home({ isConnected }) {
         <title>Habit Tracker</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <form onSubmit={handleSubmit} className={styles.form}>
-        <input className={styles.input} placeholder="Enter Habit" type="text" id="habit" name="habit" required />
-        <button className={styles.submitButton} type="submit">Submit</button>
-      </form> */}
       <div className="grid">
       <AddHabit editHandler={editHandler} habits={habits} setHabits={setHabits}/>
       {
         habits.map((habit, index) => {
-          return <Habit key={habit.key} isEditable={true} color={cardColors[index % cardColors.length]} habit={habit} identifier={habit.key} deleteHandler={deleteHandler} editHandler={editHandler}/>
+          return <Habit key={habit.key} isEditable={true} color={cardColors[index % cardColors.length]} habit={habit} setHabits={setHabits} identifier={habit.key} deleteHandler={deleteHandler} editHandler={editHandler}/>
         })
       }
       </div>
