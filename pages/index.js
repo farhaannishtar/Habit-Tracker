@@ -44,8 +44,12 @@ export default function Home({ isConnected }) {
     setHabits(habits.filter(habit => habit.key !== identifier));
   }
 
-  const editHandler = (identifier, editedHabit) => {
-    setHabits(habits => habits.filter(habit => habit.key === identifier ? habit.text = editedHabit : habit))
+  const editHabitTextHandler = (identifier, editedText) => {
+    setHabits(habits => habits.filter(habit => habit.key === identifier ? habit.text = editedText : habit))
+  }
+
+  const editHabitEmojiHandler = (identifier, editedEmoji) => {
+    setHabits(habits => habits.filter(habit => habit.key === identifier ? habit.emoji = editedEmoji : habit))
   }
 
   return (
@@ -59,10 +63,10 @@ export default function Home({ isConnected }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="grid">
-      <AddHabit editHandler={editHandler} habits={habits} setHabits={setHabits}/>
+      <AddHabit habits={habits} setHabits={setHabits}/>
       {
         habits.map((habit, index) => {
-          return <Habit key={habit.key} isEditable={true} color={cardColors[index % cardColors.length]} habit={habit} setHabits={setHabits} identifier={habit.key} deleteHandler={deleteHandler} editHandler={editHandler}/>
+          return <Habit key={habit.key} isEditable={true} color={cardColors[index % cardColors.length]} habit={habit} setHabits={setHabits} identifier={habit.key} deleteHandler={deleteHandler} editHabitTextHandler={editHabitTextHandler} editHabitEmojiHandler={editHabitEmojiHandler}/>
         })
       }
       </div>

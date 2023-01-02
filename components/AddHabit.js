@@ -8,6 +8,8 @@ export default function AddHabit(props) {
   const [isFormShowing, setIsFormShowing] = useState(false);
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState("");
+  const [cardStyle, setCardStyle] = useState('card');
+  const [checkmark, setCheckmark] = useState('/grayCheckmark.svg');
 
   const handleSubmit = async (event) => {
     // Stop the form from submitting and refreshing the page.
@@ -51,20 +53,29 @@ export default function AddHabit(props) {
       text: result.text,
       emoji: result.emoji
     }
-    console.log("newHabit: ", newHabit)
     setHabits(current => [...current, newHabit]);
     event.target.habit.value = "";
     setIsFormShowing(false);
+    setCardStyle('card');
     setEmoji("")
+  }
+
+  const styleCheckmark = () => {
+    if (checkmark === "/redCheckmark.svg") {
+      setCheckmark("/grayCheckmark.svg");
+    } else {
+      setCheckmark("/redCheckmark.svg");
+    }
   }
 
   const cardClickHandler = (e) => {
     setIsFormShowing(true)
+    setCardStyle('cardForm');
   }
 
   return ( 
     <>
-      <div className='card' style={{ backgroundColor: props.color}} onClick={cardClickHandler}>
+      <div className={cardStyle} style={{ backgroundColor: props.color}} onClick={cardClickHandler}>
         { !isFormShowing ? 
           (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
@@ -73,38 +84,145 @@ export default function AddHabit(props) {
           ) 
           :
           (
-            <div className="habitInput">
-              <div className="form">
-                <form onSubmit={handleSubmit}>
-                  <input type="text" id="habit" name="habit" required placeholder="Enter Habit"/>
-                  <button type="submit">Submit</button>
-                  { emoji === "" ?
-                    <button type="button" onClick={() => setIsEmojiModalShowing(true)}>Add icon</button>
-                    :
-                    ""
-                  }
-                </form>
-                <div className="emojiDiv" onClick={() => setIsEmojiModalShowing(true)}>
-                  {
-                    emoji !== "" ? 
-                    (
-                      <div className="emoji">
-                        { emoji }
-                      </div> 
-                    )
-                    :
-                    (
-                      ""
-                    )
-                  }
+            <>
+              <div className="topLayer">
+                <div className='icon' onClick={() => setIsEmojiModalShowing(true)}>
+                  <div className='addEmoji'>
+                    {
+                      emoji !== "" ? 
+                      (
+                        <div className="emoji">
+                          { emoji }
+                        </div> 
+                      )
+                      :
+                      (
+                        ""
+                      )
+                    }
+                  </div>
+                  <div className='shadow'></div>
                 </div>
+                {
+                  emoji === "" ? 
+                  (
+                      <p className="addIcon">☻ Add icon</p>
+                  )
+                  :
+                  (
+                    ""
+                  )
+                }
+                <label className='container'>
+                  <div className="circle">
+                    <img src={checkmark} alt="SVG as an image"/>
+                  </div>
+                </label>
               </div>
+              <form onSubmit={handleSubmit}>
+                <input className="habitextInput" type="text" id="habit" name="habit" required placeholder="Enter Habit"/>
+                <button type="submit">Submit</button>
+              </form>
               <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
-            </div>
+            </>
           )
         }
       </div>
       <style jsx>{`
+
+        
+
+        .habitextInput {
+          width: 100%; 
+          height:30px; 
+          font-size:30px;
+        }
+        
+        .addEmoji {
+          height: 202.5px;
+          width: 104px;
+        }
+        
+        .addEmoji:hover {
+          background-color: rgba(239,239,239,255);
+          cursor: pointer;
+        }
+        
+        .icon {
+          /* border: 2px solid black; */
+        }
+        
+        .icon:hover {
+          background-color: rgba(239,239,239,255);
+          cursor: pointer;
+        }
+
+        .icon:hover + .addIcon {
+          display: block;
+          /* color: red; */
+          cursor: pointer;
+        }
+        
+        .addIcon {
+          display: none;
+          position: relative;
+          right: 120px;
+          top: 75px;
+          height: 20px;
+          color: gray;
+          /* border: 2px solid red;  */
+        }
+
+        .circle {
+          padding: 15px;
+          margin: 15px;
+          border-radius: 1500px;
+          background-color: white;
+          display: flex;
+          justify-content: center;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          /* border: 2px solid black; */
+        }
+
+        .circle:hover {
+          cursor: pointer;
+        }
+
+        .topLayer {
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+          bottom: 15px;
+          left: 15px;
+          /* border: 2px solid black; */
+        }
+
+        h1 {
+          margin-top: 0px;
+          /* border: 2px solid black; */
+        }
+
+        .emoji {
+          font-size: 100px;
+        }
+
+        .shadow {
+          border-radius: 90%;
+          width: 100px;
+          height: 100px;
+          background: gray;
+          opacity: 0.2;
+          -webkit-filter: blur(10px);
+          -webkit-transform: scale(1, 0.2);
+          margin: 0px;
+          position: absolute;
+          bottom: 10px;
+        }
 
         .emoji {
           /* border: 2px solid red; */
@@ -118,7 +236,7 @@ export default function AddHabit(props) {
         }
 
         .emojiDiv {
-          /* border: 2px solid red; */
+          border: 2px solid red;
           display: flex;
           justify-content: center;
         }        
@@ -147,7 +265,7 @@ export default function AddHabit(props) {
         .card {
           margin: 1rem;
           padding: 1.5rem;
-          border: 10px solid black;
+          border: 5px solid black;
           border-radius: 15px;
           border-style: dashed;
           transition: color 0.3s ease, border-color 0.3s ease;
@@ -160,9 +278,28 @@ export default function AddHabit(props) {
           /* border: 2px solid green; */
         }
 
+        .cardForm {
+          margin: 1rem;
+          padding: 1.5rem;
+          border: 5px solid black;
+          border-radius: 15px;
+          border-style: dashed;
+          transition: color 0.3s ease, border-color 0.3s ease;
+          height: 370px;
+          width: 383px;
+          cursor: pointer;
+          /* border: 2px solid green; */
+        }
+
         .card:hover,
         .card:focus,
         .card:active {
+          color: #0070f3;
+          border-color: #0070f3;
+        }
+        .cardForm:hover,
+        .cardForm:focus,
+        .cardForm:active {
           color: #0070f3;
           border-color: #0070f3;
         }

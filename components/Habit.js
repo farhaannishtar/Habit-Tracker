@@ -7,11 +7,9 @@ export default function Habit(props) {
 
   const [editFormShowing, setEditFormShowing] = useState(false);
   const [editButtonText, setEditButtonText] = useState('Edit')
-  const [cardStyle, setCardStyle] = useState('/grayCheckMark.svg');
+  const [checkmark, setCheckmark] = useState('/grayCheckmark.svg');
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState(props.habit.emoji);
-
-  const { setHabits } = props;
 
   const deleteHandler = () => props.deleteHandler(props.identifier);
 
@@ -21,62 +19,23 @@ export default function Habit(props) {
     setEditButtonText(editButtonText === 'Edit' ? 'Close' : 'Edit');
   }
 
-  const editHandler = (event) => {
+  const editHabitTextHandler = (event) => {
     event.preventDefault()
-    const editedHabit = event.target.habit.value;
-    props.editHandler(props.identifier, editedHabit);
+    const editedText = event.target.habit.value;
+    props.editHabitTextHandler(props.identifier, editedText);
     setEditFormShowing(false);
   }  
 
-  const styleCard = () => {
-    if (cardStyle === "/redCheckMark.svg") {
-      setCardStyle("/grayCheckMark.svg");
+  const styleCheckmark = () => {
+    if (checkmark === "/redCheckmark.svg") {
+      setCheckmark("/grayCheckmark.svg");
     } else {
-      setCardStyle("/redCheckMark.svg");
+      setCheckmark("/redCheckmark.svg");
     }
   }
 
   useEffect(() => async (event) => {
-    // Get data from the form.
-    const data = {
-      habit: props.habit.text,
-      emoji: emoji,
-    }
-  
-    // Send the data to the server in JSON format.
-    const JSONdata = JSON.stringify(data)
-  
-    // API endpoint where we send form data.
-    const endpoint = '/api/form'
-  
-    // Form the request for sending data to the server.
-    const options = {
-      // The method is POST because we are sending data.
-      method: 'POST',
-      // Tell the server we're sending JSON.
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // Body of the request is the JSON data we created above.
-      body: JSONdata,
-    }
-  
-    // Send the form data to our forms API on Vercel and get a response.
-    const response = await fetch(endpoint, options)
-  
-    // Get the response data from server as JSON.
-    // If server returns the name submitted, that means the form works.
-    const result = await response.json()
-  
-    console.log("result: ", result)
-
-    const newHabit = {
-      key: uuid(),
-      text: result.text,
-      emoji: result.emoji
-    }
-    console.log("newHabit: ", newHabit)
-    setHabits(current => [...current, newHabit]);
+    props.editHabitEmojiHandler(props.identifier, emoji);    
   }, [emoji]);
 
   return (
@@ -84,14 +43,14 @@ export default function Habit(props) {
       { props.isEditable ?
         <div className='card' style={{ backgroundColor: props.color}}>
           { editFormShowing  ? (
-            <form onSubmit={editHandler} className={styles.editForm}>
+            <form onSubmit={editHabitTextHandler} className={styles.editForm}>
               <input type="text" id="habit" name="habit" required placeholder="Edit Habit"/>
               <button type="submit">Submit</button>
             </form>
           )
           : 
             <>
-              <div className="checkboxDiv">
+              <div className="topLayer">
                <div className='icon' onClick={() => setIsEmojiModalShowing(true)}>
                   { props.habit.emoji ? 
                     (
@@ -107,18 +66,18 @@ export default function Habit(props) {
                   }
                 </div>
                 <label className='container'>
-                  <div className="circle" onClick={styleCard}>
-                    <img src={cardStyle} alt="SVG as an image"/>
+                  <div className="circle" onClick={styleCheckmark}>
+                    <img src={checkmark} alt="SVG as an image"/>
                   </div>
                 </label>
               </div>
-              <h1>{props.habit.text}</h1> 
+              <h1 className='habitText' onClick={toggleEditForm}>{props.habit.text}</h1> 
             </>
           } 
-          <div className='buttons'>
+          {/* <div className='buttons'>
             <button onClick={toggleEditForm}>Edit</button>
             <button onClick={deleteHandler}>Delete</button>
-          </div>
+          </div> */}
         </div> 
         :
         <div onClick={() => props.styleCard(props.habit.id)} className={props.habit.habit_card_style}>
@@ -128,6 +87,10 @@ export default function Habit(props) {
       }
       <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
       <style jsx>{`
+        .habitText:hover {
+          cursor: pointer
+        }
+
         .emptyIcon {
           height: 202.5px;
           width: 104px;
@@ -168,7 +131,7 @@ export default function Habit(props) {
           cursor: pointer;
         }
 
-        .checkboxDiv {
+        .topLayer {
           display: flex;
           justify-content: space-between;
           position: relative;
