@@ -49,8 +49,6 @@ export default function Home({ isConnected }) {
   }
 
   const editHabitEmojiHandler = (identifier, editedEmoji) => {
-    console.log("Index.js~~~~ identifier: ", identifier, "editedEmoji: ", editedEmoji)
-
     setHabits(habits => habits.filter(habit => habit.key === identifier ? habit.emoji = editedEmoji : habit))
   }
 

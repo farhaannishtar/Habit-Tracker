@@ -9,7 +9,7 @@ export default function AddHabit(props) {
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState("");
   const [cardStyle, setCardStyle] = useState('card');
-  const [checkmark, setCheckmark] = useState('/grayCheckmark.svg');
+  const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
 
   const handleSubmit = async (event) => {
     // Stop the form from submitting and refreshing the page.
@@ -71,7 +71,7 @@ export default function AddHabit(props) {
         { !isFormShowing ? 
           (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
             </svg>
           ) 
           :
