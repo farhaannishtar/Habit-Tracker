@@ -6,7 +6,7 @@ export default function Habit(props) {
 
   const [editFormShowing, setEditFormShowing] = useState(false);
   const [editButtonText, setEditButtonText] = useState('Edit')
-  const [checkmark, setCheckmark] = useState('/grayCheckmark.svg');
+  const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState(props.habit.emoji);
 
@@ -26,10 +26,10 @@ export default function Habit(props) {
   }  
 
   const styleCheckmark = () => {
-    if (checkmark === "/redCheckmark.svg") {
-      setCheckmark("/grayCheckmark.svg");
+    if (checkmark === "/redCheckMark.svg") {
+      setCheckmark("/grayCheckMark.svg");
     } else {
-      setCheckmark("/redCheckmark.svg");
+      setCheckmark("/redCheckMark.svg");
     }
   }
 
