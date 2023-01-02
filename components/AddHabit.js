@@ -60,14 +60,6 @@ export default function AddHabit(props) {
     setEmoji("")
   }
 
-  const styleCheckmark = () => {
-    if (checkmark === "/redCheckmark.svg") {
-      setCheckmark("/grayCheckmark.svg");
-    } else {
-      setCheckmark("/redCheckmark.svg");
-    }
-  }
-
   const cardClickHandler = (e) => {
     setIsFormShowing(true)
     setCardStyle('cardForm');
@@ -86,33 +78,16 @@ export default function AddHabit(props) {
           (
             <>
               <div className="topLayer">
-                <div className='icon' onClick={() => setIsEmojiModalShowing(true)}>
+                <div className='emojiContainer' onClick={() => setIsEmojiModalShowing(true)}>
                   <div className='addEmoji'>
                     {
-                      emoji !== "" ? 
-                      (
-                        <div className="emoji">
-                          { emoji }
-                        </div> 
-                      )
-                      :
-                      (
-                        ""
-                      )
+                      emoji === "" ? <p className="addEmojiText">☻ Add icon</p> : <div className="emoji">{ emoji }</div>
+                    }
+                    {
+                      emoji === "" ? <div className='shadow'></div> : <div className='shadow'></div>
                     }
                   </div>
-                  <div className='shadow'></div>
                 </div>
-                {
-                  emoji === "" ? 
-                  (
-                      <p className="addIcon">☻ Add icon</p>
-                  )
-                  :
-                  (
-                    ""
-                  )
-                }
                 <label className='container'>
                   <div className="circle">
                     <img src={checkmark} alt="SVG as an image"/>
@@ -120,8 +95,8 @@ export default function AddHabit(props) {
                 </label>
               </div>
               <form onSubmit={handleSubmit}>
-                <input className="habitextInput" type="text" id="habit" name="habit" required placeholder="Enter Habit"/>
-                <button type="submit">Submit</button>
+                <input className="habitInput" type="text" id="habit" name="habit" required placeholder="Enter Habit"/>
+                <button type="submit">Create Habit</button>
               </form>
               <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
             </>
@@ -130,17 +105,64 @@ export default function AddHabit(props) {
       </div>
       <style jsx>{`
 
-        
+        .habitInput {
+          width: 50%; 
+          height: 30px; 
+          font-size:20px;
+          color: black;
+          border-radius: 50px;
+          border: 0;
+          /* background-color: rgba(239,239,239,255); */
+        } 
 
-        .habitextInput {
-          width: 100%; 
-          height:30px; 
-          font-size:30px;
+        .habitInput:hover {
+          background-color: rgba(239,239,239,255);
+        }
+
+        .habitInput::placeholder {
+            font-weight: bold;
+            opacity: 0.25;
+            color: black;
+        }
+        
+        .emojiContainer {
+          height: 202.5px;
+          width: 104px;
+          /* padding-top: 10px; */
+          /* border: 2px solid orange;   */
         }
         
         .addEmoji {
-          height: 202.5px;
+          height: 152.5px;
+          margin-top: 20px;
+          margin-bottom: 30px;
           width: 104px;
+          display: flex:
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          /* border: 2px dashed black; */
+        }
+        
+        .addEmojiText {
+          color: gray;
+          position: relative;
+          top: 50px;
+          left: 10px;
+          /* border: 1px solid black; */
+        }
+        
+        .shadow {
+          border-radius: 90%;
+          width: 100px;
+          height: 100px;
+          background: gray;
+          opacity: 0.2;
+          -webkit-filter: blur(10px);
+          -webkit-transform: scale(1, 0.2);
+          margin: 0px;
+          position: absolute;
+          bottom: 10px;
         }
         
         .addEmoji:hover {
@@ -148,29 +170,12 @@ export default function AddHabit(props) {
           cursor: pointer;
         }
         
-        .icon {
-          /* border: 2px solid black; */
-        }
-        
-        .icon:hover {
-          background-color: rgba(239,239,239,255);
-          cursor: pointer;
-        }
-
-        .icon:hover + .addIcon {
-          display: block;
-          /* color: red; */
-          cursor: pointer;
-        }
-        
-        .addIcon {
-          display: none;
+        .emoji {
+          font-size: 100px;
+          background-color: none;
           position: relative;
-          right: 120px;
-          top: 75px;
-          height: 20px;
-          color: gray;
-          /* border: 2px solid red;  */
+          bottom: 20px;
+          /* border: 1px solid red; */
         }
 
         .circle {
@@ -205,47 +210,6 @@ export default function AddHabit(props) {
         h1 {
           margin-top: 0px;
           /* border: 2px solid black; */
-        }
-
-        .emoji {
-          font-size: 100px;
-        }
-
-        .shadow {
-          border-radius: 90%;
-          width: 100px;
-          height: 100px;
-          background: gray;
-          opacity: 0.2;
-          -webkit-filter: blur(10px);
-          -webkit-transform: scale(1, 0.2);
-          margin: 0px;
-          position: absolute;
-          bottom: 10px;
-        }
-
-        .emoji {
-          /* border: 2px solid red; */
-          margin-top: 0;
-          padding: 0;
-          font-size: 100px;
-        }
-
-        .emoji:hover {
-          background-color: rgba(239,239,239,255);
-        }
-
-        .emojiDiv {
-          border: 2px solid red;
-          display: flex;
-          justify-content: center;
-        }        
-
-        .habitInput {
-          height: 200px;
-          display: flex;
-          flex-direction: column;
-          /* border: 2px solid magenta; */
         }
 
         svg {
@@ -287,7 +251,6 @@ export default function AddHabit(props) {
           transition: color 0.3s ease, border-color 0.3s ease;
           height: 370px;
           width: 383px;
-          cursor: pointer;
           /* border: 2px solid green; */
         }
 

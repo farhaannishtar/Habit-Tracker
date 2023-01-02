@@ -1,7 +1,6 @@
 import styles from '../styles/Habit.module.css';
 import { useState, useEffect } from 'react'
 import EmojiModal from "./EmojiModal";
-import uuid from 'react-uuid';
 
 export default function Habit(props) {
 
@@ -20,7 +19,7 @@ export default function Habit(props) {
   }
 
   const editHabitTextHandler = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     const editedText = event.target.habit.value;
     props.editHabitTextHandler(props.identifier, editedText);
     setEditFormShowing(false);
@@ -34,75 +33,122 @@ export default function Habit(props) {
     }
   }
 
-  useEffect(() => async (event) => {
-    props.editHabitEmojiHandler(props.identifier, emoji);    
-  }, [emoji]);
+  useEffect(() => async() => {
+    props.editHabitEmojiHandler(props.identifier, emoji);  
+    console.log("props.identifier: ", props.identifier, "emoji: ", emoji);
+    setEmoji(props.habit.emoji);
+  }, [props.habit.emoji]);
 
   return (
     <>
       { props.isEditable ?
-        <div className='card' style={{ backgroundColor: props.color}}>
-          { editFormShowing  ? (
-            <form onSubmit={editHabitTextHandler} className={styles.editForm}>
-              <input type="text" id="habit" name="habit" required placeholder="Edit Habit"/>
-              <button type="submit">Submit</button>
-            </form>
-          )
-          : 
-            <>
-              <div className="topLayer">
-               <div className='icon' onClick={() => setIsEmojiModalShowing(true)}>
-                  { props.habit.emoji ? 
+        (
+          <div className='card' style={{ backgroundColor: props.color}}>
+            <div className="topLayer">
+              <div className='emojiContainer' onClick={() => setIsEmojiModalShowing(true)}>
+                  { emoji ? 
                     (
                       <>
-                        <h1 className='emoji'>{emoji}</h1>
+                        <div className='emoji'>{ emoji }</div>
                         <div className='shadow'></div>
                       </>
                     )
                     :
                     (
-                      <div className='emptyIcon'></div>
+                      <div className='addEmoji'>
+                        {
+                          emoji === "" ? <p className="addEmojiText">☻ Add icon</p> : <div className="emoji">{ emoji }</div>
+                        }
+                        <div className='shadow'></div>
+                      </div>
                     )
                   }
-                </div>
-                <label className='container'>
-                  <div className="circle" onClick={styleCheckmark}>
-                    <img src={checkmark} alt="SVG as an image"/>
-                  </div>
-                </label>
               </div>
+              <label className='container'>
+                <div className="circle" onClick={styleCheckmark}>
+                  <img src={checkmark} alt="SVG as an image"/>
+                </div>
+              </label>
+            </div>
+            { editFormShowing  ? 
+              (
+                <div className='formDiv'>
+                  <form onSubmit={editHabitTextHandler} className={styles.editForm}>
+                    <input className="habitInput" type="text" id="habit" name="habit" required placeholder="Edit Habit"/>
+                    <button type="submit">Edit</button>
+                  </form>
+                </div>
+              )
+              :
               <h1 className='habitText' onClick={toggleEditForm}>{props.habit.text}</h1> 
-            </>
-          } 
-          {/* <div className='buttons'>
-            <button onClick={toggleEditForm}>Edit</button>
-            <button onClick={deleteHandler}>Delete</button>
-          </div> */}
-        </div> 
+            }
+          </div> 
+        )
         :
-        <div onClick={() => props.styleCard(props.habit.id)} className={props.habit.habit_card_style}>
-          <h1>{props.habit.habit_emoji}</h1>
-          <h2>{props.habit.habit_name}</h2>
-        </div>
+        (
+          <div onClick={() => props.styleCard(props.habit.id)} className={props.habit.habit_card_style}>
+            <h1>{props.habit.habit_emoji}</h1>
+            <h2>{props.habit.habit_name}</h2>
+          </div>
+        )
       }
       <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
       <style jsx>{`
-        .habitText:hover {
-          cursor: pointer
+
+        .formDiv {
+          position: relative;
+          right: 55px;
+          bottom: 17px;
+          /* border: 2px solid red; */
         }
 
-        .emptyIcon {
-          height: 202.5px;
+        .habitInput {
+          width: 60%; 
+          height: 30px; 
+          font-size:20px;
+          color: black;
+          border-radius: 50px;
+          border: 0;
+          /* background-color: rgba(239,239,239,255); */
+        } 
+
+        .habitInput:hover {
+          background-color: rgba(239,239,239,255);
+        }
+
+        .habitInput::placeholder {
+            font-weight: bold;
+            opacity: 0.25;
+            color: black;
+        }
+
+        .addEmoji {
+          height: 152.5px;
+          margin-top: 20px;
+          margin-bottom: 30px;
           width: 104px;
+          display: flex:
+          justify-content: center;
+          align-items: center;
+          /* border: 2px solid green;  */
         }
 
-        .emptyIcon:hover {
+        .addEmojiText {
+          color: gray;
+          position: relative;
+          top: 50px;
+          left: 10px;
+        }
+
+        .addEmoji:hover {
           background-color: rgba(239,239,239,255);
           cursor: pointer;
         }
 
-        .icon {
-          /* border: 2px solid black; */
+        .emojiContainer {
+          height: 202.5px;
+          width: 104px;
+          /* border: 2px solid black;  */
         }
 
         .icon:hover {
@@ -115,7 +161,6 @@ export default function Habit(props) {
           margin: 15px;
           border-radius: 1500px;
           background-color: white;
-          /* background-color: #999999; */
           display: flex;
           justify-content: center;
           -webkit-touch-callout: none;
@@ -124,7 +169,6 @@ export default function Habit(props) {
           -moz-user-select: none;
           -ms-user-select: none;
           user-select: none;
-           /* border: 2px solid black; */
         }
 
         .circle:hover {
@@ -139,14 +183,28 @@ export default function Habit(props) {
           left: 15px;
           /* border: 2px solid black; */
         }
+          
+        .habitText:hover {
+          cursor: pointer
+          background-color: props.color;
+          opacity: 0.5;
+        }
 
         h1 {
           margin-top: 0px;
+          cursor: pointer
           /* border: 2px solid black; */
         }
 
         .emoji {
           font-size: 100px;
+          cursor: pointer;
+          /* border: 1px solid red; */
+        }
+
+        .emoji:hover {
+          background-color: props.color;
+          opacity: 0.5;
         }
 
         .shadow {
@@ -182,7 +240,6 @@ export default function Habit(props) {
         .card:hover,
         .card:focus,
         .card:active {
-          color: #0070f3;
           border-color: #0070f3;
         }
 
@@ -191,7 +248,7 @@ export default function Habit(props) {
           color: white;
           font-size: 16px;
           border-radius: 4px;
-        }
+          }
       `}</style>
     </>
   )
