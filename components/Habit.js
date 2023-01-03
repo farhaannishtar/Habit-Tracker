@@ -1,29 +1,16 @@
 import styles from '../styles/Habit.module.css';
 import { useState, useEffect } from 'react'
 import EmojiModal from "./EmojiModal";
+import InlineEdit from './InlineEdit';
 
 export default function Habit(props) {
 
-  const [editFormShowing, setEditFormShowing] = useState(false);
-  const [editButtonText, setEditButtonText] = useState('Edit')
+  const [value, setValue] = useState(props.habit.text);
   const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState(props.habit.emoji);
 
   const deleteHandler = () => props.deleteHandler(props.identifier);
-
-  const toggleEditForm = (event) => {
-    event.stopPropagation();
-    setEditFormShowing(!editFormShowing);
-    setEditButtonText(editButtonText === 'Edit' ? 'Close' : 'Edit');
-  }
-
-  const editHabitTextHandler = (event) => {
-    event.preventDefault();
-    const editedText = event.target.habit.value;
-    props.editHabitTextHandler(props.identifier, editedText);
-    setEditFormShowing(false);
-  }  
 
   const styleCheckmark = () => {
     if (checkmark === "/redCheckMark.svg") {
@@ -32,6 +19,10 @@ export default function Habit(props) {
       setCheckmark("/redCheckMark.svg");
     }
   }
+
+  useEffect(() => {
+    props.editHabitTextHandler(props.identifier, value);
+  }, [value]);
 
   useEffect(() => async() => {
     props.editHabitEmojiHandler(props.identifier, emoji);  
@@ -69,19 +60,8 @@ export default function Habit(props) {
                   <img src={checkmark} alt="SVG as an image"/>
                 </div>
               </label>
-            </div>
-            { editFormShowing  ? 
-              (
-                <div className='formDiv'>
-                  <form onSubmit={editHabitTextHandler} className={styles.editForm}>
-                    <input className="habitInput" type="text" id="habit" name="habit" required placeholder="Edit Habit"/>
-                    <button type="submit">Edit</button>
-                  </form>
-                </div>
-              )
-              :
-              <h1 className='habitText' onClick={toggleEditForm}>{props.habit.text}</h1> 
-            }
+            </div> 
+            <InlineEdit value={value} setValue={setValue} />
           </div> 
         )
         :
@@ -94,34 +74,6 @@ export default function Habit(props) {
       }
       <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
       <style jsx>{`
-
-        .formDiv {
-          position: relative;
-          right: 55px;
-          bottom: 17px;
-          /* border: 2px solid red; */
-        }
-
-        .habitInput {
-          width: 60%; 
-          height: 30px; 
-          font-size:20px;
-          color: black;
-          border-radius: 50px;
-          border: 0;
-          /* background-color: rgba(239,239,239,255); */
-        } 
-
-        .habitInput:hover {
-          background-color: rgba(239,239,239,255);
-        }
-
-        .habitInput::placeholder {
-            font-weight: bold;
-            opacity: 0.25;
-            color: black;
-        }
-
         .addEmoji {
           height: 152.5px;
           margin-top: 20px;
@@ -185,8 +137,7 @@ export default function Habit(props) {
         }
           
         .habitText:hover {
-          cursor: pointer
-          background-color: props.color;
+          cursor: pointer;
           opacity: 0.5;
         }
 

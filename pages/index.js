@@ -2,7 +2,6 @@ import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
 import { useState } from 'react'
 import Habit from '../components/Habit'
-import uuid from 'react-uuid';
 import styles from '../styles/index.module.css'
 import AddHabit from '../components/AddHabit';
 
@@ -88,7 +87,7 @@ export default function Home({ isConnected }) {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 2px solid purple;
+            /* border: 2px solid purple; */
           }
           `}</style>
       </div>

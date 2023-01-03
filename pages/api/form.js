@@ -8,7 +8,7 @@ export default function handler(req, res) {
 
   // Guard clause checks for habit,
   // and returns early if it's not found
-  if (!body.habit) {
+  if (!body.text) {
     // Sends a HTTP bad request error code
     return res.status(400).json({ data: 'Habit not found' })
   }
@@ -16,7 +16,7 @@ export default function handler(req, res) {
   // Found the name.
   // Sends a HTTP success code
   res.status(200).json({ 
-    text: `${body.habit}`,
+    text: `${body.text}`,
     emoji: `${body.emoji}`
   })
 }

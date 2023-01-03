@@ -1,23 +1,22 @@
 import { useState } from "react";
 import uuid from 'react-uuid';
 import EmojiModal from "./EmojiModal";
+import InlineEdit from "./InlineEdit";
 
 export default function AddHabit(props) {
 
   const { setHabits }  = props;
   const [isFormShowing, setIsFormShowing] = useState(false);
+  const [editingValue, setEditingValue] = useState("");
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState("");
   const [cardStyle, setCardStyle] = useState('card');
   const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
 
-  const handleSubmit = async (event) => {
-    // Stop the form from submitting and refreshing the page.
-    event.preventDefault()
-  
+  const handleSubmit = async (habitText) => {
     // Get data from the form.
     const data = {
-      habit: event.target.habit.value,
+      text: habitText,
       emoji: emoji,
     }
   
@@ -54,10 +53,10 @@ export default function AddHabit(props) {
       emoji: result.emoji
     }
     setHabits(current => [...current, newHabit]);
-    event.target.habit.value = "";
     setIsFormShowing(false);
     setCardStyle('card');
     setEmoji("")
+    setEditingValue("");
   }
 
   const cardClickHandler = (e) => {
@@ -94,42 +93,16 @@ export default function AddHabit(props) {
                   </div>
                 </label>
               </div>
-              <form onSubmit={handleSubmit}>
-                <input className="habitInput" type="text" id="habit" name="habit" required placeholder="Enter Habit"/>
-                <button type="submit">Create Habit</button>
-              </form>
+              <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} handleSubmit={handleSubmit} />
               <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
             </>
           )
         }
       </div>
       <style jsx>{`
-
-        .habitInput {
-          width: 50%; 
-          height: 30px; 
-          font-size:20px;
-          color: black;
-          border-radius: 50px;
-          border: 0;
-          /* background-color: rgba(239,239,239,255); */
-        } 
-
-        .habitInput:hover {
-          background-color: rgba(239,239,239,255);
-        }
-
-        .habitInput::placeholder {
-            font-weight: bold;
-            opacity: 0.25;
-            color: black;
-        }
-        
         .emojiContainer {
           height: 202.5px;
           width: 104px;
-          /* padding-top: 10px; */
-          /* border: 2px solid orange;   */
         }
         
         .addEmoji {

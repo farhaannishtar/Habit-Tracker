@@ -1,0 +1,17 @@
+.input {
+  background-color: transparent;
+  border: 0;
+  width: 100%;
+  padding: 8px;
+  font-size: 35px;
+  font-weight: bold; 
+}
+
+.input:hover {
+  cursor: pointer;
+}
+
+.input:focus {
+  outline: none;
+}
+
