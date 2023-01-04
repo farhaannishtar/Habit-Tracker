@@ -9,7 +9,7 @@ export default function AddHabit(props) {
   const [isFormShowing, setIsFormShowing] = useState(false);
   const [editingValue, setEditingValue] = useState("");
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
-  const [emoji, setEmoji] = useState("");
+  const [emoji, setEmoji] = useState("🏗");
   const [cardStyle, setCardStyle] = useState('card');
   const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
 
@@ -55,7 +55,7 @@ export default function AddHabit(props) {
     setHabits(current => [...current, newHabit]);
     setIsFormShowing(false);
     setCardStyle('card');
-    setEmoji("")
+    setEmoji("🏗")
     setEditingValue("");
   }
 
@@ -79,12 +79,8 @@ export default function AddHabit(props) {
               <div className="topLayer">
                 <div className='emojiContainer' onClick={() => setIsEmojiModalShowing(true)}>
                   <div className='addEmoji'>
-                    {
-                      emoji === "" ? <p className="addEmojiText">☻ Add icon</p> : <div className="emoji">{ emoji }</div>
-                    }
-                    {
-                      emoji === "" ? <div className='shadow'></div> : <div className='shadow'></div>
-                    }
+                    <div className="emoji">{ emoji }</div>
+                    <div className='shadow'></div>
                   </div>
                 </div>
                 <label className='container'>
@@ -100,6 +96,14 @@ export default function AddHabit(props) {
         }
       </div>
       <style jsx>{`
+        .topLayer {
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+          bottom: 15px;
+          left: 15px;
+        }
+
         .emojiContainer {
           height: 202.5px;
           width: 104px;
@@ -116,11 +120,17 @@ export default function AddHabit(props) {
           align-items: center;
         }
         
-        .addEmojiText {
-          color: gray;
+        
+        .addEmoji:hover {
+          background-color: rgba(239,239,239,255);
+          cursor: pointer;
+        }
+        
+        .emoji {
+          font-size: 100px;
+          background-color: none;
           position: relative;
-          top: 50px;
-          left: 10px;
+          bottom: 20px;
         }
         
         .shadow {
@@ -134,18 +144,6 @@ export default function AddHabit(props) {
           margin: 0px;
           position: absolute;
           bottom: 10px;
-        }
-        
-        .addEmoji:hover {
-          background-color: rgba(239,239,239,255);
-          cursor: pointer;
-        }
-        
-        .emoji {
-          font-size: 100px;
-          background-color: none;
-          position: relative;
-          bottom: 20px;
         }
 
         .circle {
@@ -167,30 +165,9 @@ export default function AddHabit(props) {
           cursor: pointer;
         }
 
-        .topLayer {
-          display: flex;
-          justify-content: space-between;
-          position: relative;
-          bottom: 15px;
-          left: 15px;
-        }
-
-        h1 {
-          margin-top: 0px;
-        }
-
         svg {
           width: 100px;
           height: 100px;
-        }
-
-        .button:focus {
-          outline: 2px solid transparent;
-          outline-offset: 2px;
-        }
-
-        .button:focus-visible {
-          box-shadow: none;
         }
 
         .card {
