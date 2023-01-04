@@ -89,7 +89,7 @@ export default function AddHabit(props) {
                   </div>
                 </label>
               </div>
-              <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} handleSubmit={handleSubmit} />
+              <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} handleSubmit={handleSubmit} emoji={emoji}/>
               <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
             </>
           )

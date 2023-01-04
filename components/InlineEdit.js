@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import styles from '../styles/InlineEdit.module.css'
 
 export default function InlineEdit(props) {
-  const { editingValue, setEditingValue, handleSubmit } = props;
+  const { editingValue, setEditingValue, handleSubmit, emoji } = props;
 
   const onChange = (event) => setEditingValue(event.target.value);
   
@@ -21,12 +21,11 @@ export default function InlineEdit(props) {
       setEditingValue(event.target.value)
     }
   }
-  
+
   useEffect(() => {
     const input = document.getElementById('text-box');
     input.focus();
-    input.select();
-  }, []);
+  }, [emoji]);
 
   return (
     <input
