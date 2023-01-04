@@ -48,7 +48,7 @@ export default function AddHabit(props) {
     console.log("result: ", result)
 
     const newHabit = {
-      key: uuid(),
+      id: uuid(),
       text: result.text,
       emoji: result.emoji
     }

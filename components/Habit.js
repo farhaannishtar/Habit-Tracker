@@ -1,16 +1,15 @@
-import styles from '../styles/Habit.module.css';
 import { useState, useEffect } from 'react'
 import EmojiModal from "./EmojiModal";
 import InlineEdit from './InlineEdit';
 
 export default function Habit(props) {
 
-  const [value, setValue] = useState(props.habit.text);
+  const [editingValue, setEditingValue] = useState(props.habit.text);
   const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState(props.habit.emoji);
 
-  const deleteHandler = () => props.deleteHandler(props.identifier);
+  const deleteHandler = () => props.deleteHandler(props.id);
 
   const styleCheckmark = () => {
     if (checkmark === "/redCheckMark.svg") {
@@ -21,14 +20,12 @@ export default function Habit(props) {
   }
 
   useEffect(() => {
-    props.editHabitTextHandler(props.identifier, value);
-  }, [value]);
+    props.editHabitTextHandler(props.id, editingValue);
+  }, [editingValue]);
 
-  useEffect(() => async() => {
-    props.editHabitEmojiHandler(props.identifier, emoji);  
-    console.log("props.identifier: ", props.identifier, "emoji: ", emoji);
-    setEmoji(props.habit.emoji);
-  }, [props.habit.emoji]);
+  useEffect(() => {
+    props.editHabitEmojiHandler(props.id, emoji);  
+  }, [emoji]);
 
   return (
     <>
@@ -61,7 +58,7 @@ export default function Habit(props) {
                 </div>
               </label>
             </div> 
-            <InlineEdit value={value} setValue={setValue} />
+            <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} />
           </div> 
         )
         :

@@ -2,9 +2,8 @@ import { useState } from 'react';
 import styles from '../styles/InlineEdit.module.css'
 
 export default function InlineEdit(props) {
-  const { value, setValue, handleSubmit } = props;
-  const [editingValue, setEditingValue] = useState(value);
-  
+  const { editingValue, setEditingValue, handleSubmit } = props;
+
   const onChange = (event) => setEditingValue(event.target.value);
   
   const onKeyDown = (event) => {
@@ -17,7 +16,7 @@ export default function InlineEdit(props) {
   
   const onBlur = (event) => {
     if (event.target.value.trim() === "") {
-      setEditingValue(value);
+      setEditingValue(editingValue);
     } else {
       setEditingValue(event.target.value)
     }
@@ -26,7 +25,7 @@ export default function InlineEdit(props) {
   return (
     <input
       type="text"
-      aria-label="Field name"
+      aria-label="Habit name"
       value={editingValue}
       onChange={onChange}
       onKeyDown={onKeyDown}

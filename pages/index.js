@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Habit from '../components/Habit'
 import styles from '../styles/index.module.css'
 import AddHabit from '../components/AddHabit';
@@ -39,16 +39,30 @@ export default function Home({ isConnected }) {
   
   const [habits, setHabits] = useState([]);
 
-  const deleteHandler = (identifier) => {
-    setHabits(habits.filter(habit => habit.key !== identifier));
+  const deleteHandler = (id) => {
+    setHabits(habits.filter(habit => habit.id !== id));
   }
 
-  const editHabitTextHandler = (identifier, editedText) => {
-    setHabits(habits => habits.filter(habit => habit.key === identifier ? habit.text = editedText : habit))
+  const editHabitTextHandler = (id, editedText) => {
+    setHabits(habits => habits.filter(habit => {
+      if (habit.id === id) {
+        habit.text = editedText || " ";
+        return habit;
+      } else {
+        return habit;
+      } 
+    }))
   }
 
-  const editHabitEmojiHandler = (identifier, editedEmoji) => {
-    setHabits(habits => habits.filter(habit => habit.key === identifier ? habit.emoji = editedEmoji : habit))
+  const editHabitEmojiHandler = (id, editedEmoji) => {
+    setHabits(habits => habits.filter(habit => {
+      if(habit.id === id) {
+        habit.emoji = editedEmoji
+        return habit;
+      } else {
+        return habit
+      }
+    }))
   }
 
   return (
@@ -65,7 +79,15 @@ export default function Home({ isConnected }) {
       <AddHabit habits={habits} setHabits={setHabits}/>
       {
         habits.map((habit, index) => {
-          return <Habit key={habit.key} isEditable={true} color={cardColors[index % cardColors.length]} habit={habit} setHabits={setHabits} identifier={habit.key} deleteHandler={deleteHandler} editHabitTextHandler={editHabitTextHandler} editHabitEmojiHandler={editHabitEmojiHandler}/>
+          return <Habit 
+            key={habit.id}
+            id={habit.id} 
+            isEditable={true} 
+            color={cardColors[index % cardColors.length]} 
+            habit={habit} setHabits={setHabits} 
+            deleteHandler={deleteHandler} 
+            editHabitTextHandler={editHabitTextHandler} 
+            editHabitEmojiHandler={editHabitEmojiHandler}/>
         })
       }
       </div>
@@ -78,7 +100,6 @@ export default function Home({ isConnected }) {
             max-width: 1350px;
             margin-top: 3rem;
             gap: 5px 5px;
-            /* border: 2px solid orange;  */
           }
 
           .container {
@@ -87,7 +108,6 @@ export default function Home({ isConnected }) {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            /* border: 2px solid purple; */
           }
           `}</style>
       </div>
