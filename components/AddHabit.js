@@ -114,7 +114,6 @@ export default function AddHabit(props) {
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          /* border: 2px dashed black; */
         }
         
         .addEmojiText {
@@ -122,7 +121,6 @@ export default function AddHabit(props) {
           position: relative;
           top: 50px;
           left: 10px;
-          /* border: 1px solid black; */
         }
         
         .shadow {
@@ -148,7 +146,6 @@ export default function AddHabit(props) {
           background-color: none;
           position: relative;
           bottom: 20px;
-          /* border: 1px solid red; */
         }
 
         .circle {
@@ -164,7 +161,6 @@ export default function AddHabit(props) {
           -moz-user-select: none;
           -ms-user-select: none;
           user-select: none;
-          /* border: 2px solid black; */
         }
 
         .circle:hover {
@@ -177,12 +173,10 @@ export default function AddHabit(props) {
           position: relative;
           bottom: 15px;
           left: 15px;
-          /* border: 2px solid black; */
         }
 
         h1 {
           margin-top: 0px;
-          /* border: 2px solid black; */
         }
 
         svg {
@@ -212,7 +206,6 @@ export default function AddHabit(props) {
           justify-content: center;
           align-items: center;
           cursor: pointer;
-          /* border: 2px solid green; */
         }
 
         .cardForm {
@@ -224,7 +217,6 @@ export default function AddHabit(props) {
           transition: color 0.3s ease, border-color 0.3s ease;
           height: 370px;
           width: 383px;
-          /* border: 2px solid green; */
         }
 
         .card:hover,
