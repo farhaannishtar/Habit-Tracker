@@ -17,6 +17,7 @@ export default function handler(req, res) {
   // Sends a HTTP success code
   res.status(200).json({ 
     text: `${body.text}`,
-    emoji: `${body.emoji}`
+    emoji: `${body.emoji}`,
+    selected: `${body.selected}`
   })
 }
