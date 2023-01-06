@@ -27,17 +27,22 @@ export default function Habit(props) {
     props.editHabitEmojiHandler(props.id, emoji);  
   }, [emoji]);
 
+  const handleEmojiClick = (e) => {
+    e.stopPropagation()
+    setIsEmojiModalShowing(true)
+  }
+
   return (
     <>
       { props.isEditable ?
         (
-          <div className='card' style={{ backgroundColor: props.color}}>
+          <div className='card' style={{ backgroundColor: props.color}} onClick={styleCheckmark}>
             <div className="topLayer">
-              <div className='emojiContainer' onClick={() => setIsEmojiModalShowing(true)}>
+              <div className='emojiContainer'>
                   { emoji ? 
                     (
                       <>
-                        <div className='emoji'>{ emoji }</div>
+                        <div className='emoji' onClick={handleEmojiClick}>{ emoji }</div>
                         <div className='shadow'></div>
                       </>
                     )
@@ -53,12 +58,14 @@ export default function Habit(props) {
                   }
               </div>
               <label className='container'>
-                <div className="circle" onClick={styleCheckmark}>
+                <div className="circle">
                   <img src={checkmark} alt="SVG as an image"/>
                 </div>
               </label>
             </div> 
-            <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} />
+            <div onClick={(e) => e.stopPropagation()}>
+            <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue}/>
+            </div>
           </div> 
         )
         :
@@ -79,7 +86,6 @@ export default function Habit(props) {
           display: flex:
           justify-content: center;
           align-items: center;
-          /* border: 2px solid green;  */
         }
 
         .addEmojiText {
@@ -97,7 +103,6 @@ export default function Habit(props) {
         .emojiContainer {
           height: 202.5px;
           width: 104px;
-          /* border: 2px solid black;  */
         }
 
         .icon:hover {
@@ -147,7 +152,7 @@ export default function Habit(props) {
         .emoji {
           font-size: 100px;
           cursor: pointer;
-          /* border: 1px solid red; */
+          border: 2px solid red; 
         }
 
         .emoji:hover {

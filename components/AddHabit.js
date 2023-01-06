@@ -9,7 +9,7 @@ export default function AddHabit(props) {
   const [isFormShowing, setIsFormShowing] = useState(false);
   const [editingValue, setEditingValue] = useState("");
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
-  const [emoji, setEmoji] = useState("");
+  const [emoji, setEmoji] = useState("🏗");
   const [cardStyle, setCardStyle] = useState('card');
   const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
 
@@ -18,6 +18,7 @@ export default function AddHabit(props) {
     const data = {
       text: habitText,
       emoji: emoji,
+      selected: false
     }
   
     // Send the data to the server in JSON format.
@@ -50,12 +51,13 @@ export default function AddHabit(props) {
     const newHabit = {
       id: uuid(),
       text: result.text,
-      emoji: result.emoji
+      emoji: result.emoji,
+      selected: false
     }
     setHabits(current => [...current, newHabit]);
     setIsFormShowing(false);
     setCardStyle('card');
-    setEmoji("")
+    setEmoji("🏗")
     setEditingValue("");
   }
 
@@ -79,12 +81,8 @@ export default function AddHabit(props) {
               <div className="topLayer">
                 <div className='emojiContainer' onClick={() => setIsEmojiModalShowing(true)}>
                   <div className='addEmoji'>
-                    {
-                      emoji === "" ? <p className="addEmojiText">☻ Add icon</p> : <div className="emoji">{ emoji }</div>
-                    }
-                    {
-                      emoji === "" ? <div className='shadow'></div> : <div className='shadow'></div>
-                    }
+                    <div className="emoji">{ emoji }</div>
+                    <div className='shadow'></div>
                   </div>
                 </div>
                 <label className='container'>
@@ -93,13 +91,21 @@ export default function AddHabit(props) {
                   </div>
                 </label>
               </div>
-              <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} handleSubmit={handleSubmit} />
+              <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} handleSubmit={handleSubmit} emoji={emoji}/>
               <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
             </>
           )
         }
       </div>
       <style jsx>{`
+        .topLayer {
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+          bottom: 15px;
+          left: 15px;
+        }
+
         .emojiContainer {
           height: 202.5px;
           width: 104px;
@@ -114,15 +120,19 @@ export default function AddHabit(props) {
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          /* border: 2px dashed black; */
         }
         
-        .addEmojiText {
-          color: gray;
+        
+        .addEmoji:hover {
+          background-color: rgba(239,239,239,255);
+          cursor: pointer;
+        }
+        
+        .emoji {
+          font-size: 100px;
+          background-color: none;
           position: relative;
-          top: 50px;
-          left: 10px;
-          /* border: 1px solid black; */
+          bottom: 20px;
         }
         
         .shadow {
@@ -136,19 +146,6 @@ export default function AddHabit(props) {
           margin: 0px;
           position: absolute;
           bottom: 10px;
-        }
-        
-        .addEmoji:hover {
-          background-color: rgba(239,239,239,255);
-          cursor: pointer;
-        }
-        
-        .emoji {
-          font-size: 100px;
-          background-color: none;
-          position: relative;
-          bottom: 20px;
-          /* border: 1px solid red; */
         }
 
         .circle {
@@ -164,39 +161,15 @@ export default function AddHabit(props) {
           -moz-user-select: none;
           -ms-user-select: none;
           user-select: none;
-          /* border: 2px solid black; */
         }
 
         .circle:hover {
           cursor: pointer;
         }
 
-        .topLayer {
-          display: flex;
-          justify-content: space-between;
-          position: relative;
-          bottom: 15px;
-          left: 15px;
-          /* border: 2px solid black; */
-        }
-
-        h1 {
-          margin-top: 0px;
-          /* border: 2px solid black; */
-        }
-
         svg {
           width: 100px;
           height: 100px;
-        }
-
-        .button:focus {
-          outline: 2px solid transparent;
-          outline-offset: 2px;
-        }
-
-        .button:focus-visible {
-          box-shadow: none;
         }
 
         .card {
@@ -212,7 +185,6 @@ export default function AddHabit(props) {
           justify-content: center;
           align-items: center;
           cursor: pointer;
-          /* border: 2px solid green; */
         }
 
         .cardForm {
@@ -224,7 +196,6 @@ export default function AddHabit(props) {
           transition: color 0.3s ease, border-color 0.3s ease;
           height: 370px;
           width: 383px;
-          /* border: 2px solid green; */
         }
 
         .card:hover,

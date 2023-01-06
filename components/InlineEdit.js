@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import styles from '../styles/InlineEdit.module.css'
 
 export default function InlineEdit(props) {
-  const { editingValue, setEditingValue, handleSubmit } = props;
+  const { editingValue, setEditingValue, handleSubmit, emoji } = props;
 
   const onChange = (event) => setEditingValue(event.target.value);
   
@@ -22,6 +22,11 @@ export default function InlineEdit(props) {
     }
   }
 
+  useEffect(() => {
+    const input = document.getElementById('text-box');
+    input.focus();
+  }, [emoji]);
+
   return (
     <input
       type="text"
@@ -31,6 +36,7 @@ export default function InlineEdit(props) {
       onKeyDown={onKeyDown}
       onBlur={onBlur}
       className={styles.input}
+      id={'text-box'}
       placeholder="Enter Habit"
     />
   );
