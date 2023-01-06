@@ -152,7 +152,6 @@ export default function Habit(props) {
         .emoji {
           font-size: 100px;
           cursor: pointer;
-          border: 2px solid red; 
         }
 
         .emoji:hover {

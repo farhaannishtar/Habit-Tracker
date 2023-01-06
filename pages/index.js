@@ -38,6 +38,7 @@ cardColors[3] = '#f7edf5';
 export default function Home({ isConnected }) {
   
   const [habits, setHabits] = useState([]);
+  const [completedHabits, setCompletedHabits] = useState(0);
 
   const deleteHandler = (id) => {
     setHabits(habits.filter(habit => habit.id !== id));
@@ -65,33 +66,41 @@ export default function Home({ isConnected }) {
     }))
   }
 
+
   return (
     <>  
       <div className={styles.headerContainer}>
-        <h1>Habit Tracker</h1>
+        <div className='header'>
+          <h1>Habit Tracker</h1>
+          <h2>{completedHabits} / {habits.length} Habits Completed</h2>
+        </div>
       </div>
       <div className="container">
-      <Head>
-        <title>Habit Tracker</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div className="grid">
-      <AddHabit habits={habits} setHabits={setHabits}/>
-      {
-        habits.map((habit, index) => {
-          return <Habit 
-            key={habit.id}
-            id={habit.id} 
-            isEditable={true} 
-            color={cardColors[index % cardColors.length]} 
-            habit={habit} setHabits={setHabits} 
-            deleteHandler={deleteHandler} 
-            editHabitTextHandler={editHabitTextHandler} 
-            editHabitEmojiHandler={editHabitEmojiHandler}/>
-        })
-      }
-      </div>
+        <Head>
+          <title>Habit Tracker</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className="grid">
+          <AddHabit habits={habits} setHabits={setHabits}/>
+          {
+            habits.map((habit, index) => {
+              return <Habit 
+                key={habit.id}
+                id={habit.id} 
+                isEditable={true} 
+                color={cardColors[index % cardColors.length]} 
+                habit={habit} setHabits={setHabits} 
+                deleteHandler={deleteHandler} 
+                editHabitTextHandler={editHabitTextHandler} 
+                editHabitEmojiHandler={editHabitEmojiHandler}/>
+            })
+          }
+        </div>
         <style jsx>{`
+          .header {
+            display: flex;
+            border: 2px solid red;
+          }
           .grid {
             display: flex;
             align-items: center;
