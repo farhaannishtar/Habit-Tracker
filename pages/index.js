@@ -1,10 +1,9 @@
-// This file used the new habit card component
 import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Habit from '../components/Habit'
-import uuid from 'react-uuid';
 import styles from '../styles/index.module.css'
+import AddHabit from '../components/AddHabit';
 
 export async function getServerSideProps(context) {
   try {
@@ -29,63 +28,41 @@ export async function getServerSideProps(context) {
   }
 }
 
+const cardColors = [];
+cardColors[0] = '#ebf5ed';
+cardColors[1] = '#f9ede6';
+cardColors[2] = '#faf9e5';
+cardColors[3] = '#f7edf5';
+
+
 export default function Home({ isConnected }) {
   
   const [habits, setHabits] = useState([]);
 
-  const handleSubmit = async (event) => {
-    // Stop the form from submitting and refreshing the page.
-    event.preventDefault()
-  
-    // Get data from the form.
-    const data = {
-      habit: event.target.habit.value,
-    }
-  
-    // Send the data to the server in JSON format.
-    const JSONdata = JSON.stringify(data)
-  
-    // API endpoint where we send form data.
-    const endpoint = '/api/form'
-  
-    // Form the request for sending data to the server.
-    const options = {
-      // The method is POST because we are sending data.
-      method: 'POST',
-      // Tell the server we're sending JSON.
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // Body of the request is the JSON data we created above.
-      body: JSONdata,
-    }
-  
-    // Send the form data to our forms API on Vercel and get a response.
-    const response = await fetch(endpoint, options)
-  
-    // Get the response data from server as JSON.
-    // If server returns the name submitted, that means the form works.
-    const result = await response.json()
-  
-    const newHabit = {
-      key: uuid(),
-      text: result.data,
-    }
-    setHabits(current => [...current, newHabit]);
-    event.target.habit.value = "";
+  const deleteHandler = (id) => {
+    setHabits(habits.filter(habit => habit.id !== id));
   }
 
-  const deleteHandler = (identifier) => {
-    setHabits(habits.filter(habit => habit.key !== identifier));
+  const editHabitTextHandler = (id, editedText) => {
+    setHabits(habits => habits.filter(habit => {
+      if (habit.id === id) {
+        habit.text = editedText || " ";
+        return habit;
+      } else {
+        return habit;
+      } 
+    }))
   }
 
-  const editHandler = (identifier, editedHabit) => {
-    const habitToEdit = habits.filter(habit => habit.key === identifier);
-    habitToEdit.text = editedHabit;
-    habitToEdit.key = uuid();
-
-    deleteHandler(identifier);
-    setHabits(current => [...current, habitToEdit]);
+  const editHabitEmojiHandler = (id, editedEmoji) => {
+    setHabits(habits => habits.filter(habit => {
+      if(habit.id === id) {
+        habit.emoji = editedEmoji
+        return habit;
+      } else {
+        return habit
+      }
+    }))
   }
 
   return (
@@ -98,14 +75,19 @@ export default function Home({ isConnected }) {
         <title>Habit Tracker</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <input className={styles.input} placeholder="Enter Habit" type="text" id="habit" name="habit" required />
-        <button className={styles.submitButton} type="submit">Submit</button>
-      </form>
       <div className="grid">
+      <AddHabit habits={habits} setHabits={setHabits}/>
       {
-        habits.map((habit) => {
-          return <Habit key={habit.key} cardType={"dashboard"} habit={habit} identifier={habit.key} deleteHandler={deleteHandler} editHandler={editHandler}/>
+        habits.map((habit, index) => {
+          return <Habit 
+            key={habit.id}
+            id={habit.id} 
+            isEditable={true} 
+            color={cardColors[index % cardColors.length]} 
+            habit={habit} setHabits={setHabits} 
+            deleteHandler={deleteHandler} 
+            editHabitTextHandler={editHabitTextHandler} 
+            editHabitEmojiHandler={editHabitEmojiHandler}/>
         })
       }
       </div>
@@ -113,11 +95,11 @@ export default function Home({ isConnected }) {
           .grid {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: left;
             flex-wrap: wrap;
-            max-width: 1000px;
+            max-width: 1350px;
             margin-top: 3rem;
-            /* border: 2px solid red; */
+            gap: 5px 5px;
           }
 
           .container {

@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "emoji-picker-react": "^4.4.7",
     "mongodb": "^4.8.1",
     "next": "latest",
     "react": "^18.2.0",
