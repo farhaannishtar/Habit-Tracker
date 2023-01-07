@@ -11,8 +11,10 @@ export default function Habit(props) {
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState(props.habit.emoji);
 
-  const deleteHandler = () => props.deleteHandler(props.id);
-
+  const deleteHandler = (e) => {
+    e.stopPropagation()
+    props.deleteHandler(props.id);
+  }
   const selectCard = () => {
     if (checkmark === "/redCheckMark.svg") {
       setCheckmark("/grayCheckMark.svg");
@@ -36,7 +38,7 @@ export default function Habit(props) {
     props.editHabitEmojiHandler(props.id, emoji);  
   }, [emoji]);
 
-  const handleEmojiClick = (e) => {
+  const emojiClickHandler = (e) => {
     e.stopPropagation()
     setIsEmojiModalShowing(true)
   }
@@ -47,24 +49,29 @@ export default function Habit(props) {
         (
           <div className='card' style={{ backgroundColor: props.color}} onClick={selectCard}>
             <div className="topLayer">
-              <div className='emojiContainer'>
-                  { emoji ? 
-                    (
-                      <>
-                        <div className='emoji' onClick={handleEmojiClick}>{ emoji }</div>
-                        <div className='shadow'></div>
-                      </>
-                    )
-                    :
-                    (
-                      <div className='addEmoji'>
-                        {
-                          emoji === "" ? <p className="addEmojiText">☻ Add icon</p> : <div className="emoji">{ emoji }</div>
-                        }
-                        <div className='shadow'></div>
-                      </div>
-                    )
-                  }
+              <div className='topLeft'>
+                <div className='redX'>
+                  <img src={'/redX.svg'} alt="SVG as an image" onClick={deleteHandler}/>
+                </div>
+                <div className='emojiContainer'>
+                    { emoji ? 
+                      (
+                        <div>
+                          <div className='emoji' onClick={emojiClickHandler}>{ emoji }</div>
+                          <div className='shadow'></div>
+                        </div>
+                      )
+                      :
+                      (
+                        <div className='addEmoji'>
+                          {
+                            emoji === "" ? <p className="addEmojiText">☻ Add icon</p> : <div className="emoji">{ emoji }</div>
+                          }
+                          <div className='shadow'></div>
+                        </div>
+                      )
+                    }
+                </div>
               </div>
               <label className='container'>
                 <div className="circle">
@@ -73,7 +80,7 @@ export default function Habit(props) {
               </label>
             </div> 
             <div onClick={(e) => e.stopPropagation()}>
-            <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue}/>
+              <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue}/>
             </div>
           </div> 
         )
@@ -87,6 +94,40 @@ export default function Habit(props) {
       }
       <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
       <style jsx>{`
+
+        .topLeft {
+          display: flex;
+          width: 160px;
+          justify-content: space-between;
+        }
+        
+        
+        .emojiContainer {
+          height: 202.5px;
+          width: 104px;
+        }
+        
+        .redX {
+          width: 40px
+        }
+        
+        img {
+          height: 30px;
+        }
+
+        img:hover {
+          height: 30px;
+          cursor: pointer;
+        }
+        
+        .topLayer {
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+          bottom: 15px;
+          right: 15px;
+        }
+
         .addEmoji {
           height: 152.5px;
           margin-top: 20px;
@@ -97,22 +138,12 @@ export default function Habit(props) {
           align-items: center;
         }
 
-        .addEmojiText {
-          color: gray;
-          position: relative;
-          top: 50px;
-          left: 10px;
-        }
-
         .addEmoji:hover {
           background-color: rgba(239,239,239,255);
           cursor: pointer;
         }
 
-        .emojiContainer {
-          height: 202.5px;
-          width: 104px;
-        }
+        
 
         .icon:hover {
           background-color: rgba(239,239,239,255);
@@ -138,15 +169,6 @@ export default function Habit(props) {
           cursor: pointer;
         }
 
-        .topLayer {
-          display: flex;
-          justify-content: space-between;
-          position: relative;
-          bottom: 15px;
-          left: 15px;
-          /* border: 2px solid black; */
-        }
-          
         .habitText:hover {
           cursor: pointer;
           opacity: 0.5;
@@ -155,8 +177,9 @@ export default function Habit(props) {
         h1 {
           margin-top: 0px;
           cursor: pointer
-          /* border: 2px solid black; */
         }
+
+
 
         .emoji {
           font-size: 100px;
@@ -184,7 +207,6 @@ export default function Habit(props) {
         .buttons {
           display: flex;
           justify-content: flex-end;
-          /* border: 2px solid black; */
         }
 
         .card {
@@ -195,7 +217,6 @@ export default function Habit(props) {
           transition: color 0.3s ease, border-color 0.3s ease;
           height: 370px;
           width: 383px;
-          /* border: 2px solid green; */
         }
 
         .card:hover,
