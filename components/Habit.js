@@ -8,6 +8,7 @@ export default function Habit(props) {
   const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState(props.habit.emoji);
+  const [textDecoration, setTextDecoration] = useState('none');
 
   const deleteHandler = (e) => {
     e.stopPropagation()
@@ -23,6 +24,11 @@ export default function Habit(props) {
       props.updateCompletedHabits(props.id, true);
     } else {
       props.updateCompletedHabits(props.id, false);
+    }
+    if (textDecoration === 'none') {
+      setTextDecoration('line-through');
+    } else {
+      setTextDecoration('none')
     }
   }
 
@@ -45,29 +51,9 @@ export default function Habit(props) {
         (
           <div className='card' style={{ backgroundColor: props.color}} onClick={completeHabit}>
             <div className="topLayer">
-              <div className='topLeft'>
-                <div className='redX'>
-                  <img src={'/redX.svg'} alt="SVG as an image" onClick={deleteHandler}/>
-                </div>
-                <div className='emojiContainer'>
-                    { emoji ? 
-                      (
-                        <div>
-                          <div className='emoji' onClick={emojiClickHandler}>{ emoji }</div>
-                          <div className='shadow'></div>
-                        </div>
-                      )
-                      :
-                      (
-                        <div className='addEmoji'>
-                          {
-                            emoji === "" ? <p className="addEmojiText">☻ Add icon</p> : <div className="emoji">{ emoji }</div>
-                          }
-                          <div className='shadow'></div>
-                        </div>
-                      )
-                    }
-                </div>
+              <div className='emojiContainer'>
+                <div className='emoji' onClick={emojiClickHandler}>{ emoji }</div>
+                <div className='shadow'></div>
               </div>
               <label className='container'>
                 <div className="circle">
@@ -75,8 +61,11 @@ export default function Habit(props) {
                 </div>
               </label>
             </div> 
-            <div onClick={(e) => e.stopPropagation()}>
-              <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue}/>
+            <div onClick={(e) => e.stopPropagation()} className='inline'>
+              <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} textDecoration={textDecoration}/>
+            </div>
+            <div className='trashcan'>
+              <img src='/trash.svg' onClick={deleteHandler}/>
             </div>
           </div> 
         )
@@ -90,60 +79,47 @@ export default function Habit(props) {
       }
       <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
       <style jsx>{`
+        .trashcan {
+          display: none;
+        }
 
-        .topLeft {
+        .card:hover .trashcan {
           display: flex;
-          width: 160px;
-          justify-content: space-between;
-        }
-        
-        
-        .emojiContainer {
-          height: 202.5px;
-          width: 104px;
-        }
-        
-        .redX {
-          width: 40px
-        }
-        
-        img {
-          height: 30px;
+          justify-content: flex-end;
+          user-select:none;
         }
 
         img:hover {
-          height: 30px;
           cursor: pointer;
         }
-        
+
+        .card {
+          margin: 1rem;
+          padding: 1.5rem;
+          border: 1px solid #eaeaea;
+          border-radius: 15px;
+          transition: color 0.3s ease, border-color 0.3s ease;
+          height: 370px;
+          width: 383px;
+          border: 2px solid black;
+          cursor: pointer;
+          user-select: none;
+        }
+
         .topLayer {
           display: flex;
           justify-content: space-between;
           position: relative;
           bottom: 15px;
-          right: 15px;
+          left: 15px;
+          /* border: 2px solid green; */
         }
-
-        .addEmoji {
-          height: 152.5px;
-          margin-top: 20px;
-          margin-bottom: 30px;
-          width: 104px;
-          display: flex:
-          justify-content: center;
-          align-items: center;
-        }
-
-        .addEmoji:hover {
-          background-color: rgba(239,239,239,255);
-          cursor: pointer;
-        }
-
         
+        .emojiContainer {
+          height: 202.5px;
+          width: 104px;
+          /* border: 2px solid blue */
 
-        .icon:hover {
-          background-color: rgba(239,239,239,255);
-          cursor: pointer;
         }
 
         .circle {
@@ -161,21 +137,10 @@ export default function Habit(props) {
           user-select: none;
         }
 
-        .circle:hover {
-          cursor: pointer;
-        }
-
-        .habitText:hover {
-          cursor: pointer;
-          opacity: 0.5;
-        }
-
         h1 {
           margin-top: 0px;
           cursor: pointer
         }
-
-
 
         .emoji {
           font-size: 100px;
@@ -183,7 +148,6 @@ export default function Habit(props) {
         }
 
         .emoji:hover {
-          background-color: props.color;
           opacity: 0.5;
         }
 
@@ -200,33 +164,14 @@ export default function Habit(props) {
           bottom: 10px;
         }
 
-        .buttons {
-          display: flex;
-          justify-content: flex-end;
-        }
-
-        .card {
-          margin: 1rem;
-          padding: 1.5rem;
-          border: 1px solid #eaeaea;
-          border-radius: 15px;
-          transition: color 0.3s ease, border-color 0.3s ease;
-          height: 370px;
-          width: 383px;
-        }
-
         .card:hover,
         .card:focus,
         .card:active {
           border-color: #0070f3;
         }
-
-        button {
-          background-color: black;
-          color: white;
-          font-size: 16px;
-          border-radius: 4px;
-          }
+        div { 
+          outline-style:none;
+        }
       `}</style>
     </>
   )

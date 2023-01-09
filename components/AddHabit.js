@@ -79,9 +79,9 @@ export default function AddHabit(props) {
           (
             <>
               <div className="topLayer">
-                <div className='emojiContainer' onClick={() => setIsEmojiModalShowing(true)}>
+                <div className='emojiContainer'>
                   <div className='addEmoji'>
-                    <div className="emoji">{ emoji }</div>
+                    <div className="emoji" onClick={() => setIsEmojiModalShowing(true)}>{ emoji }</div>
                     <div className='shadow'></div>
                   </div>
                 </div>
@@ -124,7 +124,6 @@ export default function AddHabit(props) {
         
         
         .addEmoji:hover {
-          background-color: rgba(239,239,239,255);
           cursor: pointer;
         }
         
@@ -133,6 +132,10 @@ export default function AddHabit(props) {
           background-color: none;
           position: relative;
           bottom: 20px;
+        }
+
+        .emoji:hover {
+          opacity: 0.5;
         }
         
         .shadow {
@@ -185,6 +188,7 @@ export default function AddHabit(props) {
           justify-content: center;
           align-items: center;
           cursor: pointer;
+          user-select: none;
         }
 
         .cardForm {

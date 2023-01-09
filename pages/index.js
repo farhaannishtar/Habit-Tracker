@@ -131,6 +131,7 @@ export default function Home() {
             max-width: 1350px;
             margin-top: 3rem;
             gap: 5px 5px;
+            user-select: none;
           }
           `}</style>
       </div> 
