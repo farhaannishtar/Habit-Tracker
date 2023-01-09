@@ -66,6 +66,25 @@ export default function Home({ isConnected }) {
     }))
   }
 
+  const updateCompletedHabits = (id, isCompleted) => {
+    setHabits(habits => habits.filter(habit => {
+      if(habit.id === id) {
+        habit.completed = isCompleted
+        return habit;
+      } else {
+        return habit
+      }
+    }))
+  }
+
+  useEffect(() => {
+    let count = 0;
+    habits.forEach(habit => {
+      if (habit.completed === true) count++;
+    })
+    setCompletedHabits(count);
+  }, [habits])
+
   return (
     <>
       <div className={styles.header}>
@@ -88,8 +107,7 @@ export default function Home({ isConnected }) {
                 color={cardColors[index % cardColors.length]} 
                 habit={habit} 
                 setHabits={setHabits}
-                completedHabits={completedHabits} 
-                setCompletedHabits={setCompletedHabits}
+                updateCompletedHabits={updateCompletedHabits}
                 deleteHandler={deleteHandler} 
                 editHabitTextHandler={editHabitTextHandler} 
                 editHabitEmojiHandler={editHabitEmojiHandler}/>

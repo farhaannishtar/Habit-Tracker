@@ -6,27 +6,28 @@ export default function Habit(props) {
 
   const {setCompletedHabits, completedHabits } = props;
 
+  console.log("props: ", props)
+
   const [editingValue, setEditingValue] = useState(props.habit.text);
   const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState(props.habit.emoji);
+  const [isCardSelected, setIsCardSelected] = useState(false);
 
   const deleteHandler = (e) => {
     e.stopPropagation()
     props.deleteHandler(props.id);
   }
-  const selectCard = () => {
+  const completeHabit = () => {
     if (checkmark === "/redCheckMark.svg") {
       setCheckmark("/grayCheckMark.svg");
     } else {
       setCheckmark("/redCheckMark.svg");
     }
-    if (props.habit.selected === false) {
-      setCompletedHabits(completedHabits => completedHabits + 1)
-      props.habit.selected = true;
+    if (props.habit.completed === false) {
+      props.updateCompletedHabits(props.id, true);
     } else {
-      setCompletedHabits(completedHabits => completedHabits - 1)
-      props.habit.selected = false;
+      props.updateCompletedHabits(props.id, false);
     }
   }
 
@@ -47,7 +48,7 @@ export default function Habit(props) {
     <>
       { props.isEditable ?
         (
-          <div className='card' style={{ backgroundColor: props.color}} onClick={selectCard}>
+          <div className='card' style={{ backgroundColor: props.color}} onClick={completeHabit}>
             <div className="topLayer">
               <div className='topLeft'>
                 <div className='redX'>

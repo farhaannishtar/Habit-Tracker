@@ -18,7 +18,7 @@ export default function AddHabit(props) {
     const data = {
       text: habitText,
       emoji: emoji,
-      selected: false
+      completed: false
     }
   
     // Send the data to the server in JSON format.
@@ -52,7 +52,7 @@ export default function AddHabit(props) {
       id: uuid(),
       text: result.text,
       emoji: result.emoji,
-      selected: false
+      completed: false
     }
     setHabits(current => [...current, newHabit]);
     setIsFormShowing(false);
