@@ -4,15 +4,10 @@ import InlineEdit from './InlineEdit';
 
 export default function Habit(props) {
 
-  const {setCompletedHabits, completedHabits } = props;
-
-  console.log("props: ", props)
-
   const [editingValue, setEditingValue] = useState(props.habit.text);
   const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState(props.habit.emoji);
-  const [isCardSelected, setIsCardSelected] = useState(false);
 
   const deleteHandler = (e) => {
     e.stopPropagation()

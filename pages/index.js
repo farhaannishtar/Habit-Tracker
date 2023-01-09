@@ -35,7 +35,7 @@ cardColors[2] = '#faf9e5';
 cardColors[3] = '#f7edf5';
 
 
-export default function Home({ isConnected }) {
+export default function Home() {
   
   const [habits, setHabits] = useState([]);
   const [completedHabits, setCompletedHabits] = useState(0);
@@ -137,14 +137,3 @@ export default function Home({ isConnected }) {
     </>
   )
 }
-
-    // The code below is to check if this app is connected to the database
-
-    {/* 
-    <main>
-      {isConnected ? (
-        <h2 className="subtitle">You are connected to MongoDB</h2>
-      ) : (
-        <h2>You are NOT connected to MongoDB.</h2>
-      )}
-    </main> */}
