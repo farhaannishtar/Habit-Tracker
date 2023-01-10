@@ -15,19 +15,13 @@ export default function Habit(props) {
     props.deleteHandler(props.id);
   }
   const completeHabit = () => {
-    if (checkmark === "/redCheckMark.svg") {
-      setCheckmark("/grayCheckMark.svg");
-    } else {
-      setCheckmark("/redCheckMark.svg");
-    }
     if (props.habit.completed === false) {
       props.updateCompletedHabits(props.id, true);
-    } else {
-      props.updateCompletedHabits(props.id, false);
-    }
-    if (textDecoration === 'none') {
+      setCheckmark("/redCheckMark.svg");
       setTextDecoration('line-through');
     } else {
+      props.updateCompletedHabits(props.id, false);
+      setCheckmark("/grayCheckMark.svg");
       setTextDecoration('none')
     }
   }
@@ -79,16 +73,6 @@ export default function Habit(props) {
       }
       <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
       <style jsx>{`
-        .trashcan {
-          display: none;
-        }
-
-        .card:hover .trashcan {
-          display: flex;
-          justify-content: flex-end;
-          user-select:none;
-        }
-
         img:hover {
           cursor: pointer;
         }
@@ -112,14 +96,11 @@ export default function Habit(props) {
           position: relative;
           bottom: 15px;
           left: 15px;
-          /* border: 2px solid green; */
         }
         
         .emojiContainer {
           height: 202.5px;
           width: 104px;
-          /* border: 2px solid blue */
-
         }
 
         .circle {
@@ -169,8 +150,17 @@ export default function Habit(props) {
         .card:active {
           border-color: #0070f3;
         }
-        div { 
-          outline-style:none;
+        
+        .trashcan {
+          display: none;
+        }
+
+        .card .trashcan {
+          display: flex;
+          justify-content: flex-end;
+          user-select:none;
+          margin-top: 40px;
+          margin-left: 345px; 
         }
       `}</style>
     </>

@@ -38,7 +38,6 @@ cardColors[3] = '#f7edf5';
 export default function Home() {
   
   const [habits, setHabits] = useState([]);
-  const [completedHabits, setCompletedHabits] = useState(0);
 
   const deleteHandler = (id) => {
     setHabits(habits.filter(habit => habit.id !== id));
@@ -69,27 +68,19 @@ export default function Home() {
   const updateCompletedHabits = (id, isCompleted) => {
     setHabits(habits => habits.filter(habit => {
       if(habit.id === id) {
-        habit.completed = isCompleted
+        habit.completed = isCompleted;
         return habit;
       } else {
-        return habit
+        return habit;
       }
     }))
   }
-
-  useEffect(() => {
-    let count = 0;
-    habits.forEach(habit => {
-      if (habit.completed === true) count++;
-    })
-    setCompletedHabits(count);
-  }, [habits])
 
   return (
     <>
       <div className={styles.header}>
         <h1>Habit Tracker</h1>
-        <h3> {completedHabits} / {habits.length} Habits Completed</h3>
+        <h3> { habits.reduce((acc, habit) => acc + (habit.completed ? 1 : 0), 0) } / {habits.length} Habits Completed</h3>
       </div> 
       <div className="container">
         <Head>

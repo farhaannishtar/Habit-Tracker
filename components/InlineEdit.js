@@ -44,13 +44,12 @@ export default function InlineEdit(props) {
       .input {
         background-color: transparent;
         border: 0;
-        width: 100%;
+        width: 70%;
         padding: 8px;
         font-size: 40px;
         font-weight: 500; 
         font-family: sans-serif;
         text-decoration: ${props.textDecoration};
-        text-decoration-thickness: 2px;
       }
 
       .input:hover {
@@ -60,6 +59,11 @@ export default function InlineEdit(props) {
       .input:focus {
         outline: none;
       }
+
+      .input::placeholder {
+        font-size: 25px
+      }
+
       `}</style>
     </>
   );
