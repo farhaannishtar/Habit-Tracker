@@ -1,35 +1,4 @@
-.headerContainer {
-  /* border: 3px solid red; */
-  padding: 0 13rem;
-  margin: 0;
-}
-
-.form {
+.header {
   display: flex;
-  align-items: flex-end;
-
-}
-
-.submitButton {
-  background-color: black;
-  color: white;
-  /* height: 30px; */
-  font-size: 16px;
-  margin: 8px 0;
-  padding: 2px;
-  border-radius: 4px;
-}
-
-.input[type=text] {
-  width: 100%;
-  padding: 8px 8px;
-  margin: 8px 0;
-  box-sizing: border-box;
-}
-
-.input::placeholder {
-  font-weight: bold;
-  opacity: .6;
-  font-size: 16px;
-  font-style: italic;
+  justify-content: space-around;
 }

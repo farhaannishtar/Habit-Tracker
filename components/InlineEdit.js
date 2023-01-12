@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import styles from '../styles/InlineEdit.module.css'
 
 export default function InlineEdit(props) {
   const { editingValue, setEditingValue, handleSubmit, emoji } = props;
@@ -28,16 +27,44 @@ export default function InlineEdit(props) {
   }, [emoji]);
 
   return (
-    <input
-      type="text"
-      aria-label="Habit name"
-      value={editingValue}
-      onChange={onChange}
-      onKeyDown={onKeyDown}
-      onBlur={onBlur}
-      className={styles.input}
-      id={'text-box'}
-      placeholder="Enter Habit"
-    />
+    <>
+      <input
+        type="text"
+        aria-label="Habit name"
+        value={editingValue}
+        onChange={onChange}
+        onKeyDown={onKeyDown}
+        onBlur={onBlur}
+        className="input"
+        id={'text-box'}
+        placeholder="Enter Habit"
+        autoComplete="off"
+      />
+      <style jsx>{`
+      .input {
+        background-color: transparent;
+        border: 0;
+        width: 70%;
+        padding: 8px;
+        font-size: 40px;
+        font-weight: 500; 
+        font-family: sans-serif;
+        text-decoration: ${props.textDecoration};
+      }
+
+      .input:hover {
+        cursor: pointer;
+      }
+
+      .input:focus {
+        outline: none;
+      }
+
+      .input::placeholder {
+        font-size: 25px
+      }
+
+      `}</style>
+    </>
   );
 };

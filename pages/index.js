@@ -2,8 +2,8 @@ import Head from 'next/head'
 import clientPromise from '../lib/mongodb'
 import { useState, useEffect } from 'react'
 import Habit from '../components/Habit'
-import styles from '../styles/index.module.css'
 import AddHabit from '../components/AddHabit';
+import styles from '../styles/index.module.css'
 
 export async function getServerSideProps(context) {
   try {
@@ -35,10 +35,9 @@ cardColors[2] = '#faf9e5';
 cardColors[3] = '#f7edf5';
 
 
-export default function Home({ isConnected }) {
+export default function Home() {
   
   const [habits, setHabits] = useState([]);
-  const [completedHabits, setCompletedHabits] = useState(0);
 
   const deleteHandler = (id) => {
     setHabits(habits.filter(habit => habit.id !== id));
@@ -66,15 +65,23 @@ export default function Home({ isConnected }) {
     }))
   }
 
+  const updateCompletedHabits = (id, isCompleted) => {
+    setHabits(habits => habits.filter(habit => {
+      if(habit.id === id) {
+        habit.completed = isCompleted;
+        return habit;
+      } else {
+        return habit;
+      }
+    }))
+  }
 
   return (
-    <>  
-      <div className={styles.headerContainer}>
-        <div className='header'>
-          <h1>Habit Tracker</h1>
-          <h2>{completedHabits} / {habits.length} Habits Completed</h2>
-        </div>
-      </div>
+    <>
+      <div className={styles.header}>
+        <h1>Habit Tracker</h1>
+        <h3> { habits.reduce((acc, habit) => acc + (habit.completed ? 1 : 0), 0) } / {habits.length} Habits Completed</h3>
+      </div> 
       <div className="container">
         <Head>
           <title>Habit Tracker</title>
@@ -89,7 +96,9 @@ export default function Home({ isConnected }) {
                 id={habit.id} 
                 isEditable={true} 
                 color={cardColors[index % cardColors.length]} 
-                habit={habit} setHabits={setHabits} 
+                habit={habit} 
+                setHabits={setHabits}
+                updateCompletedHabits={updateCompletedHabits}
                 deleteHandler={deleteHandler} 
                 editHabitTextHandler={editHabitTextHandler} 
                 editHabitEmojiHandler={editHabitEmojiHandler}/>
@@ -97,10 +106,14 @@ export default function Home({ isConnected }) {
           }
         </div>
         <style jsx>{`
-          .header {
+          .container {
+            padding: 0 0.5rem;
             display: flex;
-            border: 2px solid red;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
           }
+
           .grid {
             display: flex;
             align-items: center;
@@ -109,28 +122,10 @@ export default function Home({ isConnected }) {
             max-width: 1350px;
             margin-top: 3rem;
             gap: 5px 5px;
-          }
-
-          .container {
-            padding: 0 0.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            user-select: none;
           }
           `}</style>
-      </div>
+      </div> 
     </>
   )
 }
-
-    // The code below is to check if this app is connected to the database
-
-    {/* 
-    <main>
-      {isConnected ? (
-        <h2 className="subtitle">You are connected to MongoDB</h2>
-      ) : (
-        <h2>You are NOT connected to MongoDB.</h2>
-      )}
-    </main> */}

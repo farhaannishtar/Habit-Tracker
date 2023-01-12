@@ -18,6 +18,6 @@ export default function handler(req, res) {
   res.status(200).json({ 
     text: `${body.text}`,
     emoji: `${body.emoji}`,
-    selected: `${body.selected}`
+    completed: `${body.completed}`
   })
 }
