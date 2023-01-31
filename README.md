@@ -1,4 +1,4 @@
-<img width="1204" alt="Screenshot 2023-01-09 at 3 04 29 PM" src="https://user-images.githubusercontent.com/89179469/211397786-e1ef9c13-91bd-426d-94a9-6ec93fa3f8ed.png">
+<img width="1119" alt="Screenshot 2023-01-31 at 6 13 17 PM" src="https://user-images.githubusercontent.com/89179469/215905050-3d8b02e8-ecfd-466c-86be-bb110578908e.png">
 
 
 This is a frontend application that allows users to monitor and record their habits. The user is able to record the habits they want to develop and mark them as completed. Once the user enters their desired habit, they are encouraged to select an emoji to represent it. In the top right corner of the user interface, there is a track of all the completed habits. Finally, once the user is done with their desired habit, they are able to delete it.  
