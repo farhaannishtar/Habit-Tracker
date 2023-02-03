@@ -25,7 +25,7 @@ export default function AddHabit(props) {
     const JSONdata = JSON.stringify(data)
   
     // API endpoint where we send form data.
-    const endpoint = '/api/form'
+    const endpoint = '/api/createHabit'
   
     // Form the request for sending data to the server.
     const options = {
@@ -49,9 +49,9 @@ export default function AddHabit(props) {
     console.log("result: ", result)
 
     const newHabit = {
-      id: uuid(),
-      text: result.text,
-      emoji: result.emoji,
+      _id: result.insertedId,
+      text: habitText,
+      emoji: emoji,
       completed: false
     }
     setHabits(current => [...current, newHabit]);

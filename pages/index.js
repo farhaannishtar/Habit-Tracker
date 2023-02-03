@@ -40,7 +40,14 @@ export default function Home({ isConnected }) {
   const [habits, setHabits] = useState([]);
   const [counter, setCounter] = useState(0);
 
-
+  useEffect(() => {
+    const fetchHabits = async () => {
+      const habits = await fetch('/api/getHabits');
+      const habitData = await habits.json();
+      setHabits(habitData);
+    }
+    fetchHabits();
+  }, [])
   
   const deleteHandler = (id) => {
     setHabits(habits.filter(habit => habit.id !== id));
@@ -81,7 +88,7 @@ export default function Home({ isConnected }) {
   
   useEffect(() => {
     const fetchButtonValue = async () => {
-      const buttonValue = await fetch('/api/fetchButtonValue');
+      const buttonValue = await fetch('/api/fetchCounterValue');
       const buttonValueJson = await buttonValue.json();
       setCounter(buttonValueJson[0].value);
     };
@@ -103,6 +110,10 @@ export default function Home({ isConnected }) {
     setCounter(value + 1);
   };
   
+  habits.map((habit, index) => {  
+    console.log("Farhaan's habit: ", habit);
+  })
+
   return (
     <>
       <h1>Counter Value: { counter }</h1>
@@ -129,8 +140,8 @@ export default function Home({ isConnected }) {
           {
             habits.map((habit, index) => {
               return <Habit 
-                key={habit.id}
-                id={habit.id} 
+                key={habit._id}
+                id={habit._id} 
                 isEditable={true} 
                 color={cardColors[index % cardColors.length]} 
                 habit={habit} 
