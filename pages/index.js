@@ -35,14 +35,17 @@ cardColors[2] = '#faf9e5';
 cardColors[3] = '#f7edf5';
 
 
-export default function Home() {
+export default function Home({ isConnected }) {
   
   const [habits, setHabits] = useState([]);
+  const [counter, setCounter] = useState(0);
 
+
+  
   const deleteHandler = (id) => {
     setHabits(habits.filter(habit => habit.id !== id));
   }
-
+  
   const editHabitTextHandler = (id, editedText) => {
     setHabits(habits => habits.filter(habit => {
       if (habit.id === id) {
@@ -53,7 +56,7 @@ export default function Home() {
       } 
     }))
   }
-
+  
   const editHabitEmojiHandler = (id, editedEmoji) => {
     setHabits(habits => habits.filter(habit => {
       if(habit.id === id) {
@@ -64,7 +67,7 @@ export default function Home() {
       }
     }))
   }
-
+  
   const updateCompletedHabits = (id, isCompleted) => {
     setHabits(habits => habits.filter(habit => {
       if(habit.id === id) {
@@ -75,9 +78,43 @@ export default function Home() {
       }
     }))
   }
-
+  
+  useEffect(() => {
+    const fetchButtonValue = async () => {
+      const buttonValue = await fetch('/api/fetchButtonValue');
+      const buttonValueJson = await buttonValue.json();
+      setCounter(buttonValueJson[0].value);
+    };
+    fetchButtonValue();
+  }, [])
+  
+  const updateCounter =  async (value) => {
+    const response = await fetch("/api/updateCounter", {
+      method: "PUT",
+      body: JSON.stringify({
+        value: value,
+      }),
+      headers: 
+      {
+        "Content-Type": 
+        "application/json",
+      },
+    });
+    setCounter(value + 1);
+  };
+  
   return (
     <>
+      <h1>Counter Value: { counter }</h1>
+      <button onClick={async () => updateCounter(counter)}>Click me { counter } </button>
+      {isConnected ? (
+        <h2 className="subtitle">You are connected to MongoDB</h2>
+        ) : (
+          <h2 className="subtitle">
+            You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
+            for instructions.
+          </h2>
+        )}
       <div className={styles.header}>
         <h1>Habit Tracker</h1>
         <h3> { habits.reduce((acc, habit) => acc + (habit.completed ? 1 : 0), 0) } / {habits.length} Habits Completed</h3>
