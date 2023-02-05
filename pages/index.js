@@ -38,7 +38,12 @@ cardColors[3] = '#f7edf5';
 export default function Home({ isConnected }) {
   
   const [habits, setHabits] = useState([]);
-  const [counter, setCounter] = useState(0);
+
+  const fetchHabits = async () => {
+    const habits = await fetch('/api/getHabits');
+    const habitData = await habits.json();
+    setHabits(habitData);
+  }
 
   useEffect(() => {
     const fetchHabits = async () => {
@@ -75,31 +80,25 @@ export default function Home({ isConnected }) {
     }))
   }
   
-  const updateCompletedHabits = (id, isCompleted) => {
+  const editCompletedHabit = async (id, isCompleted) => {
+    await editCompletedHabitToDB(id, isCompleted);
     setHabits(habits => habits.filter(habit => {
-      if(habit.id === id) {
+      if(habit._id === id) {
         habit.completed = isCompleted;
         return habit;
       } else {
         return habit;
       }
     }))
+    await fetchHabits();
   }
-  
-  useEffect(() => {
-    const fetchButtonValue = async () => {
-      const buttonValue = await fetch('/api/fetchCounterValue');
-      const buttonValueJson = await buttonValue.json();
-      setCounter(buttonValueJson[0].value);
-    };
-    fetchButtonValue();
-  }, [])
-  
-  const updateCounter =  async (value) => {
-    const response = await fetch("/api/updateCounter", {
+
+  const editCompletedHabitToDB =  async (id, isCompleted) => {
+    const response = await fetch("/api/editCompleteStatus", {
       method: "PUT",
       body: JSON.stringify({
-        value: value,
+        id: id,
+        isCompleted: isCompleted,
       }),
       headers: 
       {
@@ -107,25 +106,10 @@ export default function Home({ isConnected }) {
         "application/json",
       },
     });
-    setCounter(value + 1);
-  };
-  
-  habits.map((habit, index) => {  
-    console.log("Farhaan's habit: ", habit);
-  })
+  }
 
   return (
     <>
-      <h1>Counter Value: { counter }</h1>
-      <button onClick={async () => updateCounter(counter)}>Click me { counter } </button>
-      {isConnected ? (
-        <h2 className="subtitle">You are connected to MongoDB</h2>
-        ) : (
-          <h2 className="subtitle">
-            You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
-            for instructions.
-          </h2>
-        )}
       <div className={styles.header}>
         <h1>Habit Tracker</h1>
         <h3> { habits.reduce((acc, habit) => acc + (habit.completed ? 1 : 0), 0) } / {habits.length} Habits Completed</h3>
@@ -140,18 +124,18 @@ export default function Home({ isConnected }) {
           {
             habits.map((habit, index) => {
               return <Habit 
-                key={habit._id}
-                id={habit._id} 
-                isEditable={true} 
-                color={cardColors[index % cardColors.length]} 
+              key={habit._id}
+              _id={habit._id} 
+              isEditable={true} 
+              color={cardColors[index % cardColors.length]} 
                 habit={habit} 
                 setHabits={setHabits}
-                updateCompletedHabits={updateCompletedHabits}
+                editCompletedHabit={editCompletedHabit}
                 deleteHandler={deleteHandler} 
                 editHabitTextHandler={editHabitTextHandler} 
                 editHabitEmojiHandler={editHabitEmojiHandler}/>
-            })
-          }
+              })
+            }
         </div>
         <style jsx>{`
           .container {
@@ -161,7 +145,7 @@ export default function Home({ isConnected }) {
             justify-content: center;
             align-items: center;
           }
-
+          
           .grid {
             display: flex;
             align-items: center;
@@ -174,6 +158,14 @@ export default function Home({ isConnected }) {
           }
           `}</style>
       </div> 
+      {/* {isConnected ? (
+        <h2 className="subtitle">You are connected to MongoDB</h2>
+        ) : (
+          <h2 className="subtitle">
+            You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
+            for instructions.
+          </h2>
+        )} */}
     </>
   )
 }
