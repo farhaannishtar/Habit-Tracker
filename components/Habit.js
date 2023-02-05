@@ -11,27 +11,38 @@ export default function Habit(props) {
   const [textDecoration, setTextDecoration] = useState('none');
 
   const deleteHandler = (e) => {
-    e.stopPropagation()
-    props.deleteHandler(props.id);
+    e.stopPropagation();
+    props.deleteHandler(props._id);
   }
+
   const completeHabit = () => {
     if (props.habit.completed === false) {
-      props.updateCompletedHabits(props.id, true);
+      props.editCompletedHabit(props._id, true);
       setCheckmark("/redCheckMark.svg");
       setTextDecoration('line-through');
     } else {
-      props.updateCompletedHabits(props.id, false);
+      props.editCompletedHabit(props._id, false);
       setCheckmark("/grayCheckMark.svg");
       setTextDecoration('none')
     }
   }
 
+  useEffect(() => { 
+    if (props.habit.completed === true) {
+      setCheckmark("/redCheckMark.svg");
+      setTextDecoration('line-through');
+    } else {
+      setCheckmark("/grayCheckMark.svg");
+      setTextDecoration('none')
+    }
+  }, [props.habit.completed])
+
   useEffect(() => {
-    props.editHabitTextHandler(props.id, editingValue);
+    props.editHabitTextHandler(props._id, editingValue);
   }, [editingValue]);
 
   useEffect(() => {
-    props.editHabitEmojiHandler(props.id, emoji);  
+    props.editHabitEmojiHandler(props._id, emoji);  
   }, [emoji]);
 
   const emojiClickHandler = (e) => {
@@ -65,7 +76,7 @@ export default function Habit(props) {
         )
         :
         (
-          <div onClick={() => props.styleCard(props.habit.id)} className={props.habit.habit_card_style}>
+          <div onClick={() => props.styleCard(props.habit._id)} className={props.habit.habit_card_style}>
             <h1>{props.habit.habit_emoji}</h1>
             <h2>{props.habit.habit_name}</h2>
           </div>

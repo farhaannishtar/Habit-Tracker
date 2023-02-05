@@ -35,14 +35,29 @@ cardColors[2] = '#faf9e5';
 cardColors[3] = '#f7edf5';
 
 
-export default function Home() {
+export default function Home({ isConnected }) {
   
   const [habits, setHabits] = useState([]);
 
+  const fetchHabits = async () => {
+    const habits = await fetch('/api/getHabits');
+    const habitData = await habits.json();
+    setHabits(habitData);
+  }
+
+  useEffect(() => {
+    const fetchHabits = async () => {
+      const habits = await fetch('/api/getHabits');
+      const habitData = await habits.json();
+      setHabits(habitData);
+    }
+    fetchHabits();
+  }, [])
+  
   const deleteHandler = (id) => {
     setHabits(habits.filter(habit => habit.id !== id));
   }
-
+  
   const editHabitTextHandler = (id, editedText) => {
     setHabits(habits => habits.filter(habit => {
       if (habit.id === id) {
@@ -53,7 +68,7 @@ export default function Home() {
       } 
     }))
   }
-
+  
   const editHabitEmojiHandler = (id, editedEmoji) => {
     setHabits(habits => habits.filter(habit => {
       if(habit.id === id) {
@@ -64,16 +79,33 @@ export default function Home() {
       }
     }))
   }
-
-  const updateCompletedHabits = (id, isCompleted) => {
+  
+  const editCompletedHabit = async (id, isCompleted) => {
+    await editCompletedHabitToDB(id, isCompleted);
     setHabits(habits => habits.filter(habit => {
-      if(habit.id === id) {
+      if(habit._id === id) {
         habit.completed = isCompleted;
         return habit;
       } else {
         return habit;
       }
     }))
+    await fetchHabits();
+  }
+
+  const editCompletedHabitToDB =  async (id, isCompleted) => {
+    const response = await fetch("/api/editCompleteStatus", {
+      method: "PUT",
+      body: JSON.stringify({
+        id: id,
+        isCompleted: isCompleted,
+      }),
+      headers: 
+      {
+        "Content-Type": 
+        "application/json",
+      },
+    });
   }
 
   return (
@@ -92,18 +124,18 @@ export default function Home() {
           {
             habits.map((habit, index) => {
               return <Habit 
-                key={habit.id}
-                id={habit.id} 
-                isEditable={true} 
-                color={cardColors[index % cardColors.length]} 
+              key={habit._id}
+              _id={habit._id} 
+              isEditable={true} 
+              color={cardColors[index % cardColors.length]} 
                 habit={habit} 
                 setHabits={setHabits}
-                updateCompletedHabits={updateCompletedHabits}
+                editCompletedHabit={editCompletedHabit}
                 deleteHandler={deleteHandler} 
                 editHabitTextHandler={editHabitTextHandler} 
                 editHabitEmojiHandler={editHabitEmojiHandler}/>
-            })
-          }
+              })
+            }
         </div>
         <style jsx>{`
           .container {
@@ -113,7 +145,7 @@ export default function Home() {
             justify-content: center;
             align-items: center;
           }
-
+          
           .grid {
             display: flex;
             align-items: center;
@@ -126,6 +158,14 @@ export default function Home() {
           }
           `}</style>
       </div> 
+      {/* {isConnected ? (
+        <h2 className="subtitle">You are connected to MongoDB</h2>
+        ) : (
+          <h2 className="subtitle">
+            You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
+            for instructions.
+          </h2>
+        )} */}
     </>
   )
 }
