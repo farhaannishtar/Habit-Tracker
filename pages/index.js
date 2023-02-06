@@ -58,7 +58,8 @@ export default function Home({ isConnected }) {
     setHabits(habits.filter(habit => habit.id !== id));
   }
   
-  const editHabitTextHandler = (id, editedText) => {
+  const editHabitTextHandler = async (id, editedText) => {
+    await editHabitTextToDB(id, editedText);
     setHabits(habits => habits.filter(habit => {
       if (habit.id === id) {
         habit.text = editedText || " ";
@@ -68,8 +69,24 @@ export default function Home({ isConnected }) {
       } 
     }))
   }
+
+  const editHabitTextToDB =  async (id, editedText) => {
+    const response = await fetch("/api/editHabitText", {
+      method: "PUT",
+      body: JSON.stringify({
+        id: id,
+        editedText: editedText,
+      }),
+      headers: 
+      {
+        "Content-Type": 
+        "application/json",
+      },
+    });
+  }
   
-  const editHabitEmojiHandler = (id, editedEmoji) => {
+  const editHabitEmojiHandler = async (id, editedEmoji) => {
+    await editHabitEmojiToDB(id, editedEmoji);
     setHabits(habits => habits.filter(habit => {
       if(habit.id === id) {
         habit.emoji = editedEmoji
@@ -78,6 +95,21 @@ export default function Home({ isConnected }) {
         return habit
       }
     }))
+  }
+
+  const editHabitEmojiToDB =  async (id, editedEmoji) => {
+    const response = await fetch("/api/editHabitEmoji", {
+      method: "PUT",
+      body: JSON.stringify({
+        id: id,
+        editedEmoji: editedEmoji,
+      }),
+      headers: 
+      {
+        "Content-Type": 
+        "application/json",
+      },
+    });
   }
   
   const editCompletedHabit = async (id, isCompleted) => {
