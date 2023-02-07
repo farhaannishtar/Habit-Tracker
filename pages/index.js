@@ -54,8 +54,24 @@ export default function Home({ isConnected }) {
     fetchHabits();
   }, [])
   
-  const deleteHandler = (id) => {
+  const deleteHandler = async (id) => {
+    await deleteHabitToDB(id);
     setHabits(habits.filter(habit => habit.id !== id));
+    await fetchHabits();
+  }
+
+  const deleteHabitToDB =  async (id) => {
+    const response = await fetch("/api/deleteHabit", {
+      method: "DELETE",
+      body: JSON.stringify({
+        id: id,
+      }),
+      headers: 
+      {
+        "Content-Type": 
+        "application/json",
+      },
+    });
   }
   
   const editHabitTextHandler = async (id, editedText) => {
@@ -68,6 +84,7 @@ export default function Home({ isConnected }) {
         return habit;
       } 
     }))
+    await fetchHabits();
   }
 
   const editHabitTextToDB =  async (id, editedText) => {
