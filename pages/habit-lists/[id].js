@@ -1,33 +1,9 @@
-import Head from 'next/head'
-import clientPromise from '../lib/mongodb'
-import { useState, useEffect } from 'react'
-import Habit from '../components/Habit'
-import AddHabit from '../components/AddHabit';
-import styles from '../styles/index.module.css'
+
 import { useRouter } from 'next/router'
-
-export async function getServerSideProps(context) {
-  try {
-    await clientPromise
-    // `await clientPromise` will use the default database passed in the MONGODB_URI
-    // However you can use another database (e.g. myDatabase) by replacing the `await clientPromise` with the following code:
-    //
-    // `const client = await clientPromise`
-    // `const db = client.db("myDatabase")`
-    //
-    // Then you can execute queries against your database like so:
-    // db.find({}) or any of the MongoDB Node Driver commands
-
-    return {
-      props: { isConnected: true },
-    }
-  } catch (e) {
-    console.error(e)
-    return {
-      props: { isConnected: false },
-    }
-  }
-}
+import Head from 'next/head'
+import { useState, useEffect } from 'react'
+import Habit from '../../components/Habit'
+import AddHabit from '../../components/AddHabit';
 
 const cardColors = [];
 cardColors[0] = '#ebf5ed';
@@ -36,10 +12,12 @@ cardColors[2] = '#faf9e5';
 cardColors[3] = '#f7edf5';
 
 
-export default function Home({ isConnected }) {
-  
-  const [habits, setHabits] = useState([]);
+const List = () => {
   const router = useRouter()
+  const [habits, setHabits] = useState([]);
+
+  const { id } = router.query;
+  console.log(id);
 
   const fetchHabits = async () => {
     const habits = await fetch('/api/getHabits');
@@ -180,28 +158,21 @@ export default function Home({ isConnected }) {
     });
   }
 
+  console.log("habits: ", habits);
+
   return (
-    <>
-      <div className={styles.header}>
-        <h1>Habit Tracker</h1>
-      </div>
-      <form onSubmit={async (e) => handleCreateHabitList(e)}>
-        <label htmlFor="habitlist">Enter Habit list </label>
-        <input type="text" id="habitlist" name="habitlist" />
-        <button type="submit">Submit</button>
-      </form>
-
-
-      {/* <div className="container">
-        <h3 className='completed-counter'> { habits.reduce((acc, habit) => acc + (habit.completed ? 1 : 0), 0) } / {habits.length} Habits Completed</h3>
+    <div className="container">
+        <h3 className='completed-counter'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } Habits Completed in Habit list: { id }</h3>
         <Head>
           <title>Habit Tracker</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <div className="grid">
-          <AddHabit habits={habits} setHabits={setHabits}/>
+          <AddHabit habits={habits} setHabits={setHabits} id={id}/>
           {
-            habits.map((habit, index) => {
+            habits.filter(habit => {
+              return habit.habitListId === id
+            }).map((habit, index) => {
               return <Habit 
               key={habit._id}
               _id={habit._id} 
@@ -223,8 +194,13 @@ export default function Home({ isConnected }) {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-          }   
-    
+          }
+
+          .completed-counter {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+          }
+          
           .grid {
             display: flex;
             align-items: center;
@@ -236,15 +212,13 @@ export default function Home({ isConnected }) {
             user-select: none;
           }
           `}</style>
+          <form onSubmit={async (e) => handleCreateHabitList(e)}>
+            <label htmlFor="habitlist">Enter Habit list </label>
+            <input type="text" id="habitlist" name="habitlist" />
+            <button type="submit">Submit</button>
+        </form>
       </div>  
-      {/* {isConnected ? (
-        <h2 className="subtitle">You are connected to MongoDB</h2>
-        ) : (
-          <h2 className="subtitle">
-            You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
-            for instructions.
-          </h2>
-        )} */}
-    </>
   )
 }
+
+export default List

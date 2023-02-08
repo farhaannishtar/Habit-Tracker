@@ -5,7 +5,7 @@ import InlineEdit from "./InlineEdit";
 
 export default function AddHabit(props) {
 
-  const { setHabits }  = props;
+  const { setHabits, id }  = props;
   const [isFormShowing, setIsFormShowing] = useState(false);
   const [editingValue, setEditingValue] = useState("");
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
@@ -16,6 +16,7 @@ export default function AddHabit(props) {
   const handleSubmit = async (habitText) => {
     // Get data from the form.
     const data = {
+      habitListId: id,
       text: habitText,
       emoji: emoji,
       completed: false
@@ -52,7 +53,8 @@ export default function AddHabit(props) {
       _id: result.insertedId,
       text: habitText,
       emoji: emoji,
-      completed: false
+      completed: false,
+      habitListId: id
     }
     setHabits(current => [...current, newHabit]);
     setIsFormShowing(false);

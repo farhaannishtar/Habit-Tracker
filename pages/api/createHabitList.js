@@ -4,14 +4,12 @@ export default async function handler(request, response) {
   try {
     const mongoClient = await clientPromise;
     const db = mongoClient.db("HabitTracker");
-    const collection = db.collection("Habits");
+    const collection = db.collection("HabitLists");
     const results = await collection
       .insertOne(
         {
-          text: `${request.body.text}`,
-          emoji: `${request.body.emoji}`,
-          completed: false,
-          habitListId: `${request.body.habitListId}`,
+          habitListId: `${request.body.habitList}`,
+          habits: [],
         }
       )
     response.status(200).json(results);
