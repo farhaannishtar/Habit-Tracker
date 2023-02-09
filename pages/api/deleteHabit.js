@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb'
 
 export default async function handler(request, response) {
   try {
+    const { id } = request.body
     const mongoClient = await clientPromise;
     const db = mongoClient.db("HabitTracker");
     const collection = db.collection("Habits");

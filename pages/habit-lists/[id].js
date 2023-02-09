@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import Habit from '../../components/Habit'
 import AddHabit from '../../components/AddHabit';
-
+    
 const cardColors = [];
 cardColors[0] = '#ebf5ed';
 cardColors[1] = '#f9ede6';
@@ -14,16 +14,29 @@ cardColors[3] = '#f7edf5';
 
 const List = () => {
   const router = useRouter()
-  const [habits, setHabits] = useState([]);
-
+  const { asPath } = useRouter();
   const { id } = router.query;
-  console.log(id);
+
+  const [habits, setHabits] = useState([]);
+  const [url, setUrl] = useState('');
 
   const fetchHabits = async () => {
     const habits = await fetch('/api/getHabits');
     const habitData = await habits.json();
     setHabits(habitData);
   }
+
+  useEffect(() => { 
+    console.log("use effect")
+    const origin =
+        typeof window !== 'undefined' && window.location.origin
+            ? window.location.origin
+            : '';
+
+    const URL = `${origin}${asPath}`;
+    setUrl(URL);
+    console.log("~~~~~~~~~~~~~~ URL   ~~~~~~~~~~~~", URL);
+  },)
 
   useEffect(() => {
     const fetchHabits = async () => {
@@ -158,7 +171,7 @@ const List = () => {
     });
   }
 
-  console.log("habits: ", habits);
+  // console.log("habits: ", habits);
 
   return (
     <div className="container">
@@ -212,11 +225,12 @@ const List = () => {
             user-select: none;
           }
           `}</style>
-          <form onSubmit={async (e) => handleCreateHabitList(e)}>
-            <label htmlFor="habitlist">Enter Habit list </label>
-            <input type="text" id="habitlist" name="habitlist" />
-            <button type="submit">Submit</button>
+        <form onSubmit={async (e) => handleCreateHabitList(e)}>
+          <label htmlFor="habitlist">Enter Habit list </label>
+          <input type="text" id="habitlist" name="habitlist" />
+          <button type="submit">Submit</button>
         </form>
+        <button onClick={() =>  navigator.clipboard.writeText(url)}>Share Habit List Link</button>
       </div>  
   )
 }
