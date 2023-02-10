@@ -175,7 +175,7 @@ const List = () => {
 
   return (
     <div className="container">
-        {/* <h3 className='completed-counter'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } Habits Completed in Habit list: { id }</h3> */}
+        <h3 className='completed-counter'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } Habits Completed in Habit list: { id }</h3>
         <Head>
           <title>Habit Tracker</title>
           <link rel="icon" href="/favicon.ico" />
@@ -227,10 +227,10 @@ const List = () => {
           `}</style>
         <form onSubmit={async (e) => handleCreateHabitList(e)}>
           <label htmlFor="habitlist">Enter Habit list </label>
-          <input type="text" id="habitlist" name="habitlist" />
-          <button type="submit">Submit</button>
+          <input className='bg-gray-300' type="text" id="habitlist" name="habitlist" />
+          <button className='bg-gray-300 border border-emerald-900' type="submit">Submit</button>
         </form>
-        <button onClick={() =>  navigator.clipboard.writeText(url)}>Share Habit List Link</button>
+        <button className='bg-gray-300 border border-emerald-900' onClick={() =>  navigator.clipboard.writeText(url)}>Share Habit List Link</button>
       </div>  
   )
 }

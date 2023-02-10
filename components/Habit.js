@@ -56,11 +56,11 @@ export default function Habit(props) {
         (
           <div className='card' style={{ backgroundColor: props.color}} onClick={completeHabit}>
             <div className="topLayer">
-              <div className='emojiContainer'>
+              <div className='h-52 w-28'>
                 <div className='emoji' onClick={emojiClickHandler}>{ emoji }</div>
                 <div className='shadow'></div>
               </div>
-              <label className='container'>
+              <label>
                 <div className="circle">
                   <img src={checkmark} alt="SVG as an image"/>
                 </div>
@@ -108,16 +108,11 @@ export default function Habit(props) {
           bottom: 15px;
           left: 15px;
         }
-        
-        .emojiContainer {
-          height: 202.5px;
-          width: 104px;
-        }
 
         .circle {
           padding: 15px;
           margin: 15px;
-          border-radius: 1500px;
+          border-radius: 100px;
           background-color: white;
           display: flex;
           justify-content: center;
@@ -127,11 +122,6 @@ export default function Habit(props) {
           -moz-user-select: none;
           -ms-user-select: none;
           user-select: none;
-        }
-
-        h1 {
-          margin-top: 0px;
-          cursor: pointer
         }
 
         .emoji {

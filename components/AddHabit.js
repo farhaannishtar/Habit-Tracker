@@ -81,13 +81,13 @@ export default function AddHabit(props) {
           (
             <>
               <div className="topLayer">
-                <div className='emojiContainer'>
+                <div className='h-52 w-28'>
                   <div className='addEmoji'>
                     <div className="emoji" onClick={() => setIsEmojiModalShowing(true)}>{ emoji }</div>
                     <div className='shadow'></div>
                   </div>
                 </div>
-                <label className='container'>
+                <label>
                   <div className="circle">
                     <img src={checkmark} alt="SVG as an image"/>
                   </div>
@@ -106,11 +106,6 @@ export default function AddHabit(props) {
           position: relative;
           bottom: 15px;
           left: 15px;
-        }
-
-        .emojiContainer {
-          height: 202.5px;
-          width: 104px;
         }
         
         .addEmoji {
