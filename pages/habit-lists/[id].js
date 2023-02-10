@@ -171,11 +171,11 @@ const List = () => {
     });
   }
 
-  // console.log("habits: ", habits);
+  console.log("habits: ", habits);
 
   return (
     <div className="container">
-        <h3 className='completed-counter'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } Habits Completed in Habit list: { id }</h3>
+        {/* <h3 className='completed-counter'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } Habits Completed in Habit list: { id }</h3> */}
         <Head>
           <title>Habit Tracker</title>
           <link rel="icon" href="/favicon.ico" />
