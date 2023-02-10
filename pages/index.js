@@ -190,7 +190,14 @@ export default function Home({ isConnected }) {
         <input type="text" id="habitlist" name="habitlist" />
         <button type="submit">Submit</button>
       </form>
-
+      {isConnected ? (
+        <h2 className="subtitle">You are connected to MongoDB</h2>
+        ) : (
+          <h2 className="subtitle">
+            You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
+            for instructions.
+          </h2>
+        )}
 
       {/* <div className="container">
         <h3 className='completed-counter'> { habits.reduce((acc, habit) => acc + (habit.completed ? 1 : 0), 0) } / {habits.length} Habits Completed</h3>
