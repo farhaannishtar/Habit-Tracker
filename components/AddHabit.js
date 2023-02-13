@@ -10,7 +10,6 @@ export default function AddHabit(props) {
   const [editingValue, setEditingValue] = useState("");
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState("🏗");
-  const [cardStyle, setCardStyle] = useState('card');
   const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
 
   const handleSubmit = async (habitText) => {
@@ -58,14 +57,12 @@ export default function AddHabit(props) {
     }
     setHabits(current => [...current, newHabit]);
     setIsFormShowing(false);
-    setCardStyle('card');
     setEmoji("🏗")
     setEditingValue("");
   }
 
   const cardClickHandler = (e) => {
     setIsFormShowing(true)
-    setCardStyle('cardForm');
   }
 
   return ( 
@@ -91,7 +88,7 @@ export default function AddHabit(props) {
                   </div>
                 </div>
                 <label>
-                  <div className="circle">
+                  <div className="flex justify-center p-4 m-2 rounded-full bg-white">
                     <img src={checkmark} alt="SVG as an image"/>
                   </div>
                 </label>
@@ -106,25 +103,6 @@ export default function AddHabit(props) {
         .shadow {
           -webkit-filter: blur(10px);
           -webkit-transform: scale(1, 0.2);
-        }
-
-        .circle {
-          padding: 15px;
-          margin: 15px;
-          border-radius: 1500px;
-          background-color: white;
-          display: flex;
-          justify-content: center;
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          -khtml-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
-
-        .circle:hover {
-          cursor: pointer;
         }
       `}</style>
     </>

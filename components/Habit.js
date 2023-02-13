@@ -54,22 +54,22 @@ export default function Habit(props) {
     <>
       { props.isEditable ?
         (
-          <div className='card' style={{ backgroundColor: props.color}} onClick={completeHabit}>
-            <div className="topLayer flex justify-between relative bottom-3 left-3">
+          <div className='h-96 w-96 m-4 p-6 border-2 border-black rounded-2xl group hover:border-sky-600' style={{ backgroundColor: props.color}} onClick={completeHabit}>
+            <div className="flex justify-between relative bottom-3 left-3">
               <div className='h-52 w-28'>
-                <div className='emoji text-9xl' onClick={emojiClickHandler}>{ emoji }</div>
+                <div className='text-9xl hover:opacity-50 hover:cursor-pointer' onClick={emojiClickHandler}>{ emoji }</div>
                 <div className='shadow absolute bottom-0 w-28 h-24 rounded-full bg-slate-500 opacity-20'></div>
               </div>
-              <label>
-                <div className="circle">
+              <div>
+                <div className="flex justify-center p-4 m-2 rounded-full bg-white hover:cursor-pointer">
                   <img src={checkmark} alt="SVG as an image"/>
                 </div>
-              </label>
+              </div>
             </div> 
-            <div onClick={(e) => e.stopPropagation()} className='inline'>
+            <div onClick={(e) => e.stopPropagation()}>
               <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} textDecoration={textDecoration}/>
             </div>
-            <div className='trashcan'>
+            <div className='hidden group-hover:flex justify-end mt-7 hover:cursor-pointer'>
               <img src='/trash.svg' onClick={deleteHandler}/>
             </div>
           </div> 
@@ -84,71 +84,9 @@ export default function Habit(props) {
       }
       <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
       <style jsx>{`
-
-        .emoji {
-          /* font-size: 100px; */
-          cursor: pointer;
-        }
-
-        .emoji:hover {
-          opacity: 0.5;
-        }
-
-        img:hover {
-          cursor: pointer;
-        }
-
-        .card {
-          margin: 1rem;
-          padding: 1.5rem;
-          border: 1px solid #eaeaea;
-          border-radius: 15px;
-          transition: color 0.3s ease, border-color 0.3s ease;
-          height: 370px;
-          width: 383px;
-          border: 2px solid black;
-          cursor: pointer;
-          user-select: none;
-        }
-
-
-        .circle {
-          padding: 15px;
-          margin: 15px;
-          border-radius: 100px;
-          background-color: white;
-          display: flex;
-          justify-content: center;
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          -khtml-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
-
-
         .shadow {
           -webkit-filter: blur(10px);
           -webkit-transform: scale(1, 0.2);
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          border-color: #0070f3;
-        }
-        
-        .trashcan {
-          display: none;
-        }
-
-        .card .trashcan {
-          display: flex;
-          justify-content: flex-end;
-          user-select:none;
-          margin-top: 40px;
-          margin-left: 345px; 
         }
       `}</style>
     </>

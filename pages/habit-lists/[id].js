@@ -174,13 +174,13 @@ const List = () => {
   console.log("habits: ", habits);
 
   return (
-    <div className="container">
-        <h3 className='completed-counter'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } Habits Completed in Habit list: { id }</h3>
+    <div className="flex flex-col justify-center items-center">
+        <h3 className='m-4'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } Habits Completed in Habit list: { id }</h3>
         <Head>
           <title>Habit Tracker</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <div className="grid">
+        <div className="flex items-center justify-center flex-wrap mt-10 gap-2 select-none"> 
           <AddHabit habits={habits} setHabits={setHabits} id={id}/>
           {
             habits.filter(habit => {
@@ -200,31 +200,6 @@ const List = () => {
               })
             }
         </div>
-        <style jsx>{`
-          .container {
-            padding: 0 0.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-          }
-
-          .completed-counter {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-          }
-          
-          .grid {
-            display: flex;
-            align-items: center;
-            justify-content: left;
-            flex-wrap: wrap;
-            max-width: 1350px;
-            margin-top: 3rem;
-            gap: 5px 5px;
-            user-select: none;
-          }
-          `}</style>
         <form onSubmit={async (e) => handleCreateHabitList(e)}>
           <label htmlFor="habitlist">Enter Habit list </label>
           <input className='bg-gray-300' type="text" id="habitlist" name="habitlist" />
