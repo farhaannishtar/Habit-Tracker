@@ -55,10 +55,10 @@ export default function Habit(props) {
       { props.isEditable ?
         (
           <div className='card' style={{ backgroundColor: props.color}} onClick={completeHabit}>
-            <div className="topLayer">
+            <div className="topLayer flex justify-between relative bottom-3 left-3">
               <div className='h-52 w-28'>
-                <div className='emoji' onClick={emojiClickHandler}>{ emoji }</div>
-                <div className='shadow'></div>
+                <div className='emoji text-9xl' onClick={emojiClickHandler}>{ emoji }</div>
+                <div className='shadow absolute bottom-0 w-28 h-24 rounded-full bg-slate-500 opacity-20'></div>
               </div>
               <label>
                 <div className="circle">
@@ -84,6 +84,16 @@ export default function Habit(props) {
       }
       <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
       <style jsx>{`
+
+        .emoji {
+          /* font-size: 100px; */
+          cursor: pointer;
+        }
+
+        .emoji:hover {
+          opacity: 0.5;
+        }
+
         img:hover {
           cursor: pointer;
         }
@@ -101,13 +111,6 @@ export default function Habit(props) {
           user-select: none;
         }
 
-        .topLayer {
-          display: flex;
-          justify-content: space-between;
-          position: relative;
-          bottom: 15px;
-          left: 15px;
-        }
 
         .circle {
           padding: 15px;
@@ -124,26 +127,10 @@ export default function Habit(props) {
           user-select: none;
         }
 
-        .emoji {
-          font-size: 100px;
-          cursor: pointer;
-        }
-
-        .emoji:hover {
-          opacity: 0.5;
-        }
 
         .shadow {
-          border-radius: 90%;
-          width: 100px;
-          height: 100px;
-          background: gray;
-          opacity: 0.2;
           -webkit-filter: blur(10px);
           -webkit-transform: scale(1, 0.2);
-          margin: 0px;
-          position: absolute;
-          bottom: 10px;
         }
 
         .card:hover,
