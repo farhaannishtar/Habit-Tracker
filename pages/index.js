@@ -1,5 +1,7 @@
 import clientPromise from '../lib/mongodb'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 export async function getServerSideProps(context) {
   try {
@@ -26,13 +28,20 @@ export async function getServerSideProps(context) {
 
 export default function Home({ isConnected }) {
 
-  const router = useRouter()
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   const handleCreateHabitList = async (e) => {
     e.preventDefault();
-    const habitList = e.target.habitlist.value;
-    await editCompletedHabitListToDB(habitList);
-    router.push({ pathname: `/habit-lists/${habitList}` } )
+    console.log("e.target.enterList.value: ", e.target.enterList.value, typeof e.target.enterList.value)
+    if (e.target.enterList.value === "") {
+      setErrorMessage("Please enter a valid name for your habit list.")
+      return;
+    }
+    const habitList = e.target.enterList.value;
+    // await editCompletedHabitListToDB(habitList);
+    // router.push({ pathname: `/habit-lists/${habitList}` } )
   }
 
   const editCompletedHabitListToDB =  async (habitList) => {
@@ -49,15 +58,48 @@ export default function Home({ isConnected }) {
     });
   }
 
+  const handleEnterHabitList = async (e) => {
+    e.preventDefault();
+    const habitList = e.target.enterList.value;
+    router.push({ pathname: `/habit-lists/${habitList}` } )
+  }
+
   return (
     <>
-      <div className='flex justify-around'>
-        <h1 className='text-6xl'>Habit Tracker</h1>
+      <Head>
+        <title>Habit Tracker</title>
+      </Head>
+      <div className='flex justify-center'>
+        <h1 className='m-4 text-6xl'>Habit Tracker</h1>
       </div>
-      <form onSubmit={async (e) => handleCreateHabitList(e)}>
-        <label htmlFor="habitlist">Enter Habit list </label>
-        <input className='bg-gray-300' type="text" id="habitlist" name="habitlist" />
-        <button className='text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700' type="submit">Submit</button>
+
+      <form onSubmit={async (e) => handleCreateHabitList(e)} className="bg-white shadow-md rounded mx-[550px] px-8 pt-6 pb-8 mb-4">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+            Create New Habit List
+          </label>
+          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="enterList" type="text" placeholder="Ex. Alice's List"/>
+           { errorMessage && <p class="text-red-500 text-xs italic mt-2"> { errorMessage } </p> }
+        </div>
+        <div className="flex items-center justify-between">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+            Create List
+          </button>
+        </div>
+      </form>
+
+      <form onSubmit={async (e) => handleEnterHabitList(e)} className="bg-white shadow-md rounded mx-[550px] px-8 pt-6 pb-8 mb-4">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+            Enter Existing Habit List
+          </label>
+          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="enterList" type="text" placeholder="Ex. Alice's List"/>
+        </div>
+        <div className="flex items-center justify-between">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+            Go to List
+          </button>
+        </div>
       </form>
     </>
   )
