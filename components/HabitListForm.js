@@ -38,20 +38,22 @@ export default function HabitListForm() {
 
   return (
     <>
-      <form onSubmit={async (e) => handleSubmit(e)} className="bg-white shadow-md rounded mx-[550px] px-8 pt-6 pb-8 mb-4">
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-            Enter Existing Habit List
-          </label>
-          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="listName" type="text" placeholder="Ex. Alice's List"/>
-          { errorMessage && <p className="text-red-500 text-xs italic mt-2"> { errorMessage } </p> }
-        </div>
-        <div className="flex items-center justify-between">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-            Go to List
-          </button>
-        </div>
-      </form>
+      <div className='mx-60'>
+        <form onSubmit={async (e) => handleSubmit(e)} className="bg-white shadow-md rounded mx-60 px-8 pt-6 pb-8 mb-4">
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+              Enter Existing Habit List
+            </label>
+            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="listName" type="text" placeholder="Ex. Alice's List"/>
+            { errorMessage && <p className="text-red-500 text-xs italic mt-2"> { errorMessage } </p> }
+          </div>
+          <div className="flex items-center justify-between">
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+              Go to List
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   )
 }
