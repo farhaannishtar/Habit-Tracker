@@ -4,7 +4,8 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import Habit from '../../components/Habit'
 import AddHabit from '../../components/AddHabit';
-    
+import HabitListForm from '../../components/HabitListForm';    
+
 const cardColors = [];
 cardColors[0] = '#ebf5ed';
 cardColors[1] = '#f9ede6';
@@ -27,7 +28,6 @@ const List = () => {
   }
 
   useEffect(() => { 
-    console.log("use effect")
     const origin =
         typeof window !== 'undefined' && window.location.origin
             ? window.location.origin
@@ -35,7 +35,6 @@ const List = () => {
 
     const URL = `${origin}${asPath}`;
     setUrl(URL);
-    console.log("~~~~~~~~~~~~~~ URL   ~~~~~~~~~~~~", URL);
   },)
 
   useEffect(() => {
@@ -171,21 +170,23 @@ const List = () => {
     });
   }
 
-  console.log("habits: ", habits);
+  // console.log("habits: ", habits);
 
   return (
-    <div className="flex flex-col justify-center items-center">
-        <h3 className='m-4'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } Habits Completed in Habit list: { id }</h3>
+    <>
+      <div className="flex flex-col justify-center items-center">
         <Head>
           <title>Habit Tracker</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
+        <h3 className='m-4'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } Habits Completed in Habit list: { id }</h3>
         <div className="flex items-center justify-center flex-wrap mt-10 gap-2 select-none"> 
           <AddHabit habits={habits} setHabits={setHabits} id={id}/>
           {
             habits.filter(habit => {
-              return habit.habitListId === id
-            }).map((habit, index) => {
+              return habit.habitListId === id;
+            })
+            .map((habit, index) => {
               return <Habit 
               key={habit._id}
               _id={habit._id} 
@@ -197,16 +198,12 @@ const List = () => {
               deleteHandler={deleteHandler} 
               editHabitTextHandler={editHabitTextHandler} 
               editHabitEmojiHandler={editHabitEmojiHandler}/>
-              })
-            }
+            })
+          }
         </div>
-        <form onSubmit={async (e) => handleCreateHabitList(e)}>
-          <label htmlFor="habitlist">Enter Habit list </label>
-          <input className='bg-gray-300' type="text" id="habitlist" name="habitlist" />
-          <button className='bg-gray-300 border border-emerald-900' type="submit">Submit</button>
-        </form>
-        <button className='bg-gray-300 border border-emerald-900' onClick={() =>  navigator.clipboard.writeText(url)}>Share Habit List Link</button>
       </div>  
+      <HabitListForm />
+    </>
   )
 }
 

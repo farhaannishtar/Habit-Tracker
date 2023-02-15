@@ -9,7 +9,6 @@ export default async function handler(request, response) {
       .insertOne(
         {
           habitListId: `${request.body.habitList}`,
-          habits: [],
         }
       )
     response.status(200).json(results);

@@ -2,10 +2,9 @@ import clientPromise from '../../lib/mongodb';
 
 export default async function handler(request, response) {
   try {
-    console.log("~~~~~~~~~~~~~Inside getHabits.js~~~~~~~~~~~~~~~~")
     const mongoClient = await clientPromise;
     const db = mongoClient.db("HabitTracker");
-    const collection = db.collection("Habits");
+    const collection = db.collection("HabitLists");
     const results = await collection
       .find()
       .toArray()
