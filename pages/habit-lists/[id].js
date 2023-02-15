@@ -20,6 +20,7 @@ const List = () => {
 
   const [habits, setHabits] = useState([]);
   const [url, setUrl] = useState('');
+  const [effect, setEffect] = useState(false);
 
   const fetchHabits = async () => {
     const habits = await fetch('/api/getHabits');
@@ -149,28 +150,10 @@ const List = () => {
     });
   }
 
-  const handleCreateHabitList = async (e) => {
-    e.preventDefault();
-    const habitList = e.target.habitlist.value;
-    await editCompletedHabitListToDB(habitList);
-    router.push({ pathname: `/habit-lists/${habitList}` } )
+  const shareHabitButtonHandler = () => { 
+    navigator.clipboard.writeText(url);
+    setEffect(true);
   }
-
-  const editCompletedHabitListToDB =  async (habitList) => {
-    const response = await fetch("/api/createHabitList", {
-      method: "POST",
-      body: JSON.stringify({
-        habitList: habitList,
-      }),
-      headers: 
-      {
-        "Content-Type": 
-        "application/json",
-      },
-    });
-  }
-
-  // console.log("habits: ", habits);
 
   return (
     <>
@@ -180,6 +163,14 @@ const List = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <h3 className='m-4'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } Habits Completed in Habit list: { id }</h3>
+        <div className='flex self-end mr-52'>
+          <button 
+            className={`${ effect && `animate-wiggle`} bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+            onClick={shareHabitButtonHandler}
+            onAnimationEnd={() => setEffect(false)}
+            >
+            Share List</button>
+        </div>
         <div className="flex items-center justify-center flex-wrap mt-10 gap-2 select-none"> 
           <AddHabit habits={habits} setHabits={setHabits} id={id}/>
           {
