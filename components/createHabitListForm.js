@@ -53,23 +53,18 @@ export default function CreateHabitListForm() {
   }
 
   return (
-    <>
-      <div className='mx-60'>      
-        <form onSubmit={async (e) => handleSubmit(e)} className="bg-white shadow-md rounded mx-60 px-8 pt-6 pb-8 mb-4">
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-             Create New Habit List
-            </label>
-            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="newList" type="text" placeholder="Ex. Alice's List"/>
-            { errorMessage && <p className="text-red-500 text-xs italic mt-2"> { errorMessage } </p> }
-          </div>
-          <div className="flex items-center justify-between">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-             Create List
-            </button>
-          </div>
-        </form>
-      </div> 
+  <>      
+      <form onSubmit={async (e) => handleSubmit(e)} className="rounded px-8 mt-5 pb-8">
+        <div className="mb-4">
+          <input className="shadow border border-black rounded w-96 h-12 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="newList" type="text" placeholder="Enter new list name"/>
+          { errorMessage && <p className="text-red-500 text-xs italic mt-2"> { errorMessage } </p> }
+        </div>
+        <div className="flex items-center justify-between">
+          <button className="bg-blue-600 hover:bg-blue-800 text-black text-3xl w-96 h-12 py-1 rounded focus:outline-none focus:shadow-outline" type="submit">
+            create new list
+          </button>
+        </div>
+      </form>
     </>
   )
 }

@@ -32,12 +32,20 @@ export default function Home() {
       <Head>
         <title>Habit Tracker</title>
       </Head>
-      <div className='flex justify-center'>
-        <h1 className='m-4 text-6xl'>Habit Tracker</h1>
+      <div className='flex flex-col justify-center'>
+        <div className='flex justify-center'>
+          <h1 className='m-4 text-6xl text-center'>Habit Tracker</h1>
+        </div>
+        <div className='flex justify-center mt-4 mb-2'>
+          <div className='w-96'>
+            <h3 className='text-center text-xl'>Create a list of habits you're trying to build. Check them off on this site and share the list with your friends</h3>
+          </div>
+        </div>
       </div>
-      
-      <CreateHabitListForm />
-      <HabitListForm />
+      <div className='flex flex-col justify-center items-center'>
+        <CreateHabitListForm />
+        <HabitListForm />
+      </div>
     </>
   )
 }
