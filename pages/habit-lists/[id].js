@@ -1,4 +1,3 @@
-
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
