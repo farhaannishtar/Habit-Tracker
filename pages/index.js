@@ -1,7 +1,9 @@
-import clientPromise from '../lib/mongodb'
 import Head from 'next/head'
-import CreateHabitListForm from '../components/createHabitListForm'
-import HabitListForm from '../components/HabitListForm'
+import clientPromise from '../lib/mongodb'
+import { useState, useEffect } from 'react'
+import Habit from '../components/Habit'
+import AddHabit from '../components/AddHabit';
+import styles from '../styles/index.module.css'
 
 export async function getServerSideProps(context) {
   try {
@@ -26,35 +28,144 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default function Home() {
+const cardColors = [];
+cardColors[0] = '#ebf5ed';
+cardColors[1] = '#f9ede6';
+cardColors[2] = '#faf9e5';
+cardColors[3] = '#f7edf5';
+
+
+export default function Home({ isConnected }) {
+  
+  const [habits, setHabits] = useState([]);
+
+  const fetchHabits = async () => {
+    const habits = await fetch('/api/getHabits');
+    const habitData = await habits.json();
+    setHabits(habitData);
+  }
+
+  useEffect(() => {
+    const fetchHabits = async () => {
+      const habits = await fetch('/api/getHabits');
+      const habitData = await habits.json();
+      setHabits(habitData);
+    }
+    fetchHabits();
+  }, [])
+  
+  const deleteHandler = (id) => {
+    setHabits(habits.filter(habit => habit.id !== id));
+  }
+  
+  const editHabitTextHandler = (id, editedText) => {
+    setHabits(habits => habits.filter(habit => {
+      if (habit.id === id) {
+        habit.text = editedText || " ";
+        return habit;
+      } else {
+        return habit;
+      } 
+    }))
+  }
+  
+  const editHabitEmojiHandler = (id, editedEmoji) => {
+    setHabits(habits => habits.filter(habit => {
+      if(habit.id === id) {
+        habit.emoji = editedEmoji
+        return habit;
+      } else {
+        return habit
+      }
+    }))
+  }
+  
+  const editCompletedHabit = async (id, isCompleted) => {
+    await editCompletedHabitToDB(id, isCompleted);
+    setHabits(habits => habits.filter(habit => {
+      if(habit._id === id) {
+        habit.completed = isCompleted;
+        return habit;
+      } else {
+        return habit;
+      }
+    }))
+    await fetchHabits();
+  }
+
+  const editCompletedHabitToDB =  async (id, isCompleted) => {
+    const response = await fetch("/api/editCompleteStatus", {
+      method: "PUT",
+      body: JSON.stringify({
+        id: id,
+        isCompleted: isCompleted,
+      }),
+      headers: 
+      {
+        "Content-Type": 
+        "application/json",
+      },
+    });
+  }
+
   return (
     <>
-      <Head>
-        <title>Habit Tracker</title>
-      </Head>
-      <div className='flex flex-col justify-center'>
-        <div className='flex justify-center'>
-          <h1 className='m-4 text-6xl text-center'>Habit Tracker</h1>
+      <div className={styles.header}>
+        <h1>Habit Tracker</h1>
+        <h3> { habits.reduce((acc, habit) => acc + (habit.completed ? 1 : 0), 0) } / {habits.length} Habits Completed</h3>
+      </div> 
+      <div className="container">
+        <Head>
+          <title>Habit Tracker</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className="grid">
+          <AddHabit habits={habits} setHabits={setHabits}/>
+          {
+            habits.map((habit, index) => {
+              return <Habit 
+              key={habit._id}
+              _id={habit._id} 
+              isEditable={true} 
+              color={cardColors[index % cardColors.length]} 
+                habit={habit} 
+                setHabits={setHabits}
+                editCompletedHabit={editCompletedHabit}
+                deleteHandler={deleteHandler} 
+                editHabitTextHandler={editHabitTextHandler} 
+                editHabitEmojiHandler={editHabitEmojiHandler}/>
+              })
+            }
         </div>
-        <div className='flex justify-center mt-4 mb-2'>
-          <div className='w-96'>
-            <h3 className='text-center text-xl'>Create a list of habits you're trying to build. Check them off on this site and share the list with your friends</h3>
-          </div>
-        </div>
-      </div>
-      <div className='flex flex-col justify-center items-center'>
-        <CreateHabitListForm />
-        <HabitListForm />
-      </div>
+        <style jsx>{`
+          .container {
+            padding: 0 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          }
+          
+          .grid {
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            flex-wrap: wrap;
+            max-width: 1350px;
+            margin-top: 3rem;
+            gap: 5px 5px;
+            user-select: none;
+          }
+          `}</style>
+      </div> 
+      {/* {isConnected ? (
+        <h2 className="subtitle">You are connected to MongoDB</h2>
+        ) : (
+          <h2 className="subtitle">
+            You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
+            for instructions.
+          </h2>
+        )} */}
     </>
   )
 }
-
-// {isConnected ? (
-//   <h2 className="subtitle">You are connected to MongoDB</h2>
-//   ) : (
-//     <h2 className="subtitle">
-//       You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
-//       for instructions.
-//     </h2>
-//   )}

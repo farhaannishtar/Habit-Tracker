@@ -1,4 +1,5 @@
 import EmojiPicker from 'emoji-picker-react';
+import styles from '../styles/EmojiModal.module.css';
 
 export default function EmojiModal(props) {
 
@@ -12,7 +13,7 @@ export default function EmojiModal(props) {
   if (!isEmojiModalShowing) return null;
 
   return (
-    <div className='flex items-center justify-center fixed top-0 right-0 bottom-0 left-0 bg-black bg-opacity-50 z-10' onClick={onClose}>
+    <div className={styles.modal} onClick={onClose}>
       <div onClick={(e) => e.stopPropagation()}>
         <EmojiPicker onEmojiClick={handleEmojiClick}/>
       </div>
