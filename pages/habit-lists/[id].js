@@ -154,6 +154,10 @@ const List = () => {
     setEffect(true);
   }
 
+  const homeButtonHandler = () => {
+    router.push('/');
+  }
+
   return (
     <>
       <div className="flex flex-col justify-center items-center">
@@ -161,14 +165,27 @@ const List = () => {
           <title>Habit Tracker</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <h3 className='m-4'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } Habits Completed in Habit list: { id }</h3>
-        <div className='flex self-end mr-52'>
-          <button 
-            className={`${ effect && `animate-wiggle`} bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
-            onClick={shareHabitButtonHandler}
-            onAnimationEnd={() => setEffect(false)}
-            >
-            Share List</button>
+        <div className='flex w-full justify-between'>
+          <div>
+            <button 
+              className="bg-blue-500 hover:bg-blue-700 ml-20 mt-6 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={homeButtonHandler}
+              >
+              Home
+            </button>
+          </div>
+          <div>
+            <h1 className='text-4xl font-bold text-center mt-6'> { id } </h1>
+            <h3 className='mx-4 mt-6'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } completed</h3>
+          </div>  
+          <div>
+            <button 
+              className={`${ effect && `animate-wiggle`} bg-blue-500 hover:bg-blue-700 mr-20 mt-6 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+              onClick={shareHabitButtonHandler}
+              onAnimationEnd={() => setEffect(false)}
+              >
+              Share List</button>
+          </div>
         </div>
         <div className="flex items-center justify-center flex-wrap mt-10 gap-2 select-none"> 
           <AddHabit habits={habits} setHabits={setHabits} id={id}/>
@@ -192,7 +209,6 @@ const List = () => {
           }
         </div>
       </div>  
-      <HabitListForm />
     </>
   )
 }
