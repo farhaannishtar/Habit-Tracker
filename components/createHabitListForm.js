@@ -10,21 +10,22 @@ export default function CreateHabitListForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (e.target.newList.value.trim() === "") {
+    let newList = e.target.newList.value.toLowerCase();
+
+    if (newList === "") {
       setErrorMessage("Please enter a valid name for your habit list.")
       return;
     }
 
     const habitLists = await getHabitListsFromDB();
     for (let i = 0; i < habitLists.length; i++) {
-      if (habitLists[i].habitListId === e.target.newList.value) {
+      if (habitLists[i].habitListId === newList) {
         setErrorMessage("This habit list already exists. Please enter a different name for your list.")
         return; 
       }
     }
-    const habitList = e.target.newList.value;
-    await createHabitListToDB(habitList);
-    router.push({ pathname: `/habit-lists/${habitList}` } )
+    await createHabitListToDB(newList);
+    router.push({ pathname: `/habit-lists/${newList}` } )
   }
 
   const getHabitListsFromDB = async () => {

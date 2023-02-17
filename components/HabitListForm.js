@@ -10,11 +10,11 @@ export default function HabitListForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (e.target.listName.value.trim() === "") {
+    const habitList = e.target.listName.value.toLowerCase();
+    if (habitList === "") {
       setErrorMessage("Please enter a valid name for your habit list.")
       return;
     }
-    const habitList = e.target.listName.value;
     const habitLists = await getHabitListsFromDB();
     for (let i = 0; i < habitLists.length; i++) {
       if (habitLists[i].habitListId === habitList) {
