@@ -3,7 +3,6 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import Habit from '../../components/Habit'
 import AddHabit from '../../components/AddHabit';
-import HabitListForm from '../../components/HabitListForm';    
 
 const cardColors = [];
 cardColors[0] = '#ebf5ed';
@@ -12,7 +11,7 @@ cardColors[2] = '#faf9e5';
 cardColors[3] = '#f7edf5';
 
 
-const List = () => {
+export default function List() {
   const router = useRouter()
   const { asPath } = useRouter();
   const { id } = router.query;
@@ -21,6 +20,7 @@ const List = () => {
   const [url, setUrl] = useState('');
   const [effect, setEffect] = useState(false);
   const [shareButtonText, setShareButtonText] = useState('Share List');
+  const [message, setMessage] = useState('');
 
   const fetchHabits = async () => {
     const habits = await fetch('/api/getHabits');
@@ -36,6 +36,7 @@ const List = () => {
 
     const URL = `${origin}${asPath}`;
     setUrl(URL);
+    messageGenerator();
   },)
 
   useEffect(() => {
@@ -46,7 +47,37 @@ const List = () => {
     }
     fetchHabits();
   }, [])
-  
+
+  const messageGenerator = () => {
+    const messages = ["Pick the easiest thing first!", "You’re making great progress—keep going!", "you’re on a roll!", "Crushing it!", "You completed all your habits!"];
+    let feedback;
+    let habitsCompleted = habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0)
+    let totalHabits = habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)
+
+    // Do you like this ratio calculation?
+    let ratio = habitsCompleted / totalHabits;
+    switch (true) {
+      case (ratio === 0):
+        feedback = messages[0];
+        break;
+      case (ratio > 0 && ratio < 0.5):
+        feedback = messages[1];
+        break;
+      case (ratio >= 0.5 && ratio < 0.75):
+        feedback = messages[2];
+        break;
+      case (ratio >= 0.75 && ratio < 1):
+        feedback = messages[3];
+        break;
+      case (ratio === 1):
+        feedback = messages[4];
+        break;
+      default:
+        break;
+    }
+    setMessage(`${habitsCompleted} / ${totalHabits} habits completed. ${feedback}`);
+  }
+
   const deleteHandler = async (id) => {
     await deleteHabitToDB(id);
     setHabits(habits.filter(habit => habit.id !== id));
@@ -178,7 +209,7 @@ const List = () => {
           </div>
           <div>
             <h1 className='text-4xl font-bold text-center mt-6'> { id } </h1>
-            <h3 className='mx-4 mt-6'> { habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0) } / {habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)  } completed</h3>
+            <h3 className='mx-4 mt-6'> { message }</h3>
           </div>  
           <div>
             <button 
@@ -214,5 +245,3 @@ const List = () => {
     </>
   )
 }
-
-export default List
