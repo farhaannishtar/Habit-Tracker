@@ -11,7 +11,6 @@ export default async function handler(request, response) {
           text: `${request.body.text}`,
           emoji: `${request.body.emoji}`,
           completed: false,
-          habitListId: `${request.body.habitListId}`,
         }
       )
     response.status(200).json(results);
