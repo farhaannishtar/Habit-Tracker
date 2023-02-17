@@ -1,4 +1,7 @@
 // Modified this file to restyle form
+// I'm really sorry. When I made these commits, I was on a different branch on a different PR
+// The changes I made to this file was to re-style the two form components and the home page
+// I'll be more careful next time. I wasn't thinking
 
 import clientPromise from '../lib/mongodb'
 import Head from 'next/head'
