@@ -20,6 +20,7 @@ const List = () => {
   const [habits, setHabits] = useState([]);
   const [url, setUrl] = useState('');
   const [effect, setEffect] = useState(false);
+  const [shareButtonText, setShareButtonText] = useState('Share List');
 
   const fetchHabits = async () => {
     const habits = await fetch('/api/getHabits');
@@ -152,6 +153,7 @@ const List = () => {
   const shareHabitButtonHandler = () => { 
     navigator.clipboard.writeText(url);
     setEffect(true);
+    setShareButtonText('URL Copied');
   }
 
   const homeButtonHandler = () => {
@@ -184,7 +186,7 @@ const List = () => {
               onClick={shareHabitButtonHandler}
               onAnimationEnd={() => setEffect(false)}
               >
-              Share List</button>
+              { shareButtonText }</button>
           </div>
         </div>
         <div className="flex items-center justify-center flex-wrap mt-10 gap-2 select-none"> 
