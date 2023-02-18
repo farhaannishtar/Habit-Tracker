@@ -15,7 +15,7 @@ export default function AddHabit(props) {
   const handleSubmit = async (habitText) => {
     // Get data from the form.
     const data = {
-      habitListId: id,
+      slug: id,
       text: habitText,
       emoji: emoji,
       completed: false
@@ -53,7 +53,7 @@ export default function AddHabit(props) {
       text: habitText,
       emoji: emoji,
       completed: false,
-      habitListId: id
+      slug: id
     }
     setHabits(current => [...current, newHabit]);
     setIsFormShowing(false);

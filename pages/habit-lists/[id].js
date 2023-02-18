@@ -12,7 +12,7 @@ cardColors[3] = '#f7edf5';
 
 
 export default function List() {
-  const router = useRouter()
+  const router = useRouter();
   const { asPath } = useRouter();
   const { id } = router.query;
 
@@ -21,6 +21,7 @@ export default function List() {
   const [effect, setEffect] = useState(false);
   const [shareButtonText, setShareButtonText] = useState('Share List');
   const [message, setMessage] = useState('');
+  const [listName, setListName] = useState('');
 
   const fetchHabits = async () => {
     const habits = await fetch('/api/getHabits');
@@ -33,11 +34,21 @@ export default function List() {
         typeof window !== 'undefined' && window.location.origin
             ? window.location.origin
             : '';
-
     const URL = `${origin}${asPath}`;
     setUrl(URL);
     messageGenerator();
   },)
+
+  useEffect(() => {
+    if (!id) return;
+    const fetchListName = async () => {
+      const lists = await fetch('/api/getHabitLists');
+      const listsData = await lists.json();
+      const habitList = listsData.filter(list => list.slug === id);
+      setListName(habitList[0].listName);
+    }
+    fetchListName();
+  }, [id])
 
   useEffect(() => {
     const fetchHabits = async () => {
@@ -57,7 +68,7 @@ export default function List() {
     // Do you like this ratio calculation?
     let ratio = habitsCompleted / totalHabits;
     switch (true) {
-      case (ratio === 0):
+      case (habitsCompleted === 0 && totalHabits === 0):
         feedback = messages[0];
         break;
       case (ratio > 0 && ratio < 0.5):
@@ -208,7 +219,7 @@ export default function List() {
             </button>
           </div>
           <div>
-            <h1 className='text-4xl font-bold text-center mt-6'> { id } </h1>
+            <h1 className='text-4xl font-bold text-center mt-6'> { listName } </h1>
             <h3 className='mx-4 mt-6'> { message }</h3>
           </div>  
           <div>
@@ -224,7 +235,7 @@ export default function List() {
           <AddHabit habits={habits} setHabits={setHabits} id={id}/>
           {
             habits.filter(habit => {
-              return habit.habitListId === id;
+              return habit.slug === id;
             })
             .map((habit, index) => {
               return <Habit 

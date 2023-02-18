@@ -1,5 +1,3 @@
-// Modified this file to restyle form
-
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
@@ -10,15 +8,15 @@ export default function HabitListForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const habitList = e.target.listName.value.toLowerCase();
-    if (habitList === "") {
+    const listName = e.target.listName.value.toLowerCase();
+    if (listName === "") {
       setErrorMessage("Please enter a valid name for your habit list.")
       return;
     }
     const habitLists = await getHabitListsFromDB();
     for (let i = 0; i < habitLists.length; i++) {
-      if (habitLists[i].habitListId === habitList) {
-        router.push({ pathname: `/habit-lists/${habitList}` } )
+      if (habitLists[i].listName === listName) {
+        router.push({ pathname: `/habit-lists/${habitLists[i].slug}` } )
         return;
       }
     }

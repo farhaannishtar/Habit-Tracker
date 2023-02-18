@@ -8,7 +8,8 @@ export default async function handler(request, response) {
     const results = await collection
       .insertOne(
         {
-          habitListId: `${request.body.habitList}`,
+          slug: `${request.body.slug}`,
+          listName: `${request.body.listName}`,
         }
       )
     response.status(200).json(results);
