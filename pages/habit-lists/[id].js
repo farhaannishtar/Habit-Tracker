@@ -57,7 +57,7 @@ export default function List() {
     // Do you like this ratio calculation?
     let ratio = habitsCompleted / totalHabits;
     switch (true) {
-      case (ratio === 0):
+      case (ratio === undefined || ratio === null || ratio === 0):
         feedback = messages[0];
         break;
       case (ratio > 0 && ratio < 0.5):
