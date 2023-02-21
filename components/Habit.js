@@ -66,7 +66,7 @@ export default function Habit(props) {
                 </div>
               </div>
             </div> 
-            <div onClick={(e) => e.stopPropagation()}>
+            <div>
               <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} textDecoration={textDecoration}/>
             </div>
             <div className='hidden group-hover:flex justify-end mt-7 hover:cursor-pointer'>
