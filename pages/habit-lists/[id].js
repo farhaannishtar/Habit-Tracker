@@ -60,28 +60,26 @@ export default function List() {
   }, [])
 
   const messageGenerator = () => {
-    const messages = ["Pick the easiest thing first!", "You’re making great progress—keep going!", "you’re on a roll!", "Crushing it!", "You completed all your habits!"];
     let feedback;
     let habitsCompleted = habits.reduce((acc, habit) => acc + (habit.completed && habit.slug === id ? 1 : 0), 0)
     let totalHabits = habits.reduce((acc, habit) => acc + (habit.slug === id ? 1 : 0), 0)
 
-    // Do you like this ratio calculation?
     let ratio = habitsCompleted / totalHabits;
     switch (true) {
       case (isNaN(ratio) || ratio === 0):
-        feedback = messages[0];
+        feedback = "Pick the easiest thing first!";
         break;
       case (ratio > 0 && ratio < 0.5):
-        feedback = messages[1];
+        feedback = "You’re making great progress—keep going!";
         break;
       case (ratio >= 0.5 && ratio < 0.75):
-        feedback = messages[2];
+        feedback = "You’re on a roll!";
         break;
       case (ratio >= 0.75 && ratio < 1):
-        feedback = messages[3];
+        feedback = "Crushing it!";
         break;
       case (ratio === 1):
-        feedback = messages[4];
+        feedback = "You completed all your habits!";
         break;
       default:
         break;
