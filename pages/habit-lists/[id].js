@@ -67,7 +67,7 @@ export default function List() {
     let ratio = habitsCompleted / totalHabits;
     switch (true) {
 
-      case (isNaN(ratio) || ratio === 0):
+      case (ratio === 0):
         feedback = "Pick the easiest thing first!";
         break;
       case (ratio > 0 && ratio < 0.5):
