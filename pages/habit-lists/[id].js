@@ -23,6 +23,8 @@ export default function List() {
   const [message, setMessage] = useState('');
   const [listName, setListName] = useState('');
 
+  console.log("This line is being run.")
+  
   const fetchHabits = async () => {
     const habits = await fetch('/api/getHabits');
     const habitData = await habits.json();
