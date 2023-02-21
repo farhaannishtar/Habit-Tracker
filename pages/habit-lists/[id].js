@@ -86,7 +86,7 @@ export default function List() {
       default:
         break;
     }
-    setMessage(`${habitsCompleted} / ${totalHabits} habits completed. ${feedback}`);
+    totalHabits === 0 ? setMessage('Add a habit to your list!') : setMessage(`${habitsCompleted} / ${totalHabits} habits completed. ${feedback}`);
   }
 
   const deleteHandler = async (id) => {

@@ -46,8 +46,6 @@ export default function AddHabit(props) {
     // If server returns the name submitted, that means the form works.
     const result = await response.json()
   
-    console.log("result: ", result)
-
     const newHabit = {
       _id: result.insertedId,
       text: habitText,
