@@ -63,7 +63,7 @@ export default function CreateHabitListForm() {
           { errorMessage && <p className="text-red-500 text-xs italic mt-2"> { errorMessage } </p> }
         </div>
         <div className="flex items-center justify-between">
-          <button className="bg-blue-600 hover:bg-blue-800 text-black text-3xl w-96 h-12 py-1 rounded focus:outline-none focus:shadow-outline" type="submit">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold text-xl w-96 h-12 py-1 rounded focus:outline-none focus:shadow-outline" type="submit">
             create new list
           </button>
         </div>

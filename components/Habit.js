@@ -69,8 +69,8 @@ export default function Habit(props) {
             <div onClick={(e) => e.stopPropagation()}>
               <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} textDecoration={textDecoration}/>
             </div>
-            <div className='hidden group-hover:flex justify-end mt-7 hover:cursor-pointer'>
-              <img src='/trash.svg' onClick={deleteHandler}/>
+            <div className='hidden group-hover:flex w-full box-content justify-end mt-7 hover:cursor-pointer'>
+              <img className='-mr-4' src='/trash.svg' onClick={deleteHandler}/>
             </div>
           </div> 
         )

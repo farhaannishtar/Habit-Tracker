@@ -51,8 +51,8 @@ export default function List() {
   const messageGenerator = () => {
     const messages = ["Pick the easiest thing first!", "You’re making great progress—keep going!", "you’re on a roll!", "Crushing it!", "You completed all your habits!"];
     let feedback;
-    let habitsCompleted = habits.reduce((acc, habit) => acc + (habit.completed && habit.habitListId === id ? 1 : 0), 0)
-    let totalHabits = habits.reduce((acc, habit) => acc + (habit.habitListId === id ? 1 : 0), 0)
+    let habitsCompleted = habits.reduce((acc, habit) => acc + (habit.completed && habit.slug === id ? 1 : 0), 0)
+    let totalHabits = habits.reduce((acc, habit) => acc + (habit.slug === id ? 1 : 0), 0)
 
     // Do you like this ratio calculation?
     let ratio = habitsCompleted / totalHabits;
