@@ -15,7 +15,7 @@ export default function AddHabit(props) {
   const handleSubmit = async (habitText) => {
     // Get data from the form.
     const data = {
-      habitListId: id,
+      slug: id,
       text: habitText,
       emoji: emoji,
       completed: false
@@ -46,14 +46,12 @@ export default function AddHabit(props) {
     // If server returns the name submitted, that means the form works.
     const result = await response.json()
   
-    console.log("result: ", result)
-
     const newHabit = {
       _id: result.insertedId,
       text: habitText,
       emoji: emoji,
       completed: false,
-      habitListId: id
+      slug: id
     }
     setHabits(current => [...current, newHabit]);
     setIsFormShowing(false);

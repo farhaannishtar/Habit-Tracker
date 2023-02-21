@@ -12,7 +12,7 @@ cardColors[3] = '#f7edf5';
 
 
 export default function List() {
-  const router = useRouter()
+  const router = useRouter();
   const { asPath } = useRouter();
   const { id } = router.query;
 
@@ -21,6 +21,7 @@ export default function List() {
   const [effect, setEffect] = useState(false);
   const [shareButtonText, setShareButtonText] = useState('Share List');
   const [message, setMessage] = useState('');
+  const [listName, setListName] = useState('');
 
   const fetchHabits = async () => {
     const habits = await fetch('/api/getHabits');
@@ -33,11 +34,21 @@ export default function List() {
         typeof window !== 'undefined' && window.location.origin
             ? window.location.origin
             : '';
-
     const URL = `${origin}${asPath}`;
     setUrl(URL);
     messageGenerator();
   },)
+
+  useEffect(() => {
+    if (!id) return;
+    const fetchListName = async () => {
+      const lists = await fetch('/api/getHabitLists');
+      const listsData = await lists.json();
+      const habitList = listsData.filter(list => list.slug === id);
+      setListName(habitList[0].listName);
+    }
+    fetchListName();
+  }, [id])
 
   useEffect(() => {
     const fetchHabits = async () => {
@@ -49,33 +60,32 @@ export default function List() {
   }, [])
 
   const messageGenerator = () => {
-    const messages = ["Pick the easiest thing first!", "You’re making great progress—keep going!", "you’re on a roll!", "Crushing it!", "You completed all your habits!"];
     let feedback;
     let habitsCompleted = habits.reduce((acc, habit) => acc + (habit.completed && habit.slug === id ? 1 : 0), 0)
     let totalHabits = habits.reduce((acc, habit) => acc + (habit.slug === id ? 1 : 0), 0)
 
-    // Do you like this ratio calculation?
     let ratio = habitsCompleted / totalHabits;
     switch (true) {
-      case (ratio === undefined || ratio === null || ratio === 0):
-        feedback = messages[0];
+
+      case (isNaN(ratio) || ratio === 0):
+        feedback = "Pick the easiest thing first!";
         break;
       case (ratio > 0 && ratio < 0.5):
-        feedback = messages[1];
+        feedback = "You’re making great progress—keep going!";
         break;
       case (ratio >= 0.5 && ratio < 0.75):
-        feedback = messages[2];
+        feedback = "You’re on a roll!";
         break;
       case (ratio >= 0.75 && ratio < 1):
-        feedback = messages[3];
+        feedback = "Crushing it!";
         break;
       case (ratio === 1):
-        feedback = messages[4];
+        feedback = "You completed all your habits!";
         break;
       default:
         break;
     }
-    setMessage(`${habitsCompleted} / ${totalHabits} habits completed. ${feedback}`);
+    totalHabits === 0 ? setMessage('Add a habit to your list!') : setMessage(`${habitsCompleted} / ${totalHabits} habits completed. ${feedback}`);
   }
 
   const deleteHandler = async (id) => {
@@ -208,7 +218,7 @@ export default function List() {
             </button>
           </div>
           <div>
-            <h1 className='text-4xl font-bold text-center mt-6'> { id } </h1>
+            <h1 className='text-4xl font-bold text-center mt-6'> { listName } </h1>
             <h3 className='mx-4 mt-6'> { message }</h3>
           </div>  
           <div>
@@ -224,7 +234,7 @@ export default function List() {
           <AddHabit habits={habits} setHabits={setHabits} id={id}/>
           {
             habits.filter(habit => {
-              return habit.habitListId === id;
+              return habit.slug === id;
             })
             .map((habit, index) => {
               return <Habit 
