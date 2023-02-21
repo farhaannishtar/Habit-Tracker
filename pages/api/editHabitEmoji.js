@@ -3,8 +3,6 @@ import { ObjectId } from 'mongodb'
 
 export default async function handler(request, response) {
   try {
-    console.log("Inside editHabitEmoji.js: ");
-    console.log("request.body: ", request.body);
     const { id, editedEmoji } = request.body;
 
     const mongoClient = await clientPromise;

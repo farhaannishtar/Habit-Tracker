@@ -42,9 +42,8 @@ export default function List() {
   useEffect(() => {
     if (!id) return;
     const fetchListName = async () => {
-      const lists = await fetch('/api/getHabitLists');
-      const listsData = await lists.json();
-      const habitList = listsData.filter(list => list.slug === id);
+      const habitLists = await fetch(`/api/getListName?id=${id}`);
+      const habitList = await habitLists.json();
       setListName(habitList[0].listName);
     }
     fetchListName();
