@@ -26,6 +26,8 @@ export async function getServerSideProps(context) {
   }
 }
 
+// Polish the UI
+
 export default function Home() {
   return (
     <>
