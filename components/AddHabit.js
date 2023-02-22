@@ -11,6 +11,9 @@ export default function AddHabit(props) {
   const [emoji, setEmoji] = useState("🏗");
   const [checkmark, setCheckmark] = useState('/grayCheckMark.svg');
 
+
+  
+
   const handleSubmit = async (habitText) => {
     // Get data from the form.
     const data = {
