@@ -54,23 +54,23 @@ export default function Habit(props) {
     <>
       { props.isEditable ?
         (
-          <div className='card' style={{ backgroundColor: props.color}} onClick={completeHabit}>
-            <div className="topLayer">
-              <div className='emojiContainer'>
-                <div className='emoji' onClick={emojiClickHandler}>{ emoji }</div>
-                <div className='shadow'></div>
+          <div className='h-96 w-96 m-4 p-6 border-2 border-black rounded-2xl group hover:border-sky-600' style={{ backgroundColor: props.color}} onClick={completeHabit}>
+            <div className="flex justify-between relative bottom-3 left-3">
+              <div className='h-52 w-28'>
+                <div className='text-9xl hover:opacity-50 hover:cursor-pointer' onClick={emojiClickHandler}>{ emoji }</div>
+                <div className='shadow absolute bottom-0 w-28 h-24 rounded-full bg-slate-500 opacity-20'></div>
               </div>
-              <label className='container'>
-                <div className="circle">
+              <div>
+                <div className="flex justify-center p-4 m-2 rounded-full bg-white hover:cursor-pointer">
                   <img src={checkmark} alt="SVG as an image"/>
                 </div>
-              </label>
+              </div>
             </div> 
-            <div onClick={(e) => e.stopPropagation()} className='inline'>
+            <div>
               <InlineEdit editingValue={editingValue} setEditingValue={setEditingValue} textDecoration={textDecoration}/>
             </div>
-            <div className='trashcan'>
-              <img src='/trash.svg' onClick={deleteHandler}/>
+            <div className='hidden group-hover:flex w-full box-content justify-end mt-7 hover:cursor-pointer'>
+              <img className='-mr-4' src='/trash.svg' onClick={deleteHandler}/>
             </div>
           </div> 
         )
@@ -84,94 +84,9 @@ export default function Habit(props) {
       }
       <EmojiModal onClose={() => setIsEmojiModalShowing(false)} isEmojiModalShowing={isEmojiModalShowing} setEmoji={setEmoji}/>
       <style jsx>{`
-        img:hover {
-          cursor: pointer;
-        }
-
-        .card {
-          margin: 1rem;
-          padding: 1.5rem;
-          border: 1px solid #eaeaea;
-          border-radius: 15px;
-          transition: color 0.3s ease, border-color 0.3s ease;
-          height: 370px;
-          width: 383px;
-          border: 2px solid black;
-          cursor: pointer;
-          user-select: none;
-        }
-
-        .topLayer {
-          display: flex;
-          justify-content: space-between;
-          position: relative;
-          bottom: 15px;
-          left: 15px;
-        }
-        
-        .emojiContainer {
-          height: 202.5px;
-          width: 104px;
-        }
-
-        .circle {
-          padding: 15px;
-          margin: 15px;
-          border-radius: 1500px;
-          background-color: white;
-          display: flex;
-          justify-content: center;
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          -khtml-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
-
-        h1 {
-          margin-top: 0px;
-          cursor: pointer
-        }
-
-        .emoji {
-          font-size: 100px;
-          cursor: pointer;
-        }
-
-        .emoji:hover {
-          opacity: 0.5;
-        }
-
         .shadow {
-          border-radius: 90%;
-          width: 100px;
-          height: 100px;
-          background: gray;
-          opacity: 0.2;
           -webkit-filter: blur(10px);
           -webkit-transform: scale(1, 0.2);
-          margin: 0px;
-          position: absolute;
-          bottom: 10px;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          border-color: #0070f3;
-        }
-        
-        .trashcan {
-          display: none;
-        }
-
-        .card .trashcan {
-          display: flex;
-          justify-content: flex-end;
-          user-select:none;
-          margin-top: 40px;
-          margin-left: 345px; 
         }
       `}</style>
     </>

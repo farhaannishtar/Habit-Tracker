@@ -35,36 +35,14 @@ export default function InlineEdit(props) {
         onChange={onChange}
         onKeyDown={onKeyDown}
         onBlur={onBlur}
-        className="input"
+        className={props.textDecoration === "line-through" ? 
+          'line-through text-4xl font-medium font-sans w-full mt-6 p-3 bg-transparent placeholder:text-2xl focus:outline-0 hover:cursor-pointer border-0'
+          : 'text-4xl font-medium font-sans mt-6 p-3 w-full bg-transparent placeholder:text-2xl focus:outline-0 hover:cursor-pointer border-0'}
         id={'text-box'}
         placeholder="Enter Habit"
         autoComplete="off"
+        onClick={(e) => e.stopPropagation()}
       />
-      <style jsx>{`
-      .input {
-        background-color: transparent;
-        border: 0;
-        width: 70%;
-        padding: 8px;
-        font-size: 40px;
-        font-weight: 500; 
-        font-family: sans-serif;
-        text-decoration: ${props.textDecoration};
-      }
-
-      .input:hover {
-        cursor: pointer;
-      }
-
-      .input:focus {
-        outline: none;
-      }
-
-      .input::placeholder {
-        font-size: 25px
-      }
-
-      `}</style>
     </>
   );
 };

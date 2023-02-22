@@ -2,21 +2,16 @@ import clientPromise from '../../lib/mongodb';
 
 export default async function handler(request, response) {
   try {
+    const { id } = request.query;
     const mongoClient = await clientPromise;
     const db = mongoClient.db("HabitTracker");
-    const collection = db.collection("Habits");
+    const collection = db.collection("HabitLists");
     const results = await collection
-      .insertOne(
-        {
-          text: `${request.body.text}`,
-          emoji: `${request.body.emoji}`,
-          completed: false,
-          slug: `${request.body.slug}`,
-        }
-      )
+      .find({ slug: id })
+      .toArray();
     response.status(200).json(results);
   } catch (e) {
     console.error(e);
     response.status(500).json(e);
   }
-}
+} 
