@@ -30,24 +30,22 @@ export async function getServerSideProps(context) {
 
 export default function Home() {
   return (
-    <>
+    <div className='min-h-screen min-w-screen flex justify-center items-center'>
       <Head>
         <title>Habit Tracker</title>
       </Head>
       <div className='flex flex-col justify-center'>
         <div className='flex justify-center'>
-          <h1 className='m-4 text-6xl text-center'>Habit Tracker</h1>
+          <h1 className='text-4xl text-center'>Welcome to Habit Tracker</h1>
         </div>
-        <div className='flex justify-center mt-4 mb-2'>
+        <div className='flex justify-center mt-2 mb-2'>
           <div className='w-96'>
-            <h3 className='text-center text-xl'>Create a list of habits you're trying to build. Check them off on this site and share the list with your friends</h3>
+            <h3 className='text-center text-lg text-gray-500'>Create a list of habits you're trying to build. Check them off on this site and share the list with your friends</h3>
           </div>
         </div>
-      </div>
-      <div className='flex flex-col justify-center items-center'>
         <CreateHabitListForm />
         <HabitListForm />
       </div>
-    </>
+    </div>
   )
 }
