@@ -1,5 +1,4 @@
 import { useState } from "react";
-import uuid from 'react-uuid';
 import EmojiModal from "./EmojiModal";
 import InlineEdit from "./InlineEdit";
 
