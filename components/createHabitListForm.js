@@ -1,24 +1,29 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import FormButton from './FormButton';
 
 export default function CreateHabitListForm() {
 
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
+  const [showLoader, setShowLoader] = useState(false);
 
   const handleSubmit = async (e) => {
+    setShowLoader(true);
     e.preventDefault();
     let listName = e.target.listName.value.toLowerCase();
 
     if (listName === "") {
       setErrorMessage("Please enter a valid name for your habit list.")
+      setShowLoader(false);
       return;
     }
 
     const habitLists = await getHabitListsFromDB();
     for (let i = 0; i < habitLists.length; i++) {
       if (habitLists[i].listName === listName) {
-        setErrorMessage("This habit list already exists. Please enter a different name for your list.")
+        setErrorMessage("This habit list already exists. Please enter a different name for your list.") 
+        setShowLoader(false);
         return; 
       }
     }
@@ -63,9 +68,7 @@ export default function CreateHabitListForm() {
           { errorMessage && <p className="text-red-500 text-xs italic mt-2"> { errorMessage } </p> }
         </div>
         <div className="flex items-center justify-between">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold text-xl w-96 h-12 py-1 rounded focus:outline-none focus:shadow-outline" type="submit">
-            Create new list
-          </button>
+          <FormButton text="Create new list" loading={showLoader} disabled={showLoader} />
         </div>
       </form>
     </>

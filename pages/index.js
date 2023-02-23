@@ -1,6 +1,6 @@
 import clientPromise from '../lib/mongodb'
 import Head from 'next/head'
-import CreateHabitListForm from '../components/createHabitListForm'
+import CreateHabitListForm from '../components/CreateHabitListForm'
 import HabitListForm from '../components/HabitListForm'
 
 export async function getServerSideProps(context) {
@@ -25,8 +25,6 @@ export async function getServerSideProps(context) {
     }
   }
 }
-
-// Polish the UI
 
 export default function Home() {
   return (
