@@ -13,8 +13,14 @@ export default function CreateHabitListForm() {
     e.preventDefault();
     let listName = e.target.listName.value.toLowerCase();
 
-    if (listName === "") {
-      setErrorMessage("Please enter a valid name for your habit list.")
+    if (listName.trim() === "") {
+      setErrorMessage("Please enter a name for your habit list.")
+      setShowLoader(false);
+      return;
+    }
+
+    if (!(/\d|[A-z]/.test(listName))) {
+      setErrorMessage("Habit list must contain at least one letter or number.")
       setShowLoader(false);
       return;
     }
