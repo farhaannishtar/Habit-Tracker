@@ -1,26 +1,31 @@
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import FormButton from './FormButton';
 
 export default function HabitListForm() {
 
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
+  const [showLoader, setShowLoader] = useState(false);
 
   const handleSubmit = async (e) => {
+    setShowLoader(true);
     e.preventDefault();
     const listName = e.target.listName.value.toLowerCase();
     if (listName === "") {
-      setErrorMessage("Please enter a valid name for your habit list.")
+      setErrorMessage("Please enter a valid name for your habit list.");
+      setShowLoader(false);
       return;
     }
     const habitLists = await getHabitListsFromDB();
     for (let i = 0; i < habitLists.length; i++) {
       if (habitLists[i].listName === listName) {
-        router.push({ pathname: `/habit-lists/${habitLists[i].slug}` } )
+        router.push({ pathname: `/habit-lists/${habitLists[i].slug}` } );
         return;
       }
     }
-    setErrorMessage("This habit list does not exist. Please enter a different name for your list.")
+    setErrorMessage("This habit list does not exist. Please enter a different name for your list.");
+    setShowLoader(false);
   }
   const getHabitListsFromDB = async () => {
     const response = await fetch("/api/getHabitLists", {
@@ -47,9 +52,7 @@ export default function HabitListForm() {
           { errorMessage && <p className="text-red-500 text-xs italic mt-2"> { errorMessage } </p> }
         </div>
         <div className="flex items-center justify-between">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold text-xl w-96 h-12 py-1 rounded focus:outline-none focus:shadow-outline" type="submit">
-            go to list
-          </button>
+          <FormButton text="Go to list" loading={showLoader}/>
         </div>
       </form>
     </>
