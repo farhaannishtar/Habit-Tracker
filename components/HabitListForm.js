@@ -52,7 +52,7 @@ export default function HabitListForm() {
           { errorMessage && <p className="text-red-500 text-xs italic mt-2"> { errorMessage } </p> }
         </div>
         <div className="flex items-center justify-between">
-          <FormButton text="Go to list" loading={showLoader} disabled={showLoader} />
+          <FormButton text="Go to list" loading={showLoader}/>
         </div>
       </form>
     </>
