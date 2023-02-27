@@ -24,22 +24,6 @@ export default function List() {
 
   console.log("Component re-rendered");
 
-  const fetchHabits = async () => {
-    const habits = await fetch("/api/getHabits");
-    const habitData = await habits.json();
-    setHabits(habitData);
-  };
-
-  useEffect(() => {
-    const origin =
-      typeof window !== "undefined" && window.location.origin
-        ? window.location.origin
-        : "";
-    const URL = `${origin}${asPath}`;
-    setUrl(URL);
-    messageGenerator();
-  });
-
   useEffect(() => {
     if (!id) return;
     const fetchListName = async () => {
@@ -48,6 +32,12 @@ export default function List() {
       setListName(habitList[0].listName);
     };
     fetchListName();
+    const origin =
+      typeof window !== "undefined" && window.location.origin
+        ? window.location.origin
+        : "";
+    const URL = `${origin}${asPath}`;
+    setUrl(URL);
   }, [id]);
 
   useEffect(() => {
@@ -57,7 +47,14 @@ export default function List() {
       setHabits(habitData);
     };
     fetchHabits();
+    messageGenerator();
   }, []);
+
+  const fetchHabits = async () => {
+    const habits = await fetch("/api/getHabits");
+    const habitData = await habits.json();
+    setHabits(habitData);
+  };
 
   const messageGenerator = () => {
     let feedback;
@@ -98,12 +95,6 @@ export default function List() {
   };
 
   const deleteHandler = async (id) => {
-    await deleteHabitToDB(id);
-    setHabits(habits.filter((habit) => habit.id !== id));
-    await fetchHabits();
-  };
-
-  const deleteHabitToDB = async (id) => {
     const response = await fetch("/api/deleteHabit", {
       method: "DELETE",
       body: JSON.stringify({
@@ -113,24 +104,10 @@ export default function List() {
         "Content-Type": "application/json",
       },
     });
-  };
-
-  const editHabitTextHandler = async (id, editedText) => {
-    await editHabitTextToDB(id, editedText);
-    setHabits((habits) =>
-      habits.filter((habit) => {
-        if (habit.id === id) {
-          habit.text = editedText || " ";
-          return habit;
-        } else {
-          return habit;
-        }
-      })
-    );
     await fetchHabits();
   };
 
-  const editHabitTextToDB = async (id, editedText) => {
+  const editHabitTextHandler = async (id, editedText) => {
     const response = await fetch("/api/editHabitText", {
       method: "PUT",
       body: JSON.stringify({
@@ -141,23 +118,10 @@ export default function List() {
         "Content-Type": "application/json",
       },
     });
+    await fetchHabits();
   };
 
   const editHabitEmojiHandler = async (id, editedEmoji) => {
-    await editHabitEmojiToDB(id, editedEmoji);
-    setHabits((habits) =>
-      habits.filter((habit) => {
-        if (habit.id === id) {
-          habit.emoji = editedEmoji;
-          return habit;
-        } else {
-          return habit;
-        }
-      })
-    );
-  };
-
-  const editHabitEmojiToDB = async (id, editedEmoji) => {
     const response = await fetch("/api/editHabitEmoji", {
       method: "PUT",
       body: JSON.stringify({
@@ -168,24 +132,10 @@ export default function List() {
         "Content-Type": "application/json",
       },
     });
-  };
-
-  const editCompletedHabit = async (id, isCompleted) => {
-    await editCompletedHabitToDB(id, isCompleted);
-    setHabits((habits) =>
-      habits.filter((habit) => {
-        if (habit._id === id) {
-          habit.completed = isCompleted;
-          return habit;
-        } else {
-          return habit;
-        }
-      })
-    );
     await fetchHabits();
   };
 
-  const editCompletedHabitToDB = async (id, isCompleted) => {
+  const editCompletedHabit = async (id, isCompleted) => {
     const response = await fetch("/api/editCompleteStatus", {
       method: "PUT",
       body: JSON.stringify({
@@ -196,6 +146,8 @@ export default function List() {
         "Content-Type": "application/json",
       },
     });
+    await fetchHabits();
+    messageGenerator();
   };
 
   const shareHabitButtonHandler = () => {
