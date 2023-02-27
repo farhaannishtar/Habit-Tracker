@@ -36,7 +36,7 @@ export default function List() {
     const fetchListName = async () => {
       const habitLists = await fetch(`/api/getListName?id=${id}`);
       const habitList = await habitLists.json();
-      setListName(habitList[0].listName);
+      setListName(habitList[0].usersInput);
     };
     fetchListName();
     const origin =

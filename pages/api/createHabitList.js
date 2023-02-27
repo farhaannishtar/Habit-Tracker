@@ -8,6 +8,7 @@ export default async function handler(request, response) {
     const results = await collection.insertOne({
       slug: `${request.body.slug}`,
       listName: `${request.body.listName}`,
+      usersInput: `${request.body.usersInput}`,
     });
     response.status(200).json(results);
   } catch (e) {

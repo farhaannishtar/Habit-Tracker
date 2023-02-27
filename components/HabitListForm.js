@@ -10,7 +10,7 @@ export default function HabitListForm() {
   const handleSubmit = async (e) => {
     setShowLoader(true);
     e.preventDefault();
-    const listName = e.target.listName.value.toLowerCase();
+    const listName = e.target.listName.value.toLowerCase().trim();
     if (listName === "") {
       setErrorMessage("Please enter a valid name for your habit list.");
       setShowLoader(false);
