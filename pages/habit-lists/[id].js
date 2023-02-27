@@ -94,7 +94,6 @@ export default function List() {
       : setMessage(
           `${habitsCompleted} / ${totalHabits} habits completed. ${feedback}`
         );
-    console.log("messageGenerator called");
   };
 
   const deleteHandler = async (id) => {
