@@ -49,7 +49,7 @@ export default function List() {
 
   useEffect(() => {
     const fetchHabits = async () => {
-      const habits = await fetch("/api/getHabits");
+      const habits = await fetch(`/api/getHabits?id=${id}`);
       const habitData = await habits.json();
       setHabits(habitData);
     };
@@ -61,7 +61,7 @@ export default function List() {
   }, [habitsCompleted, totalHabits]);
 
   const fetchHabits = async () => {
-    const habits = await fetch("/api/getHabits");
+    const habits = await fetch(`/api/getHabits?id=${id}`);
     const habitData = await habits.json();
     setHabits(habitData);
   };
@@ -198,26 +198,22 @@ export default function List() {
         </div>
         <div className="flex items-center justify-center flex-wrap mt-10 gap-2 select-none">
           <AddHabit habits={habits} setHabits={setHabits} id={id} />
-          {habits
-            .filter((habit) => {
-              return habit.slug === id;
-            })
-            .map((habit, index) => {
-              return (
-                <Habit
-                  key={habit._id}
-                  _id={habit._id}
-                  isEditable={true}
-                  color={cardColors[index % cardColors.length]}
-                  habit={habit}
-                  setHabits={setHabits}
-                  editCompletedHabit={editCompletedHabit}
-                  deleteHandler={deleteHandler}
-                  editHabitTextHandler={editHabitTextHandler}
-                  editHabitEmojiHandler={editHabitEmojiHandler}
-                />
-              );
-            })}
+          {habits.map((habit, index) => {
+            return (
+              <Habit
+                key={habit._id}
+                _id={habit._id}
+                isEditable={true}
+                color={cardColors[index % cardColors.length]}
+                habit={habit}
+                setHabits={setHabits}
+                editCompletedHabit={editCompletedHabit}
+                deleteHandler={deleteHandler}
+                editHabitTextHandler={editHabitTextHandler}
+                editHabitEmojiHandler={editHabitEmojiHandler}
+              />
+            );
+          })}
         </div>
       </div>
     </>
