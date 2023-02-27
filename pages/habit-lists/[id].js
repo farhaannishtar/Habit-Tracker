@@ -178,17 +178,12 @@ export default function List() {
             </button>
           </div>
           <div>
-            <h1 className="text-4xl font-bold text-center mt-6">
-              {" "}
-              {listName}{" "}
-            </h1>
-            <h3 className="mx-4 mt-6"> {message}</h3>
-          </div>
+            <h1 className='text-4xl font-bold text-center mt-6'> { listName } </h1>
+            <h3 className='mx-4 mt-6 text-center'> { message }</h3>
+          </div>  
           <div>
-            <button
-              className={`${
-                effect && `animate-wiggle`
-              } bg-blue-500 hover:bg-blue-700 mr-20 mt-6 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+            <button 
+              className={`${ effect && `animate-wiggle`} bg-blue-500 hover:bg-blue-700 mr-20 mt-6 text-white font-bold w-28 h-10 rounded focus:outline-none focus:shadow-outline`}
               onClick={shareHabitButtonHandler}
               onAnimationEnd={() => setEffect(false)}
             >
