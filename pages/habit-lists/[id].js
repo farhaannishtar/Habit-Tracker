@@ -22,7 +22,14 @@ export default function List() {
   const [message, setMessage] = useState("");
   const [listName, setListName] = useState("");
 
-  console.log("Component re-rendered");
+  let habitsCompleted = habits.reduce(
+    (acc, habit) => acc + (habit.completed && habit.slug === id ? 1 : 0),
+    0
+  );
+  let totalHabits = habits.reduce(
+    (acc, habit) => acc + (habit.slug === id ? 1 : 0),
+    0
+  );
 
   useEffect(() => {
     if (!id) return;
@@ -47,8 +54,11 @@ export default function List() {
       setHabits(habitData);
     };
     fetchHabits();
-    messageGenerator();
   }, []);
+
+  useEffect(() => {
+    messageGenerator(habitsCompleted, totalHabits);
+  }, [habitsCompleted, totalHabits]);
 
   const fetchHabits = async () => {
     const habits = await fetch("/api/getHabits");
@@ -56,16 +66,8 @@ export default function List() {
     setHabits(habitData);
   };
 
-  const messageGenerator = () => {
+  const messageGenerator = (habitsCompleted, totalHabits) => {
     let feedback;
-    let habitsCompleted = habits.reduce(
-      (acc, habit) => acc + (habit.completed && habit.slug === id ? 1 : 0),
-      0
-    );
-    let totalHabits = habits.reduce(
-      (acc, habit) => acc + (habit.slug === id ? 1 : 0),
-      0
-    );
 
     let ratio = habitsCompleted / totalHabits;
     switch (true) {
@@ -92,6 +94,7 @@ export default function List() {
       : setMessage(
           `${habitsCompleted} / ${totalHabits} habits completed. ${feedback}`
         );
+    console.log("messageGenerator called");
   };
 
   const deleteHandler = async (id) => {
@@ -147,7 +150,6 @@ export default function List() {
       },
     });
     await fetchHabits();
-    messageGenerator();
   };
 
   const shareHabitButtonHandler = () => {
