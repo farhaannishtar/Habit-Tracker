@@ -8,9 +8,10 @@ export default function CreateHabitListForm() {
   const [showLoader, setShowLoader] = useState(false);
 
   const handleSubmit = async (e) => {
-    setShowLoader(true);
     e.preventDefault();
-    let listName = e.target.listName.value.toLowerCase();
+    setShowLoader(true);
+    let usersInput = e.target.listName.value.trim();
+    let listName = e.target.listName.value.toLowerCase().trim();
 
     if (listName.trim() === "") {
       setErrorMessage("Please enter a name for your habit list.");
@@ -39,7 +40,7 @@ export default function CreateHabitListForm() {
       .replace(/[^\w\s-]/g, "")
       .replace(/[\s_-]+/g, "-")
       .replace(/^-+|-+$/g, "");
-    await createHabitListToDB(listName, slug);
+    await createHabitListToDB(listName, slug, usersInput);
     router.push({ pathname: `/habit-lists/${slug}` });
   };
 
@@ -54,12 +55,13 @@ export default function CreateHabitListForm() {
     return data;
   };
 
-  const createHabitListToDB = async (listName, slug) => {
+  const createHabitListToDB = async (listName, slug, usersInput) => {
     const response = await fetch("/api/createHabitList", {
       method: "POST",
       body: JSON.stringify({
         listName: listName,
         slug: slug,
+        usersInput: usersInput,
       }),
       headers: {
         "Content-Type": "application/json",
