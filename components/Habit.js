@@ -4,11 +4,23 @@ import InlineEdit from "./InlineEdit";
 
 export default function Habit(props) {
   const [editingValue, setEditingValue] = useState(props.habit.text);
-  const [checkmark, setCheckmark] = useState("/grayCheckMark.svg");
-  const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
-  const [emoji, setEmoji] = useState(props.habit.emoji);
-  const [textDecoration, setTextDecoration] = useState("none");
 
+  // the checkmark and the text decoration don't necessarily need to be their own state variables
+  // since it's always going to be correlated with `props.habit.completed` right? Instead of:
+  const [checkmark, setCheckmark] = useState("/grayCheckMark.svg");
+
+  // You could just have:
+  const checkmark = habit.completed ?  "/redCheckMark.svg" :  "/greyCheckMark.svg"
+  // which would then let you remove some of the logic in `completeHabit()` as well. 
+
+  const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
+  const [textDecoration, setTextDecoration] = useState("none");
+  const [emoji, setEmoji] = useState(props.habit.emoji);
+
+// Nit: You have different naming conventions for your functions that happen after some action. 
+// Ex. "deleteHandler" versus. "completeHabit". 
+// Try to make them all consistent across your app. I personally like using `onCompleteHabit` or `onDeleteHabit`
+// but it's up to you, as long as its all consistent.
   const deleteHandler = (e) => {
     e.stopPropagation();
     props.deleteHandler(props._id);
@@ -86,6 +98,7 @@ export default function Habit(props) {
         </div>
       ) : (
         <div
+          // Is styleCard still being used? Looks like we're handling a lot of the styling based on the state variables at the top? 
           onClick={() => props.styleCard(props.habit._id)}
           className={props.habit.habit_card_style}
         >

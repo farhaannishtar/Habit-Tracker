@@ -1,5 +1,6 @@
 import { MongoClient } from 'mongodb'
 
+// This is the only .ts file in your repo--should it be TS or JS? Not seeing any types here
 if (!process.env.MONGODB_URI) {
   throw new Error('Invalid/Missing environment variable: "MONGODB_URI"')
 }

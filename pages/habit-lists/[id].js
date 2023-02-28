@@ -22,6 +22,7 @@ export default function List() {
   const [message, setMessage] = useState("");
   const [listName, setListName] = useState("");
 
+  // We should be able to remove the filtering by ID here now that you're handling it at the DB level?
   let habitsCompleted = habits.reduce(
     (acc, habit) => acc + (habit.completed && habit.slug === id ? 1 : 0),
     0
@@ -96,6 +97,9 @@ export default function List() {
         );
   };
 
+  // This is more of a preference thing, but since there are so many API functions, I would put them in a separate file
+  // api.js or helpers.js
+  // Which will make this a shorter file that's easier to follow, and make it easier to reuse these functions in other components if you need them.
   const deleteHandler = async (id) => {
     const response = await fetch("/api/deleteHabit", {
       method: "DELETE",

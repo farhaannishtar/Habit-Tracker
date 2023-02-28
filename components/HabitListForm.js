@@ -17,6 +17,7 @@ export default function HabitListForm() {
       return;
     }
     const habitLists = await getHabitListsFromDB();
+    // Same question here regarding looping through all the habits
     for (let i = 0; i < habitLists.length; i++) {
       if (habitLists[i].listName === listName) {
         router.push({ pathname: `/habit-lists/${habitLists[i].slug}` });

@@ -25,6 +25,8 @@ export default function CreateHabitListForm() {
     }
 
     const habitLists = await getHabitListsFromDB();
+    // This is another example of loading all the data in the frontend and then looping through it client side.
+    // How can we handle this at the DB level instead?
     for (let i = 0; i < habitLists.length; i++) {
       if (habitLists[i].listName === listName) {
         setErrorMessage(
@@ -34,6 +36,12 @@ export default function CreateHabitListForm() {
         return;
       }
     }
+
+    // When you start having a lot of logic to transform a variable, 
+    // its a signal that you may want to move it out to a helper function
+    // example: 
+    // const slug = toSlug(listName)
+    // and then `toSlug` can be a function defined in a `helpers.js` file, since you may want to use it in other places in your app.
     const slug = listName
       .trim()
       .replace(/[^\w\s-]/g, "")
