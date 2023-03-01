@@ -3,45 +3,29 @@ import EmojiModal from "./EmojiModal";
 import InlineEdit from "./InlineEdit";
 
 export default function AddHabit(props) {
-  const { setHabits, id } = props;
+  const { setHabits, listId } = props;
   const [isFormShowing, setIsFormShowing] = useState(false);
   const [editingValue, setEditingValue] = useState("");
-  const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [emoji, setEmoji] = useState("🏗");
-  const [checkmark, setCheckmark] = useState("/grayCheckMark.svg");
+  const checkmark = "/grayCheckMark.svg";
 
   const handleSubmit = async (habitText) => {
-    // Get data from the form.
     const data = {
-      slug: id,
+      slug: listId,
       text: habitText,
       emoji: emoji,
       completed: false,
     };
 
-    // Send the data to the server in JSON format.
-    const JSONdata = JSON.stringify(data);
-
-    // API endpoint where we send form data.
-    const endpoint = "/api/createHabit";
-
-    // Form the request for sending data to the server.
-    const options = {
-      // The method is POST because we are sending data.
+    const response = await fetch("/api/createHabit", {
       method: "POST",
-      // Tell the server we're sending JSON.
+      body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
-      // Body of the request is the JSON data we created above.
-      body: JSONdata,
-    };
+    });
 
-    // Send the form data to our forms API on Vercel and get a response.
-    const response = await fetch(endpoint, options);
-
-    // Get the response data from server as JSON.
-    // If server returns the name submitted, that means the form works.
     const result = await response.json();
 
     const newHabit = {
@@ -49,7 +33,7 @@ export default function AddHabit(props) {
       text: habitText,
       emoji: emoji,
       completed: false,
-      slug: id,
+      slug: listId,
     };
     setHabits((current) => [...current, newHabit]);
     setIsFormShowing(false);
@@ -92,7 +76,7 @@ export default function AddHabit(props) {
                 <div className="flex flex-col justify-center items-center h-40 mt-5 hover:cursor-pointer">
                   <div
                     className="text-9xl mb-14 hover:opacity-50"
-                    onClick={() => setIsEmojiModalShowing(true)}
+                    onClick={() => setIsModalVisible(true)}
                   >
                     {emoji}
                   </div>
@@ -112,8 +96,8 @@ export default function AddHabit(props) {
               emoji={emoji}
             />
             <EmojiModal
-              onClose={() => setIsEmojiModalShowing(false)}
-              isEmojiModalShowing={isEmojiModalShowing}
+              onClose={() => setIsModalVisible(false)}
+              isModalVisible={isModalVisible}
               setEmoji={setEmoji}
             />
           </>

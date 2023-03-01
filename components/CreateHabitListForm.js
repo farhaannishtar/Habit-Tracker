@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import FormButton from "./FormButton";
+import { createHabitList, searchHabitLists } from "../utils/api";
 
 export default function CreateHabitListForm() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function CreateHabitListForm() {
     let usersInput = e.target.listName.value.trim();
     let listName = e.target.listName.value.toLowerCase().trim();
 
-    if (listName.trim() === "") {
+    if (listName === "") {
       setErrorMessage("Please enter a name for your habit list.");
       setShowLoader(false);
       return;
@@ -25,48 +26,27 @@ export default function CreateHabitListForm() {
       return;
     }
 
-    const habitLists = await getHabitListsFromDB();
-    for (let i = 0; i < habitLists.length; i++) {
-      if (habitLists[i].listName === listName) {
-        setErrorMessage(
-          "This habit list already exists. Please enter a different name for your list."
-        );
-        setShowLoader(false);
-        return;
-      }
+    const searchResults = await searchHabitLists(listName);
+    if (searchResults.length > 0) {
+      setErrorMessage(
+        "This habit list already exists. Please enter a different name for your list."
+      );
+      setShowLoader(false);
+      return;
     }
-    const slug = listName
-      .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/[\s_-]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-    await createHabitListToDB(listName, slug, usersInput);
+
+    const slug = slugify(listName);
+    await createHabitList(listName, slug, usersInput);
     router.push({ pathname: `/habit-lists/${slug}` });
   };
 
-  const getHabitListsFromDB = async () => {
-    const response = await fetch("/api/getHabitLists", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    return data;
-  };
-
-  const createHabitListToDB = async (listName, slug, usersInput) => {
-    const response = await fetch("/api/createHabitList", {
-      method: "POST",
-      body: JSON.stringify({
-        listName: listName,
-        slug: slug,
-        usersInput: usersInput,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+  const slugify = (string) => {
+    return string
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/&/g, "-and-")
+      .replace(/[\s\W-]+/g, "-");
   };
 
   return (

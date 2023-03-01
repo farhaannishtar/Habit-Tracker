@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import FormButton from "./FormButton";
+import { searchHabitLists } from "../utils/api";
 
 export default function HabitListForm() {
   const router = useRouter();
@@ -16,27 +17,15 @@ export default function HabitListForm() {
       setShowLoader(false);
       return;
     }
-    const habitLists = await getHabitListsFromDB();
-    for (let i = 0; i < habitLists.length; i++) {
-      if (habitLists[i].listName === listName) {
-        router.push({ pathname: `/habit-lists/${habitLists[i].slug}` });
-        return;
-      }
+    const searchResults = await searchHabitLists(listName);
+    if (searchResults.length > 0) {
+      router.push({ pathname: `/habit-lists/${searchResults[0].slug}` });
+      return;
     }
     setErrorMessage(
       "This habit list does not exist. Please enter a different name for your list."
     );
     setShowLoader(false);
-  };
-  const getHabitListsFromDB = async () => {
-    const response = await fetch("/api/getHabitLists", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    return data;
   };
 
   return (

@@ -3,6 +3,13 @@ import Head from "next/head";
 import { useState, useEffect } from "react";
 import Habit from "../../components/Habit";
 import AddHabit from "../../components/AddHabit";
+import {
+  getHabits,
+  deleteHabit,
+  updateHabitText,
+  updateHabitEmoji,
+  toggleCompleteStatus,
+} from "../../utils/api";
 
 const cardColors = [];
 cardColors[0] = "#ebf5ed";
@@ -13,7 +20,7 @@ cardColors[3] = "#f7edf5";
 export default function List() {
   const router = useRouter();
   const { asPath } = useRouter();
-  const { id } = router.query;
+  const { listId } = router.query;
 
   const [habits, setHabits] = useState([]);
   const [url, setUrl] = useState("");
@@ -23,48 +30,36 @@ export default function List() {
   const [listName, setListName] = useState("");
 
   let habitsCompleted = habits.reduce(
-    (acc, habit) => acc + (habit.completed && habit.slug === id ? 1 : 0),
+    (acc, habit) => acc + (habit.completed ? 1 : 0),
     0
   );
-  let totalHabits = habits.reduce(
-    (acc, habit) => acc + (habit.slug === id ? 1 : 0),
-    0
-  );
+  let totalHabits = habits.length;
 
   useEffect(() => {
-    if (!id) return;
-    const fetchListName = async () => {
-      const habitLists = await fetch(`/api/getListName?id=${id}`);
+    if (!listId) return;
+    const getListName = async () => {
+      const habitLists = await fetch(`/api/getListName?listId=${listId}`);
       const habitList = await habitLists.json();
       setListName(habitList[0].usersInput);
     };
-    fetchListName();
+    const getHabits = async () => {
+      const habits = await fetch(`/api/getHabits?listId=${listId}`);
+      const habitData = await habits.json();
+      setHabits(habitData);
+    };
+    getListName();
+    getHabits(listId);
     const origin =
       typeof window !== "undefined" && window.location.origin
         ? window.location.origin
         : "";
     const URL = `${origin}${asPath}`;
     setUrl(URL);
-  }, [id]);
-
-  useEffect(() => {
-    const fetchHabits = async () => {
-      const habits = await fetch(`/api/getHabits?id=${id}`);
-      const habitData = await habits.json();
-      setHabits(habitData);
-    };
-    fetchHabits();
-  }, []);
+  }, [listId]);
 
   useEffect(() => {
     messageGenerator(habitsCompleted, totalHabits);
   }, [habitsCompleted, totalHabits]);
-
-  const fetchHabits = async () => {
-    const habits = await fetch(`/api/getHabits?id=${id}`);
-    const habitData = await habits.json();
-    setHabits(habitData);
-  };
 
   const messageGenerator = (habitsCompleted, totalHabits) => {
     let feedback;
@@ -97,67 +92,32 @@ export default function List() {
   };
 
   const deleteHandler = async (id) => {
-    const response = await fetch("/api/deleteHabit", {
-      method: "DELETE",
-      body: JSON.stringify({
-        id: id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await fetchHabits();
+    await deleteHabit(id);
+    setHabits(await getHabits(listId));
   };
 
-  const editHabitTextHandler = async (id, editedText) => {
-    const response = await fetch("/api/editHabitText", {
-      method: "PUT",
-      body: JSON.stringify({
-        id: id,
-        editedText: editedText,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await fetchHabits();
+  const updateHabitTextHandler = async (id, editedText) => {
+    await updateHabitText(id, editedText);
+    setHabits(await getHabits(listId));
   };
 
-  const editHabitEmojiHandler = async (id, editedEmoji) => {
-    const response = await fetch("/api/editHabitEmoji", {
-      method: "PUT",
-      body: JSON.stringify({
-        id: id,
-        editedEmoji: editedEmoji,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await fetchHabits();
+  const updateHabitEmojiHandler = async (id, editedEmoji) => {
+    await updateHabitEmoji(id, editedEmoji);
+    setHabits(await getHabits(listId));
   };
 
-  const editCompletedHabit = async (id, isCompleted) => {
-    const response = await fetch("/api/editCompleteStatus", {
-      method: "PUT",
-      body: JSON.stringify({
-        id: id,
-        isCompleted: isCompleted,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await fetchHabits();
+  const updateCompleteStatus = async (id) => {
+    await toggleCompleteStatus(id);
+    setHabits(await getHabits(listId));
   };
 
-  const shareHabitButtonHandler = () => {
+  const onShareHabit = () => {
     navigator.clipboard.writeText(url);
     setEffect(true);
     setShareButtonText("URL Copied");
   };
 
-  const homeButtonHandler = () => {
+  const onHomeButtonClick = () => {
     router.push("/");
   };
 
@@ -172,7 +132,7 @@ export default function List() {
           <div>
             <button
               className="bg-blue-500 hover:bg-blue-700 ml-20 mt-6 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              onClick={homeButtonHandler}
+              onClick={onHomeButtonClick}
             >
               Home
             </button>
@@ -182,14 +142,14 @@ export default function List() {
               {" "}
               {listName}{" "}
             </h1>
-            <h3 className="mx-4 mt-6 text-center"> {message}</h3>
+            <h3 className="mx-4 mt-6 text-center"> {message} </h3>
           </div>
           <div>
             <button
               className={`${
                 effect && `animate-wiggle`
               } bg-blue-500 hover:bg-blue-700 mr-20 mt-6 text-white font-bold w-28 h-10 rounded focus:outline-none focus:shadow-outline`}
-              onClick={shareHabitButtonHandler}
+              onClick={onShareHabit}
               onAnimationEnd={() => setEffect(false)}
             >
               {shareButtonText}
@@ -197,20 +157,18 @@ export default function List() {
           </div>
         </div>
         <div className="flex items-center justify-center flex-wrap mt-10 gap-2 select-none">
-          <AddHabit habits={habits} setHabits={setHabits} id={id} />
+          <AddHabit habits={habits} setHabits={setHabits} listId={listId} />
           {habits.map((habit, index) => {
             return (
               <Habit
                 key={habit._id}
-                _id={habit._id}
-                isEditable={true}
+                id={habit._id}
                 color={cardColors[index % cardColors.length]}
                 habit={habit}
-                setHabits={setHabits}
-                editCompletedHabit={editCompletedHabit}
+                updateCompleteStatus={updateCompleteStatus}
                 deleteHandler={deleteHandler}
-                editHabitTextHandler={editHabitTextHandler}
-                editHabitEmojiHandler={editHabitEmojiHandler}
+                updateHabitTextHandler={updateHabitTextHandler}
+                updateHabitEmojiHandler={updateHabitEmojiHandler}
               />
             );
           })}

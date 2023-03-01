@@ -1,18 +1,17 @@
 import clientPromise from "../../lib/mongodb";
-import { ObjectId } from "mongodb";
 
 export default async function handler(request, response) {
   try {
-    const { id } = request.body;
+    const { query } = request.query;
     const mongoClient = await clientPromise;
     const db = mongoClient.db("HabitTracker");
-    const collection = db.collection("Habits");
-    const results = await collection.updateOne(
-      {
-        _id: ObjectId(id),
-      },
-      [{ $set: { completed: { $not: "$completed" } } }]
-    );
+    const collection = db.collection("HabitLists");
+    const regexQuery = { $regex: query, $options: "i" };
+    const results = await collection
+      .find({
+        $or: [{ listName: regexQuery }, { usersInput: regexQuery }],
+      })
+      .toArray();
     response.status(200).json(results);
   } catch (e) {
     console.error(e);

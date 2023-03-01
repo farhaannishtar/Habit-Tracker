@@ -1,14 +1,14 @@
 import EmojiPicker from "emoji-picker-react";
 
 export default function EmojiModal(props) {
-  const { isEmojiModalShowing, setEmoji, onClose } = props;
+  const { isModalVisible, setEmoji, onClose } = props;
 
   const handleEmojiClick = (emojiData) => {
     setEmoji(emojiData.emoji);
     onClose();
   };
 
-  if (!isEmojiModalShowing) return null;
+  if (!isModalVisible) return null;
 
   return (
     <div
