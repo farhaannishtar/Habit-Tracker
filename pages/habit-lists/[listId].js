@@ -13,7 +13,7 @@ cardColors[3] = "#f7edf5";
 export default function List() {
   const router = useRouter();
   const { asPath } = useRouter();
-  const { id } = router.query;
+  const { listId } = router.query;
 
   const [habits, setHabits] = useState([]);
   const [url, setUrl] = useState("");
@@ -22,47 +22,45 @@ export default function List() {
   const [message, setMessage] = useState("");
   const [listName, setListName] = useState("");
 
+  console.log("habits: ", habits);
+
   let habitsCompleted = habits.reduce(
-    (acc, habit) => acc + (habit.completed && habit.slug === id ? 1 : 0),
+    (acc, habit) => acc + (habit.completed ? 1 : 0),
     0
   );
-  let totalHabits = habits.reduce(
-    (acc, habit) => acc + (habit.slug === id ? 1 : 0),
-    0
-  );
+  let totalHabits = habits.length;
 
   useEffect(() => {
-    if (!id) return;
-    const fetchListName = async () => {
-      const habitLists = await fetch(`/api/getListName?id=${id}`);
+    if (!listId) return;
+    const getListName = async () => {
+      const habitLists = await fetch(`/api/getListName?listId=${listId}`);
       const habitList = await habitLists.json();
       setListName(habitList[0].usersInput);
     };
-    fetchListName();
+    getListName();
+    const getHabits = async () => {
+      const habits = await fetch(`/api/getHabits?listId=${listId}`);
+      const habitData = await habits.json();
+      console.log("habit data inside use effect:", habitData);
+      setHabits(habitData);
+    };
+    getHabits(listId);
     const origin =
       typeof window !== "undefined" && window.location.origin
         ? window.location.origin
         : "";
     const URL = `${origin}${asPath}`;
     setUrl(URL);
-  }, [id]);
-
-  useEffect(() => {
-    const fetchHabits = async () => {
-      const habits = await fetch(`/api/getHabits?id=${id}`);
-      const habitData = await habits.json();
-      setHabits(habitData);
-    };
-    fetchHabits();
-  }, []);
+  }, [listId]);
 
   useEffect(() => {
     messageGenerator(habitsCompleted, totalHabits);
   }, [habitsCompleted, totalHabits]);
 
-  const fetchHabits = async () => {
-    const habits = await fetch(`/api/getHabits?id=${id}`);
+  const getHabits = async () => {
+    const habits = await fetch(`/api/getHabits?listId=${listId}`);
     const habitData = await habits.json();
+    console.log("habit data inside get habits:", habitData);
     setHabits(habitData);
   };
 
@@ -106,7 +104,7 @@ export default function List() {
         "Content-Type": "application/json",
       },
     });
-    await fetchHabits();
+    await getHabits(listId);
   };
 
   const editHabitTextHandler = async (id, editedText) => {
@@ -120,7 +118,7 @@ export default function List() {
         "Content-Type": "application/json",
       },
     });
-    await fetchHabits();
+    await getHabits(listId);
   };
 
   const editHabitEmojiHandler = async (id, editedEmoji) => {
@@ -134,21 +132,20 @@ export default function List() {
         "Content-Type": "application/json",
       },
     });
-    await fetchHabits();
+    await getHabits(listId);
   };
 
-  const editCompletedHabit = async (id, isCompleted) => {
+  const editCompletedHabit = async (id) => {
     const response = await fetch("/api/editCompleteStatus", {
       method: "PUT",
       body: JSON.stringify({
         id: id,
-        isCompleted: isCompleted,
       }),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    await fetchHabits();
+    await getHabits(listId);
   };
 
   const shareHabitButtonHandler = () => {
@@ -182,7 +179,7 @@ export default function List() {
               {" "}
               {listName}{" "}
             </h1>
-            <h3 className="mx-4 mt-6 text-center"> {message}</h3>
+            <h3 className="mx-4 mt-6 text-center"> {message} </h3>
           </div>
           <div>
             <button
@@ -197,12 +194,12 @@ export default function List() {
           </div>
         </div>
         <div className="flex items-center justify-center flex-wrap mt-10 gap-2 select-none">
-          <AddHabit habits={habits} setHabits={setHabits} id={id} />
+          <AddHabit habits={habits} setHabits={setHabits} listId={listId} />
           {habits.map((habit, index) => {
             return (
               <Habit
                 key={habit._id}
-                _id={habit._id}
+                id={habit._id}
                 isEditable={true}
                 color={cardColors[index % cardColors.length]}
                 habit={habit}

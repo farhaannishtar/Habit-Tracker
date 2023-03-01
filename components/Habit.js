@@ -13,21 +13,19 @@ export default function Habit(props) {
 
   const onDeleteHabit = (e) => {
     e.stopPropagation();
-    props.deleteHandler(props._id);
+    props.deleteHandler(props.id);
   };
 
   const onHabitCardClick = () => {
-    props.habit.completed === false
-      ? props.editCompletedHabit(props._id, true)
-      : props.editCompletedHabit(props._id, false);
+    props.editCompletedHabit(props.id);
   };
 
   useEffect(() => {
-    props.editHabitTextHandler(props._id, editingValue);
+    props.editHabitTextHandler(props.id, editingValue);
   }, [editingValue]);
 
   useEffect(() => {
-    props.editHabitEmojiHandler(props._id, emoji);
+    props.editHabitEmojiHandler(props.id, emoji);
   }, [emoji]);
 
   const onEmojiClick = (e) => {

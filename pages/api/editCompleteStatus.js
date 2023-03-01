@@ -3,17 +3,7 @@ import { ObjectId } from "mongodb";
 
 export default async function handler(request, response) {
   try {
-    console.log("Inside editCompleted Habit: ");
-    console.log("request.body: ", request.body);
-    const { id, isCompleted } = request.body;
-    console.log(
-      "id: ",
-      id,
-      "isCompleted: ",
-      isCompleted,
-      "typeof id: ",
-      typeof id
-    );
+    const { id } = request.body;
     const mongoClient = await clientPromise;
     const db = mongoClient.db("HabitTracker");
     const collection = db.collection("Habits");

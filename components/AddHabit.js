@@ -3,17 +3,17 @@ import EmojiModal from "./EmojiModal";
 import InlineEdit from "./InlineEdit";
 
 export default function AddHabit(props) {
-  const { setHabits, id } = props;
+  const { setHabits, listId } = props;
   const [isFormShowing, setIsFormShowing] = useState(false);
   const [editingValue, setEditingValue] = useState("");
   const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
   const [emoji, setEmoji] = useState("🏗");
-  const [checkmark, setCheckmark] = useState("/grayCheckMark.svg");
+  const checkmark = "/grayCheckMark.svg";
 
   const handleSubmit = async (habitText) => {
     // Get data from the form.
     const data = {
-      slug: id,
+      slug: listId,
       text: habitText,
       emoji: emoji,
       completed: false,
@@ -49,7 +49,7 @@ export default function AddHabit(props) {
       text: habitText,
       emoji: emoji,
       completed: false,
-      slug: id,
+      slug: listId,
     };
     setHabits((current) => [...current, newHabit]);
     setIsFormShowing(false);
