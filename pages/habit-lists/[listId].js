@@ -3,6 +3,13 @@ import Head from "next/head";
 import { useState, useEffect } from "react";
 import Habit from "../../components/Habit";
 import AddHabit from "../../components/AddHabit";
+import {
+  getHabits,
+  deleteHabit,
+  updateHabitText,
+  updateHabitEmoji,
+  toggleCompleteStatus,
+} from "../../utils/api";
 
 const cardColors = [];
 cardColors[0] = "#ebf5ed";
@@ -22,8 +29,6 @@ export default function List() {
   const [message, setMessage] = useState("");
   const [listName, setListName] = useState("");
 
-  console.log("habits: ", habits);
-
   let habitsCompleted = habits.reduce(
     (acc, habit) => acc + (habit.completed ? 1 : 0),
     0
@@ -37,13 +42,12 @@ export default function List() {
       const habitList = await habitLists.json();
       setListName(habitList[0].usersInput);
     };
-    getListName();
     const getHabits = async () => {
       const habits = await fetch(`/api/getHabits?listId=${listId}`);
       const habitData = await habits.json();
-      console.log("habit data inside use effect:", habitData);
       setHabits(habitData);
     };
+    getListName();
     getHabits(listId);
     const origin =
       typeof window !== "undefined" && window.location.origin
@@ -56,13 +60,6 @@ export default function List() {
   useEffect(() => {
     messageGenerator(habitsCompleted, totalHabits);
   }, [habitsCompleted, totalHabits]);
-
-  const getHabits = async () => {
-    const habits = await fetch(`/api/getHabits?listId=${listId}`);
-    const habitData = await habits.json();
-    console.log("habit data inside get habits:", habitData);
-    setHabits(habitData);
-  };
 
   const messageGenerator = (habitsCompleted, totalHabits) => {
     let feedback;
@@ -95,66 +92,32 @@ export default function List() {
   };
 
   const deleteHandler = async (id) => {
-    const response = await fetch("/api/deleteHabit", {
-      method: "DELETE",
-      body: JSON.stringify({
-        id: id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await getHabits(listId);
+    await deleteHabit(id);
+    setHabits(await getHabits(listId));
   };
 
-  const editHabitTextHandler = async (id, editedText) => {
-    const response = await fetch("/api/editHabitText", {
-      method: "PUT",
-      body: JSON.stringify({
-        id: id,
-        editedText: editedText,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await getHabits(listId);
+  const updateHabitTextHandler = async (id, editedText) => {
+    await updateHabitText(id, editedText);
+    setHabits(await getHabits(listId));
   };
 
-  const editHabitEmojiHandler = async (id, editedEmoji) => {
-    const response = await fetch("/api/editHabitEmoji", {
-      method: "PUT",
-      body: JSON.stringify({
-        id: id,
-        editedEmoji: editedEmoji,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await getHabits(listId);
+  const updateHabitEmojiHandler = async (id, editedEmoji) => {
+    await updateHabitEmoji(id, editedEmoji);
+    setHabits(await getHabits(listId));
   };
 
-  const editCompletedHabit = async (id) => {
-    const response = await fetch("/api/editCompleteStatus", {
-      method: "PUT",
-      body: JSON.stringify({
-        id: id,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    await getHabits(listId);
+  const updateCompleteStatus = async (id) => {
+    await toggleCompleteStatus(id);
+    setHabits(await getHabits(listId));
   };
 
-  const shareHabitButtonHandler = () => {
+  const onShareHabit = () => {
     navigator.clipboard.writeText(url);
     setEffect(true);
     setShareButtonText("URL Copied");
   };
 
-  const homeButtonHandler = () => {
+  const onHomeButtonClick = () => {
     router.push("/");
   };
 
@@ -169,7 +132,7 @@ export default function List() {
           <div>
             <button
               className="bg-blue-500 hover:bg-blue-700 ml-20 mt-6 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              onClick={homeButtonHandler}
+              onClick={onHomeButtonClick}
             >
               Home
             </button>
@@ -186,7 +149,7 @@ export default function List() {
               className={`${
                 effect && `animate-wiggle`
               } bg-blue-500 hover:bg-blue-700 mr-20 mt-6 text-white font-bold w-28 h-10 rounded focus:outline-none focus:shadow-outline`}
-              onClick={shareHabitButtonHandler}
+              onClick={onShareHabit}
               onAnimationEnd={() => setEffect(false)}
             >
               {shareButtonText}
@@ -200,14 +163,12 @@ export default function List() {
               <Habit
                 key={habit._id}
                 id={habit._id}
-                isEditable={true}
                 color={cardColors[index % cardColors.length]}
                 habit={habit}
-                setHabits={setHabits}
-                editCompletedHabit={editCompletedHabit}
+                updateCompleteStatus={updateCompleteStatus}
                 deleteHandler={deleteHandler}
-                editHabitTextHandler={editHabitTextHandler}
-                editHabitEmojiHandler={editHabitEmojiHandler}
+                updateHabitTextHandler={updateHabitTextHandler}
+                updateHabitEmojiHandler={updateHabitEmojiHandler}
               />
             );
           })}

@@ -3,8 +3,16 @@ import EmojiModal from "./EmojiModal";
 import InlineEdit from "./InlineEdit";
 
 export default function Habit(props) {
-  const [editingValue, setEditingValue] = useState(props.habit.text);
-  const [isEmojiModalShowing, setIsEmojiModalShowing] = useState(false);
+  const { text } = props.habit;
+  const {
+    id,
+    deleteHandler,
+    updateCompleteStatus,
+    updateHabitTextHandler,
+    updateHabitEmojiHandler,
+  } = props;
+  const [editingValue, setEditingValue] = useState(text);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [emoji, setEmoji] = useState(props.habit.emoji);
   const textDecoration = props.habit.completed ? "line-through" : "none";
   const checkmark = props.habit.completed
@@ -13,24 +21,24 @@ export default function Habit(props) {
 
   const onDeleteHabit = (e) => {
     e.stopPropagation();
-    props.deleteHandler(props.id);
+    deleteHandler(id);
   };
 
   const onHabitCardClick = () => {
-    props.editCompletedHabit(props.id);
+    updateCompleteStatus(id);
   };
 
   useEffect(() => {
-    props.editHabitTextHandler(props.id, editingValue);
+    updateHabitTextHandler(id, editingValue);
   }, [editingValue]);
 
   useEffect(() => {
-    props.editHabitEmojiHandler(props.id, emoji);
+    updateHabitEmojiHandler(id, emoji);
   }, [emoji]);
 
   const onEmojiClick = (e) => {
     e.stopPropagation();
-    setIsEmojiModalShowing(true);
+    setIsModalVisible(true);
   };
 
   return (
@@ -68,8 +76,8 @@ export default function Habit(props) {
         </div>
       </div>
       <EmojiModal
-        onClose={() => setIsEmojiModalShowing(false)}
-        isEmojiModalShowing={isEmojiModalShowing}
+        onClose={() => setIsModalVisible(false)}
+        isModalVisible={isModalVisible}
         setEmoji={setEmoji}
       />
       <style jsx>{`

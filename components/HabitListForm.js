@@ -18,7 +18,6 @@ export default function HabitListForm() {
       return;
     }
     const searchResults = await searchHabitLists(listName);
-    console.log("searchResults: ", searchResults);
     if (searchResults.length > 0) {
       router.push({ pathname: `/habit-lists/${searchResults[0].slug}` });
       return;
