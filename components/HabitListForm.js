@@ -59,7 +59,7 @@ export default function HabitListForm() {
             placeholder="Enter existing list name, ex. Alice’s list"
           />
           {errorMessage && (
-            <p className="text-red-500 text-xs italic mt-2"> {errorMessage} </p>
+            <p className="text-xs italic mt-2"> {errorMessage} </p>
           )}
         </div>
         <div className="flex items-center justify-between">
